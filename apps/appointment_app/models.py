@@ -4,7 +4,7 @@ from apps.login_app.models import *
 
 class Appointments(models.Model):
     appointment_creator = models.ForeignKey(Users, related_name = 'created_appointments')
-    appointment_student = models.ForeignKey(Users, related_name = 'attending_appointments')
+    appointment_student = models.ForeignKey(Users, related_name = 'attending_appointments', default = None)
     appointment_date = models.DateField()
     appointment_time = models.FloatField()
     appointment_location = models.CharField(max_length = 255)

@@ -34,4 +34,5 @@ class Users(models.Model):
     pw_hash = models.CharField(max_length = 255)
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
+    credits = models.IntegerField(default = 3)
     objects = UserManager()
