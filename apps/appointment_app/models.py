@@ -15,3 +15,13 @@ class Appointments(models.Model):
     updated_at = models.DateTimeField(auto_now = True)
 
 
+
+class Reviews(models.Model):
+    review_creator = models.ForeignKey(Users, related_name = 'created_reviews')
+    review_receiver = models.ForeignKey(Users, related_name = 'received_reviews')
+    rating = models.IntegerField()
+    content = models.TextField()
+    category = models.ForeignKey(SubCategories, related_name = 'related_reviews')
+    role = models.CharField(max_length = 255)
+    created_at = models.DateTimeField(auto_now_add = True)
+    updated_at = models.DateTimeField(auto_now = True)
