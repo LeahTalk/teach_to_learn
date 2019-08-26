@@ -1,0 +1,27 @@
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+.wrapper {
+    margin: 0px auto;
+    padding: 20px;
+    width: 1000px;
+}
+
+.login_section {
+    vertical-align: top;
+    display: inline-block; 
+    margin-right: 200px;
+    padding: 20px;
+    border: 1px solid lightgray;
+
+}
+
+.login_section label {
+    text-align: left;
+}
+
+.login_section form {
+    text-align: left;
+}
