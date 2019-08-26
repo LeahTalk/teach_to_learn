@@ -13,6 +13,9 @@ def logout(request):
     request.session.clear()
     return redirect('/')
 
+def register_login(request):
+    return render(request, 'login_app/register_login.html')
+
 def login(request):
     errors = Users.objects.user_validator(request.POST)
     user = Users.objects.filter(email=request.POST['email'])
@@ -49,15 +52,8 @@ def register(request):
     Users.objects.create(first_name=request.POST['first_name'], last_name = request.POST['last_name'],
             email = request.POST['email'], pw_hash=pw_hash)
     request.session['curUser'] = Users.objects.get(email = request.POST['email']).id
-    return redirect('/dashboard')
+    return redirect('/register')
 
-def user_page(request, user_id):
-    if 'curUser' not in request.session:
-        return redirect('/')
-    user = Users.objects.get(id = request.session['curUser'])
-    context = {
-        'user' : user,
-        'numReviews' : len(user.reviews.all()),
-        'books' : user.books.all()
-    }
-    return render(request, 'login_app/user_details.html', context)
+def complete_register(request):
+    return render(request, "login_app/register.html")
+

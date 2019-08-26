@@ -2,14 +2,14 @@ from __future__ import unicode_literals
 from django.db import models
 import datetime
 
-class Categories(models.Manager):
+class Categories(models.Model):
     name = models.CharField(max_length = 255)
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True) 
 
-class SubCategories(models.Manager):
+class SubCategories(models.Model):
     name = models.CharField(max_length = 255)
-    mainCategory = models.ForeignKey(Categories, related_name = 'sub-categories')
+    mainCategory = models.ForeignKey(Categories, related_name = 'subcategories')
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True) 
 
