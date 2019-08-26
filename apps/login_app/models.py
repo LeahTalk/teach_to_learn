@@ -35,4 +35,5 @@ class Users(models.Model):
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
     credits = models.IntegerField(default = 3)
+    desc = models.TextField(default = "")
     objects = UserManager()
