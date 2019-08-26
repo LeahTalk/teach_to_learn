@@ -36,4 +36,6 @@ class Users(models.Model):
     updated_at = models.DateTimeField(auto_now = True)
     credits = models.IntegerField(default = 3)
     desc = models.TextField(default = "")
+    skills_to_teach = models.ManyToManyField(SubCategories, related_name = "teachers")
+    skills_to_learn = models.ManyToManyField(SubCategories, related_name = "students")
     objects = UserManager()
