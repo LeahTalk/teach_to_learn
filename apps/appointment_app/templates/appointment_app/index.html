@@ -32,6 +32,7 @@
         {% else %}
             <p>(Reserved)</p>
         {% endif %}
+        <a href = '/appointment/edit/{{ appointment.id }}'>Edit</a>
         <a href = '/appointment/cancel/{{ appointment.id }}' onclick="return confirm('Are you sure you want to cancel this appointment?');">Cancel</a>
     </li>
 {% endfor %}

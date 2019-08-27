@@ -89,8 +89,23 @@ def process_reservation(request):
     appointment.save()
     return redirect('/dashboard')
 
-def edit_appointment(request):
+def edit_appointment(request, appointment_id):
+    appointment = Appointments.objects.get(id = appointment_id)
+    #"2018-06-12T19:30"
+    appointment.date = appointment.date.strftime("%Y-%m-%d"+ 'T' +"%H:%M")
     context = {
-        'appointment' : Appointments.objects.get(id = appointment_id)
+        'appointment' : appointment
     }
     return render(request, 'appointment_app/edit.html', context)
+
+def process_edits(request, appointment_id):
+    errors = Appointments.objects.appointment_validator(request.POST)
+    if len(errors) > 0:
+        for key, value in errors.items():
+            messages.error(request, value)
+        return redirect('/appointment/edit/' + str(appointment_id))
+    appointment = Appointments.objects.get(id = appointment_id)
+    appointment.date = request.POST['date']
+    appointment.location = request.POST['location']
+    appointment.save()  
+    return redirect('/dashboard')
