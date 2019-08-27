@@ -3,7 +3,7 @@
     <h3>Which courses/subcategories would you like to learn?</h3> 
     <p> Select from below: </p>
         {% for subcategory in all_subcategories %}
-        <input type="checkbox" id="post_subcategories" name="subcategories" value="{{subcategory.id}}"> {{subcategory.name}}<br>
+        <input type="checkbox" name="{{subcategory.name}}" value="{{subcategory.name}}"> {{subcategory.name}}<br>
         {% endfor %}
     
     <input type="hidden" name="current_user" value="{{current_user.id}}">
@@ -19,7 +19,8 @@ $('#choose_subcategories').submit(function(e){
     $.ajax({
         url: '/learn_subcategories',
         method: 'POST',
-        data: { subcategories : $('#post_subcategories') },
+        // data: { subcategories : $('#post_subcategories') },
+        data: $(this).serialize(),
         success: function(serverResponse){
         }
     })

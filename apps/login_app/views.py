@@ -58,6 +58,9 @@ def register(request):
     return redirect('/register')
 
 def continue_registration(request):
+    current_user = Users.objects.get(id=request.session['curUser'])
+    print(current_user.first_name)
+
     if 'current_category' not in request.session:
         request.session['current_category'] = ''
         current_category = Categories.objects.filter(name = request.session['current_category'])
@@ -124,7 +127,12 @@ def select_subcategory(request):
                 new_subcategory = SubCategories.objects.create(name=request.POST['add_subcategory'], mainCategory = current_category)
                 new_subcategory.teachers.add(current_user)
                 request.session.save()
-                print(current_user.skills_to_teach.all())
+                print("new subcategory created")
+                all_teachers = new_subcategory.teachers.all()
+                this_subs_teacher = all_teachers.filter(id = current_user.id)
+                current_teacher = this_subs_teacher[0]
+                print(current_teacher.first_name)
+                print("is teaching")
                 return render(request, 'login_app/location_form.html')
 
         if request.POST['select_subcategory']:
@@ -132,7 +140,14 @@ def select_subcategory(request):
             current_subcategory.teachers.add(current_user)
             print("subcategory selected to teach")
             print(current_subcategory.name)
-            print(current_user.skills_to_teach.all())
+
+            print("-----------------------")
+            all_teachers = current_subcategory.teachers.all()
+            this_subs_teacher = all_teachers.filter(id = current_user.id)
+            current_teacher = this_subs_teacher[0]
+            print(current_teacher.first_name)
+            print("is teaching")
+            print(current_subcategory.name)
 
         return render(request, 'login_app/location_form.html')
 
@@ -154,20 +169,20 @@ def location_form_process(request):
 
 def choose_subcategories(request):
     print("I'm at choose_categories")
-    some_var = request.POST['subcategories']
-    print(some_var)
-    current_user = Users.objects.get(id=request.session['curUser'])
-    if request.method == "POST":
-        if len(request.POST.getlist('subcategories')) > 0:
-            all_subcategories = SubCategories.objects.all()
+    print(request.POST)
 
-            for subcategory in all_subcategories:
-                if str(subcategory.id) in request.POST['subcategories']:
-                    current_user.skills_to_learn.add(subcategory)
-                    print(current_user.first_name)
-                    print("has added")
-                    print(subcategory.name)
-                    print("to the skills they want to learn!")
+    current_user = Users.objects.get(id=request.session['curUser'])
+    all_subcategories = SubCategories.objects.all() 
+    if request.method == "POST":
+        for subcategory in all_subcategories:
+            if subcategory.name in request.POST:
+                # loop_subcategory = SubCategories.objects.get(id = int(request.POST[key]))
+                loop_subcategory = SubCategories.objects.get(name__iexact=request.POST[subcategory.name])
+                current_user.skills_to_learn.add(loop_subcategory)
+                print(current_user.first_name)
+                print("has added")
+                print(loop_subcategory.name)
+                print("to the skills they want to learn!")
 
     return redirect("/dashboard")
 
