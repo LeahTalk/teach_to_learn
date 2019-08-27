@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'profile_app/css/####.css' %}">
+        <title>Profile</title>
+    </head>
+    <body>
+        <div class="container">
+            <nav>
+                <a href="PLACEHOLDER">About Us</a>
+                <a href = '/categories'>To categories</a>
+                <a href="PLACEHOLDER">Log Out</a>
+            </nav>
+            <header>
+                <p>Username: {{PLACEHOLDER}}</p>
+            </header>
+            <body>
+                <div class="main_content">
+                    <div class="profile_img">
+
+                    </div>
+                    <div class="user_bio">
+                        
+                    </div>
+                    <div class="Drop down of my availability:">
+
+                    </div>
+                    <div class="user_reviews">
+                        <p>Reviews:</p>
+                        {% for review in all_reviews  %}
+                        <p>
+                            {{PLACEHOLDER}} says,   
+                        </p>
+                        <p>
+                            "{{PLACEHOLDER}}"
+                        </p>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="live_feed">
+                    <p>User Rating:</p>
+                    <p>Courses taught:</p>
+                    <ul>
+                        <li></li>
+                    </ul>
+                    <a href="PLACEHOLDER">Add courses</a>
+                </div>
+            </body>
+        </div>
+    </body>
+</html>
