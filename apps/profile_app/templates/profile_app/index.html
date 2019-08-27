@@ -5,15 +5,35 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         {% load static %}
-        <link rel="stylesheet" href="{% static 'profile_app/css/####.css' %}">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+          <!-- Latest compiled and minified JavaScript -->
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <link rel="stylesheet" type="text/css" href="{% static '/profile_app/css/style.css' %}">
         <title>User Dashboard</title>
     </head>
     <body>
-        <div class="container">
-            <nav>
-                <a href="PLACEHOLDER">About Us</a>
-                <a href = '/categories'>To categories</a>
-                <a href="/logout">Log Out</a>
+        <div class="wrapper">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+                <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+                    <h1 class="navbar-brand">Welcome {{ user.first_name }}!</h1>
+                    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                        <li class="nav-item">
+                            <a class = 'nav-link' href="/dashboard" style = 'margin-left: 50px'>Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class = 'nav-link' href="/profile/{{ user.id }}" style = 'margin-left: 50px'>My Profile Page</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class = 'nav-link' href="/edit_profile" style = 'margin-left: 50px'>About Page</a>
+                        </li>
+                        <li>
+                            <a class = 'nav-link' href="/categories" style = 'margin-left: 50px'>Categories</a>
+                        </li>
+                        <li class="nav-item">
+                            <a style = "margin-left: 50px" class = 'nav-link' href="/logout">Logout</a>
+                        </li>
+                    </ul>
+                </div>
             </nav>
             <header>
                 <p>Welcome {{user.first_name}}! - You have {{user.credits}} credits.</p>
