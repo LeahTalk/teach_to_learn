@@ -62,6 +62,7 @@ def cancel_appointment(request, appointment_id):
             student.save()
         student.attending_appointments.remove(appointment)
         student.save()
+        appointment.messages.all().delete()
     #If the teacher cancelled
     else:
         if student != None:
