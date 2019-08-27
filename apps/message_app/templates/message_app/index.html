@@ -7,3 +7,90 @@ if the appointment creator is a teacher, then they should be the review receiver
 
 After creating a review the user should be redirected back to the dashboard. 
 -->
+<!DOCTYPE html>
+<head>
+      <meta charset="UTF-8">
+      {% load static %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'message_app/css/my_style.css' %}">
+</head>
+
+<body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="#">Navbar w/ text</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarText">
+                  <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                      <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">Features</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">Pricing</a>
+                    </li>
+                  </ul>
+                  <span class="navbar-text">
+                    
+                        <a href="url">Log Out</a>
+
+                  </span>
+                </div>
+              </nav>
+
+
+    <h3>You are messaging {Intructor.name} for {appointment.category} {appointment.subcategory} </h3>
+    <button type="button" class="btn btn-outline-danger">Cancel</button>
+
+    
+    
+
+
+    
+
+    {% for message in all_messages %}
+    <h3>{{message.message_owner.first_name}} {{message.message_owner.last_name}} [{{message.created_at}}] </h3>
+    <p>{{message.content}}</p>
+    {% endfor %}
+        
+            
+    <form action="/send_message/{{request.session.appointment_id}}" class="login-form" method="POST">     
+        {% csrf_token %}
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                {% if message.extra_tags == "length" %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+                {% endif %}
+
+        <textarea class="post_area" rows="4" cols="150" name="post" value = ""></textarea>
+        <input class="submit" name="message" type="submit" value="Post_a_message">
+      </form>
+
+
+      </div> 
+
+      <button type="button" class="btn btn-outline-success">Teacher Attended </button>
+      <button type="button" class="btn btn-outline-success">Student Attended</button>
+
+      <h4>Review :</h4>
+
+            <select>
+            <option value="" selected disabled>Please select</option>
+            <option value="1">☆</option>
+            <option value="2">☆☆</option>
+            <option value="3">☆☆☆</option>
+            <option value="4">☆☆☆☆</option>
+            <option value="5">☆☆☆☆☆</option>
+          </select> 
+
+          <button type="button" class="btn btn-outline-primary">Submit Review</button>
+
+
+</body>

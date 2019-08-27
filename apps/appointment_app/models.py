@@ -15,7 +15,6 @@ class Appointments(models.Model):
     updated_at = models.DateTimeField(auto_now = True)
 
 
-
 class Reviews(models.Model):
     review_creator = models.ForeignKey(Users, related_name = 'created_reviews')
     review_receiver = models.ForeignKey(Users, related_name = 'received_reviews')
