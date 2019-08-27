@@ -16,7 +16,7 @@
                 <a href="/logout">Log Out</a>
             </nav>
             <header>
-                <p>Username: {{first_name}}</p>
+                <p>Username: {{viewing_user.first_name}} {{viewing_user.last_name}}</p>
             </header>
             <body>
                 <div class="main_content">
@@ -38,18 +38,23 @@
                     </div>
                     <div class="user_bio">
                         <p>User Bio:</p>
-                        <p>{{user_bio}}</p>
+                        <p>{{viewing_user.desc}}</p>
                         <form action="PLACEHOLDER">
                             <a href="PLACEHOLDER">edit bio</a>
                         </form>
                     </div>
                     <div class="">
-                        <p>Drop down of my availability:</p>
-                        <select name="availability">
-                            for loop?
-                            <option value="{{appt.id}}">{{appt.appointment_date}} {{PLACEHOLDER}} {{appt.appointment_location}}</option>
-                            end for loop?
-                        </select>
+                        <h2>{{ viewing_user.first_name}}'s open timeslots: </h2>
+                        <ul>
+                            {% for appointment in open_appointments %}
+                                <li>
+                                    <p>{{ appointment.date }} At {{ appointment.location }}</p>
+                                    {% if user.credits > 0 and viewing_user != user %}
+                                        <a href = "/appointment/reserve/{{ appointment.id }}">Reserve this timeslot!</a>
+                                    {%endif%}
+                                </li>
+                            {% endfor %}
+                        </ul>   
                     </div>
                     <div class="user_reviews">
                         <p>Reviews:</p>

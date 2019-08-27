@@ -35,7 +35,7 @@ def process_new_appointment(request):
     if len(errors) > 0:
         for key, value in errors.items():
             messages.error(request, value)
-        return redirect('/appointment')
+        return redirect('/dashboard')
     user = Users.objects.get(id = request.session['curUser'])
     Appointments.objects.create(appointment_creator = user, date = request.POST['date'],
         location = request.POST['location'])    
@@ -68,7 +68,6 @@ def cancel_appointment(request, appointment_id):
             student.credits += 1 
             student.save()
         appointment.delete()
-        
     return redirect('/dashboard')
 
 def reserve_appointment(request, appointment_id):

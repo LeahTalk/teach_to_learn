@@ -16,44 +16,76 @@
                 <a href="/logout">Log Out</a>
             </nav>
             <header>
-                <p>Welcome {{first_name}}! - You have {{currency}} credits.</p>
+                <p>Welcome {{user.first_name}}! - You have {{user.credits}} credits.</p>
             </header>
             <body>
                 <div class="control_panel">
                     <p>User Control Panel</p>
-                    <div class="my_availability">
-                        <p>My availability:</p>
-                        <form action="PLACEHOLDER" method="POST">
-                            {% csrf_token %}
-                            <label for="date">Date:</label>
-                            <input type="date" id="date" name="appt_date"><br>
-                            <label for="time">Time:</label>
-                            <input type="time" id="time" name="appt_time" min="06:00" max="20:30" required><br>
-                            <label for="location">Location</label>
-                            <input type="text" id="location" name="appt_location"><br>
-                            <input type="hidden" name="appt_creator" value="{{request.session.curUser}}">
-                            <input type="submit" name="submit" value="Set availability">
-                        </form>
-                    </div>
                     <a href = '/profile/{{request.session.curUser}}'>To Profile</a>
                     <a href = '/my_history'>To history</a>
                     <a href="/messages/1">To message</a>
                     <a href="/appointment">Appointment</a>
+                    <div class="my_availability">
+                        <h2>Add a new 1-hr Timeslot</h2>
+                        {% if messages %}
+                            <ul class="messages">    
+                            {% for message in messages %}    
+                                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+                            {% endfor %}
+                            </ul>
+                        {% endif %}
+                        <form action = '/appointment/add' method = 'post'>
+                            {% csrf_token %}
+                            <p>Date and time:</p>
+                            <input type="datetime-local" name="date">
+                            <p>Location: </p>
+                            <input type="text" name = "location">
+                            <input type="submit" value="Submit">
+                        </form>
+                        <h2>My Timeslots: </h2>
+                        <ul>
+                        {% for appointment in all_teaching_appointments %}
+                            <li>
+                                <a href = '/messages/{{appointment.id}}'>{{ appointment.date }} At {{ appointment.location }}</a>
+                                {% if appointment.appointment_student == None %}
+                                    <p>(Open)</p>
+                                {% else %}
+                                    <p>(Reserved)</p>
+                                {% endif %}
+                                <a href = '/appointment/edit/{{ appointment.id }}'>Edit</a>
+                                <a href = '/appointment/cancel/{{ appointment.id }}' onclick="return confirm('Are you sure you want to cancel this appointment?');">Cancel</a>
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    </div>
                 </div>
                 <div class="live_feed">
                     <p>Live feed:</p>
                     <p>Suggestion for user</p>
-                    <p>Pending request</p>
-                    <p>I am teaching this person:</p>
-                    <p>
-                        <a href="/messages/{{appointments.id}}">{{appointments.appointment_student}}</a><br>
-                        class on {{appointments.date}} at {{appointments.location}}
-                    </p>
-                    <p>I am signed up for:</p>
-                    <p>
-                        <a href="/profile/{{users.id}}">{{PLACEHOLDER}}</a><br>
-                        class on {{PLACEHOLDER}} {{PLACEHOLDER}}
-                    </p>
+                    <h2>Upcoming teaching sessions:</h2>
+                    <ul>
+                        {% for appointment in reserved_teaching_appointments %}
+                            <li>
+                                <p>I'm teaching </p>
+                                <a href = '/profile/{{ appointment.appointment_student.id }}'>{{ appointment.appointment_student.first_name }}</a>
+                                <p>{{ appointment.category.name }} on {{ appointment.date }}</p>
+                                <p>Location: {{appointment.location }}</p>
+                                <a href = '/appointment/cancel/{{ appointment.id }}' onclick="return confirm('Are you sure you want to cancel this appointment?');">Cancel</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <h2>Upcoming learning sessions:</h2>
+                    <ul>
+                        {% for appointment in learning_appointments %}
+                            <li>
+                                <p>I'm meeting</p>
+                                <a href = '/profile/{{ appointment.appointment_creator.id }}'>{{ appointment.appointment_creator.first_name }}</a>
+                                <p> to learn {{ appointment.category.name }} on {{ appointment.date }}</p>
+                                <p>Location: {{ appointment.location }}</p>
+                                <a href = '/appointment/cancel/{{ appointment.id }}' onclick="return confirm('Are you sure you want to cancel this appointment? Credit will not be refunded for cancellations made within 24 hours of your scheduled session.');">Cancel</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </body>
         </div>

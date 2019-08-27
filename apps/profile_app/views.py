@@ -3,22 +3,32 @@ from .models import *
 from apps.login_app.models import *
 
 def index(request):
-    current_user = Users.objects.get(id=request.session['curUser'])
-    first_name = current_user.first_name
-    currency = current_user.credits
+    user = Users.objects.get(id = request.session['curUser'])
+    created_appointments = user.created_appointments.all().order_by('date')
+    reserved_appointments = []
+    for appointment in created_appointments:
+        if appointment.appointment_student != None:
+            reserved_appointments.append(appointment)
+    attending_appointments = user.attending_appointments.all().order_by('date')
     context = {
-        "first_name" : first_name,
-        "currency" : currency,
+        'user' : Users.objects.get(id = request.session['curUser']),
+        'all_teaching_appointments' : created_appointments,
+        'reserved_teaching_appointments' : reserved_appointments,
+        'learning_appointments' : attending_appointments,
     }
     return render(request, 'profile_app/index.html', context)
 
 def view_profile(request, user_id):
+    view_user = Users.objects.get(id = user_id)
+    created_appointments = view_user.created_appointments.all().order_by('date')
+    open_appointments = []
+    for appointment in created_appointments:
+        if appointment.appointment_student == None:
+            open_appointments.append(appointment)
     context = {
-        "first_name" : Users.objects.get(id=user_id).first_name,
-        "user_bio" : Users.objects.get(id=user_id).desc,
-        "all_received_reviews" : Users.objects.get(id=user_id).received_reviews.all(),
-        "course_taught" : Users.objects.get(id=user_id).skills_to_teach.all(),
-        "availability" : Users.objects.get(id=user_id).created_appointments.all(),
+        'user' : Users.objects.get(id = request.session['curUser']),
+        'viewing_user' : view_user,
+        'open_appointments' : open_appointments
     }
     return render(request, 'profile_app/profile.html', context)
 
