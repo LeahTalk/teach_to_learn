@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Trip Buddy</title>
+    <title>Teach & Learn - Registarion/Login</title>
     {% load static %}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
       <!-- Latest compiled and minified JavaScript -->
@@ -9,11 +9,11 @@
 </head>
 <body>
     <div class = "wrapper">
-        <h1>Welcome! Let's travel!</h1>
+        <h1 class="mb-5">Welcome to Teach & Learn! </h1>
         {% if messages %}
-        <ul class="messages">    
+        <ul class="messages border border-danger pl-5">    
             {% for message in messages %}    
-                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
             {% endfor %}
         </ul>
         {% endif %}
@@ -27,6 +27,8 @@
                 <input class="form-control" type="text" placeholder="last Name" id = "last_name" name = "last_name">
                 <label for="email">Email</label>
                 <input class="form-control" type="text" placeholder="example@yahoo.com" id = "email" name = "email">
+                <label for="birthday" class="mt-2">Birthday: </label>
+                <input class="form-control" type="date" id="birthday" name="birthday" required="">
                 <label for="password">Password</label>
                 <input class="form-control" type="password" placeholder="Password" id = "regPassword" name = "regPassword">
                 <label for="confPassword">Confirm Password</label>

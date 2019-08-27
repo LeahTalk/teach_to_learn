@@ -1,0 +1,27 @@
+<form id="choose_subcategories" action="/learn_subcategories" method="POST">
+    {% csrf_token %}
+    <h3>Which courses/subcategories would you like to learn?</h3> 
+    <p> Select from below: </p>
+        {% for subcategory in all_subcategories %}
+        <input type="checkbox" id="post_subcategories" name="subcategories" value="{{subcategory.id}}"> {{subcategory.name}}<br>
+        {% endfor %}
+    
+    <input type="hidden" name="current_user" value="{{current_user.id}}">
+    <input type="submit">
+</form>
+
+<script>
+$('#choose_subcategories').submit(function(e){
+    // preventDefault stops the default action of the event (e) from being triggered.
+    // e.preventDefault();
+    console.log("Choose Category From submitted but no HTTP request sent to server!");
+
+    $.ajax({
+        url: '/learn_subcategories',
+        method: 'POST',
+        data: { subcategories : $('#post_subcategories') },
+        success: function(serverResponse){
+        }
+    })
+});
+</script>

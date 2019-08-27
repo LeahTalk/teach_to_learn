@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Getting to know you!</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+</head>
+
+<body>
+    <div>
+        <h3> Thank you for registering {{current_user.first_name}} {{current_user.last_name}} </h3>
+
+        <form id="category_form" action="/category_form" method="POST"> {% csrf_token %}
+            <h3>What Category would you like to teach in?</h3> 
+            <p> Choose from the list: </p>
+            <select class="btn text-dark bg-light" name="select_category">
+                {% for category in all_categories %}
+                <option value="{{category.id}}">{{category.name}}</option>
+                {% endfor %}
+            </select>
+            <p>Or add a new category! </p>
+            <input type="text" class="form-control" name="add_category">
+            
+            <input type="hidden" name="current_user" value="{{current_user.id}}">
+            <input type="submit">
+        </form>
+
+        <div id="subcategories">
+
+        </div>
+
+        <div id="location_form">
+
+        </div>
+
+        <div id="choose_subcategories">
+
+        </div>
+
+
+    </div>
+
+    <script>
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (settings.type == 'POST' || settings.type == 'PUT' || settings.type == 'DELETE') {
+                    function getCookie(name) {
+                        var cookieValue = null;
+                        if (document.cookie && document.cookie != '') {
+                            var cookies = document.cookie.split(';');
+                            for (var i = 0; i < cookies.length; i++) {
+                                var cookie = jQuery.trim(cookies[i]);
+                                // Does this cookie string begin with the name we want?
+                                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                    break;
+                                }
+                            }
+                        }
+                        return cookieValue;
+                    }
+                    if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                        // Only send the token to relative URLs i.e. locally.
+                        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                    }
+                }
+            }
+        });
+
+        $('#category_form').submit(function(e){
+            // preventDefault stops the default action of the event (e) from being triggered.
+            e.preventDefault();
+            console.log("Cateogry Form submitted but no HTTP request sent to server!");
+
+            $.ajax({
+                url: '/category_form',
+                method: 'POST',
+                data: $(this).serialize(),
+                success: function(serverResponse){
+                    $('#subcategories').html(serverResponse);
+                }
+            })
+        });
+
+    </script>
+
+</body>
+
+</html>
