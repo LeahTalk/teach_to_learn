@@ -1,0 +1,7 @@
+{% if messages %}
+<ul class="messages border border-danger pl-5">    
+            {% for message in messages %}    
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+</ul>
+{% endif %}

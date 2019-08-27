@@ -1,0 +1,23 @@
+<form id="location_form" action="/location_form" method="POST"> {% csrf_token %}
+    <h3>What city are you looking to teach in?</h3>
+    <input type="text" id="post_location" class="form-control" name="place">
+    <input type="hidden" name="current_user" value={{current_user.id}}>
+    <input type="submit">
+</form>
+
+<script>
+$('#location_form').submit(function(e){
+    // preventDefault stops the default action of the event (e) from being triggered.
+    e.preventDefault();
+    console.log("Location Form submitted but no HTTP request sent to server!");
+
+    $.ajax({
+        url: '/location_form',
+        method: 'POST',
+        data: { location : $('#post_location').val() },
+        success: function(serverResponse){
+            $('#choose_subcategories').html(serverResponse);
+        }
+    })
+});
+</script>

@@ -1,0 +1,31 @@
+.form_section {
+    vertical-align: top;
+    display: inline-block; 
+    padding: 25px 0px;
+}
+
+.main_section {
+    padding: 25px 200px;
+}
+
+.header_section {
+    padding: 25px 0px;
+}
+
+.form_border {
+    vertical-align: top;
+    display: inline-block; 
+    padding: 25px 50px;
+    border: 1px solid lightgray;
+    width: 500px;
+}
+
+.message_section {
+    margin-left: 50px;
+}
+
+.message_box {
+    border: 1px solid lightgray;
+    overflow:auto;
+    height: 100px;
+}

@@ -1,0 +1,17 @@
+{% if messages %}
+    <ul class="messages">    
+        {% for message in messages %}    
+            <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<h2>Edit your timeslot: </h2>
+<form action = '/appointment/process_edits/{{ appointment.id }}' method = 'post'>
+    {% csrf_token %}
+    <p>Date and time:</p>
+    <input type="datetime-local" name="date" value = '{{ appointment.date }}'>
+    <p>Location: </p>
+    <input type="text" name = "location" value = {{ appointment.location }}>
+    <input type="submit" value="Submit">
+</form>

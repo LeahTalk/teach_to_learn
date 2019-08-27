@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'profile_app/css/####.css' %}">
+        <title>History</title>
+    </head>
+    <body>
+        <div class="container">
+            <nav>
+                <a href="PLACEHOLDER">About Us</a>
+                <a href = '/categories'>To categories</a>
+                <a href="/logout">Log Out</a>
+            </nav>
+            <header>
+                <p>Your history on {{PLACEHOLDER}}.</p>
+            </header>
+            <body>
+                <div class="main_content">
+                    <div class="taught_courses">
+                        Courses you have taught:
+                        Loop through all appointment where curUser is instructor
+                        <ul>
+                        {% for class in classes_taught %}
+                            <li>{{class.category}} - {{class.appointment_student}} - {{class.appointment_date}}</li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="taken_courses">
+                        Courses you have taken:
+                        Loop through all appointment where curUser is student
+                        <ul>
+                        {% for class in classes_taken %}
+                            <li>{{class.category}} - {{class.appointment_creator}} - {{class.appointment_date}}</li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="live_feed">
+                    <p>Live feed:</p>
+                    <p>suggestions for user</p>
+                </div>
+            </body>
+        </div>
+    </body>
+</html>

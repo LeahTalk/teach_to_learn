@@ -1,0 +1,33 @@
+<form id="subcategory_form" action="/subcategory_form" method="POST"> {% csrf_token %}
+    <h3>You have selected {{current_category.name}}! What Course/Subcategory would you like to teach? </h3> 
+    
+    <p> Choose from the list: </p>
+    <select class="btn text-dark bg-light" name="select_subcategory">
+        {% for subcategory in all_subcategories %}
+        <option value="{{subcategory.id}}">{{subcategory.name}}</option>
+        {% endfor %}
+    </select>
+    <p>Or add a new course/subcategory! </p>
+    <input type="text" class="form-control" name="add_subcategory">
+
+    <input type="hidden" name="current_category" value="{{current_category.id}}">
+    <input type="hidden" name="current_user" value="{{current_user.id}}">
+    <input type="submit">
+</form>
+
+<script>
+$('#subcategory_form').submit(function(e){
+    // preventDefault stops the default action of the event (e) from being triggered.
+    e.preventDefault();
+    console.log("Subcategory Form submitted but no HTTP request sent to server!");
+
+    $.ajax({
+        url: '/subcategory_form',
+        method: 'POST',
+        data: $(this).serialize(),
+        success: function(serverResponse){
+            $('#location_form').html(serverResponse);
+        }
+    })
+});
+</script>
