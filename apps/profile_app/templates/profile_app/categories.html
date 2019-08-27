@@ -6,21 +6,22 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         {% load static %}
         <link rel="stylesheet" href="{% static 'profile_app/css/####.css' %}">
-        <title>Profile</title>
+        <title>Category</title>
     </head>
     <body>
         <div class="container">
             <nav>
                 <a href="PLACEHOLDER">About Us</a>
                 <a href = '/categories'>To categories</a>
-                <a href="PLACEHOLDER">Log Out</a>
+                <a href="/logout">Log Out</a>
             </nav>
             <header>
                 <p>
                     Categories:
                     <select name="categories">
                     {% for category in all_categories %}
-                        <option value="{{PLACEHOLDER}}">{{PLACEHOLDER}}</option>
+                        <option value="{{category.name}}">{{category.name}}</option>
+                    {% endfor %}
                     </select>
                 </p>
             </header>
@@ -29,15 +30,13 @@
                     <h3>
                         This div will update depending on the drop down and populate the sub categories and instructors
                     </h3>
+                    {% for subcategory in categories %}
                     <div>
-                        Sub Category
+                        Sub Category 1 {{PLACEHOLDER}}
+                        Instructor: {{PLACEHOLDER}}
+                        <a href="/profile/{{user_id}}">View User's Profile</a>
                     </div>
-                    <div>
-
-                    </div>
-                    <div>
-
-                    </div>
+                    {% endfor %}
                 </div>
             </body>
         </div>

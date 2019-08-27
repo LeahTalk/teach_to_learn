@@ -13,10 +13,10 @@
             <nav>
                 <a href="PLACEHOLDER">About Us</a>
                 <a href = '/categories'>To categories</a>
-                <a href="PLACEHOLDER">Log Out</a>
+                <a href="/logout">Log Out</a>
             </nav>
             <header>
-                <p>Username: {{PLACEHOLDER}}</p>
+                <p>Username: {{first_name}}</p>
             </header>
             <body>
                 <div class="main_content">
@@ -24,19 +24,25 @@
 
                     </div>
                     <div class="user_bio">
-                        
+                        <p>User Bio:</p>
+                        <p>{{user_bio}}</p>
                     </div>
-                    <div class="Drop down of my availability:">
-
+                    <div class="">
+                        <p>Drop down of my availability:</p>
+                        <select name="availability">
+                        {% for appt in availability  %}
+                            <option value="{{appt.id}}">{{appt.appointment_date}} {{PLACEHOLDER}} {{appt.appointment_location}}</option>
+                        {% endfor %}
+                        </select>
                     </div>
                     <div class="user_reviews">
                         <p>Reviews:</p>
-                        {% for review in all_reviews  %}
+                        {% for review in all_received_reviews  %}
                         <p>
-                            {{PLACEHOLDER}} says,   
+                            {{review.review_creator}} says,   
                         </p>
                         <p>
-                            "{{PLACEHOLDER}}"
+                            "{{review.content}}"
                         </p>
                         {% endfor %}
                     </div>
@@ -45,7 +51,9 @@
                     <p>User Rating:</p>
                     <p>Courses taught:</p>
                     <ul>
-                        <li></li>
+                    {% for course in course_taught  %}
+                        <li>{{course.skills_to_teach}}</li>
+                    {% endfor %}
                     </ul>
                     <a href="PLACEHOLDER">Add courses</a>
                 </div>
