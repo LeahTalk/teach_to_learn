@@ -109,7 +109,8 @@
                             <li>
                                 <p>I'm meeting</p>
                                 <a href = '/profile/{{ appointment.appointment_creator.id }}'>{{ appointment.appointment_creator.first_name }}</a>
-                                <p> to learn {{ appointment.category.name }} on {{ appointment.date }}</p>
+                                <p> to learn </p>
+                                <a href = '/messages/{{ appointment.id }}'>{{ appointment.category.name }} on {{ appointment.date }}</a>
                                 <p>Location: {{ appointment.location }}</p>
                                 <a href = '/appointment/cancel/{{ appointment.id }}' onclick="return confirm('Are you sure you want to cancel this appointment? Credit will not be refunded for cancellations made within 24 hours of your scheduled session.');">Cancel</a>
                             </li>
