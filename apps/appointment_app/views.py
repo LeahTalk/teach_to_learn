@@ -1,10 +1,17 @@
 from django.shortcuts import render, HttpResponse, redirect
 from .models import *
 from django.contrib import messages
+from datetime import timedelta
+import datetime
+import time
+import pytz
+from pytz import timezone
+
 
 def index(request):
     user = Users.objects.get(id = request.session['curUser'])
-    created_appointments = user.created_appointments.all().order_by('date', 'time')
+    user.credits += 1
+    created_appointments = user.created_appointments.all().order_by('date')
     reserved_appointments = []
     open_appointments = []
     for appointment in created_appointments:
@@ -12,10 +19,7 @@ def index(request):
             reserved_appointments.append(appointment)
         else:
             open_appointments.append(appointment)
-    attending_appointments = user.attending_appointments.all().order_by('date', 'time')
-    print(created_appointments)
-    print(reserved_appointments)
-    print(attending_appointments)
+    attending_appointments = user.attending_appointments.all().order_by('date')
     context = {
         'user' : Users.objects.get(id = request.session['curUser']),
         #In this case the id would be the user_id from the URL
@@ -35,7 +39,36 @@ def process_new_appointment(request):
         return redirect('/appointment')
     user = Users.objects.get(id = request.session['curUser'])
     Appointments.objects.create(appointment_creator = user, date = request.POST['date'],
-        time = request.POST['time'], location = request.POST['location'])    
+        location = request.POST['location'])    
+    return redirect('/dashboard')
+
+def cancel_appointment(request, appointment_id):
+    #Add a check here to make sure the person cancelling is either the teacher or student - otherwise return redirect to dashboard
+    appointment = Appointments.objects.get(id = appointment_id)
+    user = Users.objects.get(id = request.session['curUser'])
+    student = appointment.appointment_student
+    #If the creator cancelled
+    if user == appointment.appointment_student:
+        local = pytz.timezone ("America/Los_Angeles")
+        naive = datetime.datetime.now()
+        local_dt = local.localize(naive, is_dst=None)
+        utc_dt = local_dt.astimezone(pytz.utc)
+        d1 = appointment.date
+        d2 = datetime.datetime.now()
+        d1_ts = time.mktime(d1.timetuple())
+        d2_ts = time.mktime(d2.timetuple())
+        print(int(d2_ts-d1_ts) / 60)
+        if (int(d2_ts-d1_ts) / 60) < -1440:
+            student.credits += 1
+        student.attending_appointments.remove(appointment)
+        student.save()
+    #If the student cancelled
+    else:
+        if student != None:
+            student.credits += 1 
+            student.save()
+        appointment.delete()
+        
     return redirect('/dashboard')
 
 def reserve_appointment(request, appointment_id):
@@ -51,7 +84,7 @@ def process_reservation(request):
     #category = SubCategories.objects.get(name = request.POST['category'])
     #appointment.category = category
     appointment.pending_credit = True
-    user.credits = user.credits - 1
+    user.credits -= 1
     user.save()
     appointment.save()
     return redirect('/dashboard')
