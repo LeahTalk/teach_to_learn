@@ -80,9 +80,18 @@
                     </div>
                 </div>
                 <div class="live_feed">
-                    <p>Live feed:</p>
-                    <p>Suggestion for user</p>
-                    <h2>Upcoming teaching sessions:</h2>
+                    <h6>Live feed:</h6>
+                    <h6>Course Suggestions for You!</h6>
+                    {% for skills in skills_to_learn %}
+                    <p> {{skills.name}} Course is taught by: 
+                        {% for user in all_users %}
+                            {% if user in skills.teachers.all %}
+                                {{ user.first_name }} {{user.last_name}} 
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                    </p>
+                    <h3>Upcoming teaching sessions:</h3>
                     <ul>
                         {% for appointment in reserved_teaching_appointments %}
                             <li>
