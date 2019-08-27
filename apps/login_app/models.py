@@ -40,17 +40,19 @@ class UserManager(models.Manager):
     def user_validator(self, postData):
         errors = {}
         if 'first_name' in postData:
-            birthday = datetime.strptime(postData['birthday'], '%Y-%M-%d')
-            age = calculate_age(birthday)
-
             if len(postData['first_name']) < 2:
                 errors['first_name'] = "First name must be at least two characters long"
+        if 'last_name' in postData:
             if len(postData['last_name']) < 2:
                 errors['last_name'] = "Last name must be at least two characters long"
+        if 'birthday' in postData:
+            birthday = datetime.strptime(postData['birthday'], '%Y-%M-%d')
+            age = calculate_age(birthday)
             if postData['birthday'] > strftime("%Y-%m-%d", localtime()):
                 errors['birthday'] = "Birthday should be in the past"
             if age < 18:
                 errors['age'] = "Must be 18 years old or older"
+        if 'regPassword' in postData:
             if len(postData['regPassword']) < 8:
                 errors['pw_length'] = "Password must be at least eight characters long"
             if postData['regPassword'] != postData['confPassword']:
