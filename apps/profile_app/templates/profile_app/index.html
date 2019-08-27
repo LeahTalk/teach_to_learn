@@ -6,29 +6,86 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         {% load static %}
         <link rel="stylesheet" href="{% static 'profile_app/css/####.css' %}">
-        <title>Dashboard</title>
+        <title>User Dashboard</title>
     </head>
     <body>
         <div class="container">
             <nav>
                 <a href="PLACEHOLDER">About Us</a>
                 <a href = '/categories'>To categories</a>
-                <a href="PLACEHOLDER">Log Out</a>
+                <a href="/logout">Log Out</a>
             </nav>
             <header>
-                <p>Welcome {{PLACEHOLDER}}! - You have {{PLACEHOLDER}} credits.</p>
+                <p>Welcome {{user.first_name}}! - You have {{user.credits}} credits.</p>
             </header>
             <body>
                 <div class="control_panel">
-                    <div class="my_availability">
-
-                    </div>
-                    <a href = '/profile/1'>To Profile</a>
+                    <p>User Control Panel</p>
+                    <a href = '/profile/{{request.session.curUser}}'>To Profile</a>
                     <a href = '/my_history'>To history</a>
-                    <a href="/message/1">To message</a>
+                    <a href="/messages/1">To message</a>
+                    <a href="/appointment">Appointment</a>
+                    <div class="my_availability">
+                        <h2>Add a new 1-hr Timeslot</h2>
+                        {% if messages %}
+                            <ul class="messages">    
+                            {% for message in messages %}    
+                                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+                            {% endfor %}
+                            </ul>
+                        {% endif %}
+                        <form action = '/appointment/add' method = 'post'>
+                            {% csrf_token %}
+                            <p>Date and time:</p>
+                            <input type="datetime-local" name="date">
+                            <p>Location: </p>
+                            <input type="text" name = "location">
+                            <input type="submit" value="Submit">
+                        </form>
+                        <h2>My Timeslots: </h2>
+                        <ul>
+                        {% for appointment in all_teaching_appointments %}
+                            <li>
+                                <a href = '/messages/{{appointment.id}}'>{{ appointment.date }} At {{ appointment.location }}</a>
+                                {% if appointment.appointment_student == None %}
+                                    <p>(Open)</p>
+                                {% else %}
+                                    <p>(Reserved)</p>
+                                {% endif %}
+                                <a href = '/appointment/edit/{{ appointment.id }}'>Edit</a>
+                                <a href = '/appointment/cancel/{{ appointment.id }}' onclick="return confirm('Are you sure you want to cancel this appointment?');">Cancel</a>
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    </div>
                 </div>
                 <div class="live_feed">
                     <p>Live feed:</p>
+                    <p>Suggestion for user</p>
+                    <h2>Upcoming teaching sessions:</h2>
+                    <ul>
+                        {% for appointment in reserved_teaching_appointments %}
+                            <li>
+                                <p>I'm teaching </p>
+                                <a href = '/profile/{{ appointment.appointment_student.id }}'>{{ appointment.appointment_student.first_name }}</a>
+                                <p>{{ appointment.category.name }} on {{ appointment.date }}</p>
+                                <p>Location: {{appointment.location }}</p>
+                                <a href = '/appointment/cancel/{{ appointment.id }}' onclick="return confirm('Are you sure you want to cancel this appointment?');">Cancel</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <h2>Upcoming learning sessions:</h2>
+                    <ul>
+                        {% for appointment in learning_appointments %}
+                            <li>
+                                <p>I'm meeting</p>
+                                <a href = '/profile/{{ appointment.appointment_creator.id }}'>{{ appointment.appointment_creator.first_name }}</a>
+                                <p> to learn {{ appointment.category.name }} on {{ appointment.date }}</p>
+                                <p>Location: {{ appointment.location }}</p>
+                                <a href = '/appointment/cancel/{{ appointment.id }}' onclick="return confirm('Are you sure you want to cancel this appointment? Credit will not be refunded for cancellations made within 24 hours of your scheduled session.');">Cancel</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </body>
         </div>

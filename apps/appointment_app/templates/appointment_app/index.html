@@ -1,0 +1,82 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<p>{{user.credits}}</p>
+
+{% if messages %}
+    <ul class="messages">    
+        {% for message in messages %}    
+            <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<h2>Add an hour time slot: </h2>
+<form action = '/appointment/add' method = 'post'>
+    {% csrf_token %}
+    <p>Date and time:</p>
+    <input type="datetime-local" name="date">
+    <p>Location: </p>
+    <input type="text" name = "location">
+    <input type="submit" value="Submit">
+</form>
+
+<h2>My Timeslots: </h2>
+<ul>
+{% for appointment in all_teaching_appointments %}
+    <li>
+        <a href = '/messages/{{appointment.id}}'>{{ appointment.date }} At {{ appointment.location }}</a>
+        {% if appointment.appointment_student == None %}
+            <p>(Open)</p>
+        {% else %}
+            <p>(Reserved)</p>
+        {% endif %}
+        <a href = '/appointment/edit/{{ appointment.id }}'>Edit</a>
+        <a href = '/appointment/cancel/{{ appointment.id }}' onclick="return confirm('Are you sure you want to cancel this appointment?');">Cancel</a>
+    </li>
+{% endfor %}
+</ul>
+
+<!--This code below is for the user dashboard!!-->
+
+<h2>Upcoming teaching sessions:</h2>
+<ul>
+    {% for appointment in reserved_teaching_appointments %}
+        <li>
+            <p>I'm teaching </p>
+            <a href = '/profile/{{ appointment.appointment_student.id }}'>{{ appointment.appointment_student.first_name }}</a>
+            <p>{{ appointment.category.name }} on {{ appointment.date }}</p>
+            <p>Location: {{appointment.location }}</p>
+            <a href = '/appointment/cancel/{{ appointment.id }}' onclick="return confirm('Are you sure you want to cancel this appointment?');">Cancel</a>
+        </li>
+    {% endfor %}
+</ul>
+
+<h2>Upcoming learning sessions:</h2>
+<ul>
+    {% for appointment in learning_appointments %}
+        <li>
+            <p>I'm meeting</p>
+            <a href = '/profile/{{ appointment.appointment_student.id }}'>{{ appointment.appointment_student.first_name }}</a>
+            <p> to learn {{ appointment.category.name }} on {{ appointment.date }}</p>
+            <p>Location: {{ appointment.location }}</p>
+            <a href = '/appointment/cancel/{{ appointment.id }}' onclick="return confirm('Are you sure you want to cancel this appointment?');">Cancel</a>
+        </li>
+    {% endfor %}
+</ul>
+
+
+<!--This code below is for viewing from a profile!!-->
+<h2>{{ user.first_name}}'s open timeslots: </h2>
+<ul>
+    {% for appointment in open_appointments %}
+        <li>
+            <p>{{ appointment.date }} At {{ appointment.location }}</p>
+            {% if user.credits > 0%}
+                <a href = "/appointment/reserve/{{ appointment.id }}">Reserve this timeslot!</a>
+            {%endif%}
+        </li>
+    {% endfor %}
+</ul>
+
