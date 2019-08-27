@@ -10,7 +10,6 @@ from pytz import timezone
 
 def index(request):
     user = Users.objects.get(id = request.session['curUser'])
-    user.credits += 1
     created_appointments = user.created_appointments.all().order_by('date')
     reserved_appointments = []
     open_appointments = []
@@ -47,7 +46,7 @@ def cancel_appointment(request, appointment_id):
     appointment = Appointments.objects.get(id = appointment_id)
     user = Users.objects.get(id = request.session['curUser'])
     student = appointment.appointment_student
-    #If the creator cancelled
+    #If the student cancelled
     if user == appointment.appointment_student:
         local = pytz.timezone ("America/Los_Angeles")
         naive = datetime.datetime.now()
@@ -57,12 +56,13 @@ def cancel_appointment(request, appointment_id):
         d2 = datetime.datetime.now()
         d1_ts = time.mktime(d1.timetuple())
         d2_ts = time.mktime(d2.timetuple())
-        print(int(d2_ts-d1_ts) / 60)
+        #Student cancelled with more than a day in advance, refund credit
         if (int(d2_ts-d1_ts) / 60) < -1440:
             student.credits += 1
+            student.save()
         student.attending_appointments.remove(appointment)
         student.save()
-    #If the student cancelled
+    #If the teacher cancelled
     else:
         if student != None:
             student.credits += 1 
