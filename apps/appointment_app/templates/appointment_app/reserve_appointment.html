@@ -1,0 +1,22 @@
+<h2>Confirm Appointment with {{appointment.appointment_creator.first_name}}</h2>
+
+<p>Date: {{ appointment.date }}</p>
+<p>At: {{ appointment.time }}</p>
+<p>Location: {{ appointment.location }}</p>
+
+<h2>What skill would you like to learn during this time?</h2>
+<form action = '/process_reservation' method = 'post'>
+    {% csrf_token %}
+    <input type = 'hidden' name = 'id' value = '{{ appointment.id }}'>
+    <select name = 'category'>
+        <option>Soccer</option>
+        <option>Basketball</option>
+    </select>
+    <input type="submit" value="Submit">
+</form>
+
+{% for categories in appointment.appointment_creator.skills_to_teach.all%}
+<select name = 'category'>
+    <option></option>
+</select>
+{% endfor %}
