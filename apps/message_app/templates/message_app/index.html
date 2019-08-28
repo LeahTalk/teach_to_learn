@@ -39,9 +39,39 @@ After creating a review the user should be redirected back to the dashboard.
         </div>
     </nav>
 
+{%if appointment_Object.appointment_creator.id == request.session.curUser %}
+<h2>Edit your timeslot: </h2>
+<form action = '/appointment/process_edits/{{ appointment_Object.id }}' method = 'post'>
+    {% csrf_token %}
+    <p>Date and time:</p>
+    <input type="datetime-local" name="date" value = '{{ appointment_Object.date }}'>
+    <p>Location: </p>
+    <input type="text" name = "location" value = {{ appointment_Object.location }}>
+    
+    
+    <input type="submit" value="Submit">
+</form>
 
-    <h3>You are messaging {Intructor.name} for {appointment.category} {appointment.subcategory} </h3>
+    {% else %}
+
+    <p>Date and time: {{appointment_Object.date}}</p>
+    <p>Location: {{appointment_Object.location}} </p>
+
+    {%endif%}
+
+
+
+{% if not appointment_Object.appointment_student == none %}
+
+    {%if appointment_Object.appointment_creator.id == request.session.curUser %}
+    <h3>You are messaging {{appointment_Object.appointment_student.first_name}} {{appointment_Object.appointment_student.last_name}} for {{appointment_Object.category.name}} </h3>
     <a class="btn btn-outline-danger" href = '/appointment/cancel/{{ request.session.appointment_id }}'>Cancel</a>
+    
+    {% else %}
+
+    <h3>You are messaging {{appointment_Object.appointment_creator.first_name}} {{appointment_Object.appointment_creator.last_name}} for {{appointment_Object.category.name}} </h3>
+    <a class="btn btn-outline-danger" href = '/appointment/cancel/{{ request.session.appointment_id }}'>Cancel</a>
+    {%endif%}
 
     
     
@@ -73,22 +103,55 @@ After creating a review the user should be redirected back to the dashboard.
 
 
       </div> 
+     
+      <form action="/send_review/{{request.session.appointment_id}}" class="login-form" method="POST"> 
+        <h4>Review :</h4>    
+        {% csrf_token %}
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                {% if message.extra_tags == "rating" %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+                {% endif %}
 
-      <button type="button" class="btn btn-outline-success">Teacher Attended </button>
-      <button type="button" class="btn btn-outline-success">Student Attended</button>
+            <select name="rating">
+                    <option value="" selected >Please select</option>
+                    <option value="1">☆</option>
+                    <option value="2">☆☆</option>
+                    <option value="3">☆☆☆</option>
+                    <option value="4">☆☆☆☆</option>
+                    <option value="5">☆☆☆☆☆</option>
+            </select> 
 
-      <h4>Review :</h4>
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                {% if message.extra_tags == "review_post" %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+                {% endif %}
 
-            <select>
-            <option value="" selected disabled>Please select</option>
-            <option value="1">☆</option>
-            <option value="2">☆☆</option>
-            <option value="3">☆☆☆</option>
-            <option value="4">☆☆☆☆</option>
-            <option value="5">☆☆☆☆☆</option>
-          </select> 
 
-          <button type="button" class="btn btn-outline-primary">Submit Review</button>
+        <textarea class="post_area" rows="2" cols="75" name="review_post" value = ""></textarea>
+        <input class="submit" name="Review_post"type="submit" value="Submit Review">
+     {%endif%}
+    </form>
+
+  
+
+
+      
+
+
+
+           
+
+          <!-- <button type="button" class="btn btn-outline-primary">Submit Review</button> -->
 
 
 </body>

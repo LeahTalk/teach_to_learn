@@ -92,6 +92,7 @@ def process_reservation(request):
 def edit_appointment(request, appointment_id):
     appointment = Appointments.objects.get(id = appointment_id)
     #"2018-06-12T19:30"
+    
     appointment.date = appointment.date.strftime("%Y-%m-%d"+ 'T' +"%H:%M")
     context = {
         'appointment' : appointment

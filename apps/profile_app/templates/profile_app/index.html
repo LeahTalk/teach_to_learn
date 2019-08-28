@@ -126,9 +126,11 @@
                                 <ul class="pl-5">
                                     {% for appointment in reserved_teaching_appointments %}
                                         <li>
-                                            <p>I'm teaching </p>
+                                            <p>I'm meeting </p>
                                             <a href = '/profile/{{ appointment.appointment_student.id }}'>{{ appointment.appointment_student.first_name }}</a>
-                                            <p>{{ appointment.category.name }} on {{ appointment.date }}</p>
+                                            <p>To teach</p>
+                                            <a href = '/messages/{{ appointment.id }}'>{{ appointment.category.name }} on {{ appointment.date }}</a>
+                                            <!-- <p>{{ appointment.category.name }} on {{ appointment.date }}</p> -->
                                             <p>Location: {{appointment.location }}</p>
                                             <a href = '/appointment/cancel/{{ appointment.id }}' onclick="return confirm('Are you sure you want to cancel this appointment?');">Cancel</a>
                                         </li>
@@ -142,7 +144,7 @@
                                         <li>
                                             <p>I'm meeting</p>
                                             <a href = '/profile/{{ appointment.appointment_creator.id }}'>{{ appointment.appointment_creator.first_name }}</a>
-                                            <p> to learn </p>
+                                            <p> To learn </p>
                                             <a href = '/messages/{{ appointment.id }}'>{{ appointment.category.name }} on {{ appointment.date }}</a>
                                             <p>Location: {{ appointment.location }}</p>
                                             <a href = '/appointment/cancel/{{ appointment.id }}' onclick="return confirm('Are you sure you want to cancel this appointment? Credit will not be refunded for cancellations made within 24 hours of your scheduled session.');">Cancel</a>
