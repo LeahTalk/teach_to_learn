@@ -4,15 +4,7 @@ from apps.login_app.models import *
 from django.contrib import messages
 import bcrypt
 import re
-import boto3
-
-
-def upload_photo(request):
-    # Create an S3 client
-    s3 = boto3.client('s3')
-    filename = 'file.txt'
-    bucket_name = 'my-bucket'
-    s3.upload_file(filename, bucket_name, filename)
+from geopy.geocoders import Nominatim
 
 def index(request):
     user = Users.objects.get(id = request.session['curUser'])
@@ -22,6 +14,14 @@ def index(request):
         if appointment.appointment_student != None:
             reserved_appointments.append(appointment)
     attending_appointments = user.attending_appointments.all().order_by('date')
+
+    geolocator = Nominatim(user_agent="profile_app")
+    location = geolocator.geocode(user.location)
+    print("lat")
+    print(location.latitude)
+    print("long")
+    print(location.longitude)
+
     context = {
         'user' : Users.objects.get(id = request.session['curUser']),
         'all_teaching_appointments' : created_appointments,
@@ -29,7 +29,9 @@ def index(request):
         'learning_appointments' : attending_appointments,
         'skills_to_learn' : user.skills_to_learn.all(),
         'all_users': Users.objects.all(),
-        'image' : user.image
+        'latitude': location.latitude,
+        'longitude': location.longitude,
+
     }
     return render(request, 'profile_app/index.html', context)
 
@@ -112,7 +114,9 @@ def view_history(request):
     return render(request, 'profile_app/history.html', context)
 
 def categories(request):
+    current_user = Users.objects.get(id=request.session['curUser'])
     context = {
+        'user': current_user,
         "all_categories" : Categories.objects.all(),
     }
     return render(request, 'profile_app/categories.html', context)
