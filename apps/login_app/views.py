@@ -19,7 +19,6 @@ def register_login(request):
 def login(request):
     errors = Users.objects.user_validator(request.POST)
     user = Users.objects.filter(email=request.POST['email'])
-    print(user)
     if user: 
         logged_user = user[0] 
         if bcrypt.checkpw(request.POST['password'].encode(), logged_user.pw_hash.encode()):

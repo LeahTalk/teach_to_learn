@@ -38,19 +38,23 @@
                 </div>
             </nav>
             <header>
-                <p>{{ user.first_name }} {{ user.last_name }}</p>
-                <p>Username: {{viewing_user.first_name}} {{viewing_user.last_name}}</p>
+                <h2>Username: {{viewing_user.first_name}} {{viewing_user.last_name}}</h2>
             </header>
             <body>
                 <div class="main_content">
                     <div class="profile_img">
-                        <img src="" alt="profile avatar">
-                        <form action="PLACEHOLDER" enctype="multipart/form-data" method="POST">
+                        <form action="/check_picture" enctype="multipart/form-data" method="POST">
                             {% csrf_token %}
-                            <label for="profile_img" style="cursor: pointer;">Select Image</label>
-                            <input type="file" id="profile_img" name="profile_img" accept="image/png, image/jpeg" style="display: none;" onchange="loadFile(event)">
-                            <input type="submit" name="upload" value="Upload">
-                            <img id="output" width="200"/>
+                            {% if viewing_user.image_base == None %}
+                                <img src="{% static '/profile_app/images/blank_user.jpg' %}" height = 100px>
+                            {% else %}
+                                <img src="data:image/png;base64, {{ viewing_user.image_base }}" alt="user profile picture" height = 100px/>
+                            {% endif %}
+                            {% if user == viewing_user %}
+                                <label for="profile_img" style="cursor: pointer;">Select Image</label>
+                                <input type="file" id="profile_img" name="profile_img" style="display: none;" onchange="loadFile(event)">
+                                <input type="submit" name="upload" value="Upload">
+                            {% endif %}
                             <script>
                                 var loadFile = function(event) {
                                     var image = document.getElementById('output');
@@ -93,10 +97,10 @@
                 </div>
                 <div class="live_feed">
                     <p>User Rating:</p>
-                    <p>Courses taught:</p>
+                    <p>Skills:</p>
                     <ul>
-                    {% for course in course_taught  %}
-                        <li>{{course.name}}</li>
+                    {% for skill in skills  %}
+                        <li>{{skill.name}}</li>
                     {% endfor %}
                     </ul>
                     <a href="PLACEHOLDER">Add courses</a>

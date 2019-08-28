@@ -3,6 +3,13 @@ from django.db import models
 from time import localtime, strftime, strptime
 from datetime import date, datetime
 
+class Image(models.Model):
+    title = models.TextField()
+    cover = models.ImageField(upload_to='images/')
+
+    def __str__(self):
+        return self.title
+
 class CategoriesManager(models.Manager):
     def basic_validator(self, postData):
         errors = {}
@@ -70,6 +77,8 @@ class Users(models.Model):
     desc = models.TextField(max_length = 255, default = "")
     skills_to_teach = models.ManyToManyField(SubCategories, related_name = "teachers")
     skills_to_learn = models.ManyToManyField(SubCategories, related_name = "students")
+    image_base = models.TextField(default = None, null = True)
+    image = models.OneToOneField(Image, null = True, blank=True, default = None)
     location = models.TextField(max_length = 255, default = "")
     objects = UserManager()
 

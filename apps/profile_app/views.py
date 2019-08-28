@@ -4,6 +4,29 @@ from apps.login_app.models import *
 from django.contrib import messages
 import bcrypt
 import re
+import os
+import boto3
+import base64
+from geopy.geocoders import Nominatim
+
+'''
+def upload_photo(request):
+    bucket = 'teachtolearnphotos'
+
+    object_name = 'test.png'
+    #Change this for later so it doesn't have the access key in plaintext!!!
+    s3_client = boto3.client('s3', aws_access_key_id='AKIAUTEH3EOJ7EEP2HPU',
+         aws_secret_access_key= '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')
+    response = s3_client.upload_file(file_name, bucket, object_name)
+    return redirect('/dashboard')
+'''
+def upload_photo(request):
+    if 'profile_img' in request.FILES:
+        encoded_string = base64.b64encode(request.FILES['profile_img'].read())
+        user = Users.objects.get(id = request.session['curUser'])
+        user.image_base = encoded_string
+        user.save()
+    return redirect('/profile/' + str(request.session['curUser']))
 
 def index(request):
     user = Users.objects.get(id = request.session['curUser'])
@@ -14,6 +37,13 @@ def index(request):
             reserved_appointments.append(appointment)
     attending_appointments = user.attending_appointments.all().order_by('date')
 
+    geolocator = Nominatim(user_agent="profile_app")
+    location = geolocator.geocode(user.location)
+    print("lat")
+    print(location.latitude)
+    print("long")
+    print(location.longitude)
+
     context = {
         'user' : Users.objects.get(id = request.session['curUser']),
         'all_teaching_appointments' : created_appointments,
@@ -21,6 +51,9 @@ def index(request):
         'learning_appointments' : attending_appointments,
         'skills_to_learn' : user.skills_to_learn.all(),
         'all_users': Users.objects.all(),
+        'latitude': location.latitude,
+        'longitude': location.longitude,
+
     }
     return render(request, 'profile_app/index.html', context)
 
@@ -91,7 +124,7 @@ def view_profile(request, user_id):
         'user' : Users.objects.get(id = request.session['curUser']),
         'viewing_user' : view_user,
         'open_appointments' : open_appointments,
-        'course_taught': view_user.skills_to_teach.all(),
+        'skills': view_user.skills_to_teach.all(),
     }
     return render(request, 'profile_app/profile.html', context)
 
@@ -103,7 +136,9 @@ def view_history(request):
     return render(request, 'profile_app/history.html', context)
 
 def categories(request):
+    current_user = Users.objects.get(id=request.session['curUser'])
     context = {
+        'user': current_user,
         "all_categories" : Categories.objects.all(),
     }
     return render(request, 'profile_app/categories.html', context)

@@ -16,79 +16,225 @@ After creating a review the user should be redirected back to the dashboard.
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-            <h1 class="navbar-brand">Welcome {{ user.first_name }}!</h1>
-            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item">
-                    <a class = 'nav-link' href="/dashboard" style = 'margin-left: 50px'>Dashboard</a>
-                </li>
-                <li class="nav-item">
-                    <a class = 'nav-link' href="/profile/{{ user.id }}" style = 'margin-left: 50px'>My Profile Page</a>
-                </li>
-                <li class="nav-item">
-                    <a class = 'nav-link' href="/edit_profile" style = 'margin-left: 50px'>About Page</a>
-                </li>
-                <li>
-                    <a class = 'nav-link' href="/categories" style = 'margin-left: 50px'>Categories</a>
-                </li>
-                <li class="nav-item">
-                    <a style = "margin-left: 50px" class = 'nav-link' href="/logout">Logout</a>
-                </li>
-            </ul>
+
+    {% load static %}
+    <nav class="navbar mb-5 p-0 pb-1" style="background-image: linear-gradient(#fff, #fff3cf);">
+        <div class="row text-center pl-2 pr-2" style="width:100%">
+            <div class="col p-0 pl-5">
+                <a href="/dashboard"><img src="{% static 'profile_app/img/Teach2Learn.png' %}" style="height: 70px" /></a>
+            </div>
+            <div class="col p-0"></div>
+            <div class="col border-left border-right p-0 mt-4" style="height: 75%">
+                <a class = 'nav-link text-secondary p-0' href="/dashboard">Dashboard</a>
+            </div>
+            <div class="col border-right p-0 mt-4" style="height: 75%">
+                <a class = 'nav-link text-secondary p-0' href="/profile/{{ user.id }}">My Profile Page</a>
+            </div>
+            <div class="col border-right p-0 mt-4" style="height: 75%">
+                <a class = 'nav-link text-secondary p-0' href="/edit_profile">Account Settings</a>
+            </div>
+            <div class="col border-right p-0 mt-4" style="height: 75%">
+                <a class = 'nav-link text-secondary p-0' href="/categories">Categories</a>
+            </div>
+            <div class="col border-right p-0 mt-4" style="height: 75%">
+                <a class = 'nav-link text-secondary p-0' href="/logout">Logout</a>
+            </div>
         </div>
     </nav>
 
+    <div class="row">
+        <div class="col">
+                <p class="lead ml-5"> You are viewing as Instructor: </p>
+        </div>
+        <div class="col">
 
-    <h3>You are messaging {Intructor.name} for {appointment.category} {appointment.subcategory} </h3>
-    <a class="btn btn-outline-danger" href = '/appointment/cancel/{{ request.session.appointment_id }}'>Cancel</a>
+        </div>
+        <div class="col">
+            {%if appointment_Object.appointment_creator.id == request.session.curUser %}
 
-    
-    
-
-
-    
-
-    {% for message in all_messages %}
-    <h3>{{message.message_owner.first_name}} {{message.message_owner.last_name}} [{{message.created_at}}] </h3>
-    <p>{{message.content}}</p>
-    {% endfor %}
-        
+                <div class="overflow-auto mb-4 border rounded rounded-lg border-muted" style="min-height: 250px">
+                    <h4 class="p-2" style="width: 100%; background-color:#fff3cf">Edit this timeslot:</h4>
+                    <div class="ml-5 mt-4" style="width:55%">
+                        <form action = '/appointment/process_edits/{{ appointment_Object.id }}' method = 'post'>
+                            {% csrf_token %}
+                            <p>Date and time:</p>
+                            <input class="form-control" type="datetime-local" name="date" value = '{{ appointment_Object.date }}'>
+                            <p>Location: </p>
+                            <input class="form-control" type="text" name = "location" value = {{ appointment_Object.location }}>
+                            
+                            <div class="text-center mt-4 mb-4">
+                                <button class="btn text-dark" type="submit" style ="background-color:#fcedfc ">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            {%endif%}
             
-    <form action="/send_message/{{request.session.appointment_id}}" class="login-form" method="POST">     
-        {% csrf_token %}
-        {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                {% if message.extra_tags == "length" %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                {% endif %}
-                {% endfor %}
-            </ul>
-                {% endif %}
+        </div>
+        <div class="col"></div>
+        <div class="col"></div>
+    </div>
 
-        <textarea class="post_area" rows="4" cols="150" name="post" value = ""></textarea>
-        <input class="submit" name="message" type="submit" value="Post_a_message">
-      </form>
+
+
+            {% if not appointment_Object.appointment_student == none %}
+            
+            <!-- Instructor View -->
+            {% if appointment_Object.appointment_creator.id == request.session.curUser %}
+
+            <div class="row">
+                <div class="col"></div>
+                    <div class="col-8">
+                        <div class="row">
+                            <div class="col">
+                                <div class="mt-3 mb-4 border rounded rounded-lg border-muted" style="width: 95%; min-height: 200px;  min-width:250px">
+                                    <h4 class="p-2" style="width: 100%; background-color:#fcedfc">You are messaging {{appointment_Object.appointment_student.first_name}} {{appointment_Object.appointment_student.last_name}} for the "blank" {{appointment_Object.category.name}} course. </h4>
+
+
+                                    {% for message in all_messages %}
+                                    <h6 class="pl-3">{{message.message_owner.first_name}} {{message.message_owner.last_name}} [{{message.created_at}}] </h6>
+                                    <p class="pl-5">{{message.content}}</p>
+                                    {% endfor %}
+                                            
+                                                
+                                    <form action="/send_message/{{request.session.appointment_id}}" class="login-form" method="POST">     
+                                        {% csrf_token %}
+                                        {% if messages %}
+                                            <ul class="messages ml-5">
+                                                {% for message in messages %}
+                                                {% if message.extra_tags == "length" %}
+                                                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                                {% endif %}
+                                                {% endfor %}
+                                            </ul>
+                                                {% endif %}
+                                
+                                        <textarea class="post_area from-control ml-3" rows="4" cols="60" name="post" value = ""></textarea>
+                                        <div class="text-center mt-4 mb-4">
+                                            <button class="btn text-dark" type="submit" style ="background-color:#fcedfc ">Submit</button>
+                                        </div>
+                                    </form>  
+                                </div>
+                            </div>
+
+                            <div class="col-1"></div>
+
+                            <div class="col">
+                                <div class="mt-3 mb-4 border rounded rounded-lg border-muted" style="width: 95%; min-height: 200px;  min-width:250px">
+                                    <h4 class="p-2" style="width: 100%; background-color:#fcedfc">Course Details: </h4>
+                                    <div class="pl-5 mt-4">
+                                        <p> Course: </p>
+                                        <p>Date and time: {{appointment_Object.date}}</p>
+                                        <p>Location: {{appointment_Object.location}} </p>
+                                    </div>
+                                <div class="text-center mt-4 mb-4">
+                                        <a class="btn btn-outline-danger" href = '/appointment/cancel/{{ request.session.appointment_id }}'>Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col"></div>
+            </div>
+
+            <!-- Student View -->
+            {% else %}
+                <div class="row">
+                    <div class="col-10">
+                        <p> You are viewing as Student: </p>
+                        <h3>You are messaging {{appointment_Object.appointment_creator.first_name}} {{appointment_Object.appointment_creator.last_name}} for {{appointment_Object.category.name}} </h3>
+                    
+                        {% for message in all_messages %}
+                        <h3>{{message.message_owner.first_name}} {{message.message_owner.last_name}} [{{message.created_at}}] </h3>
+                        <p>{{message.content}}</p>
+                        {% endfor %}
+                            
+                                
+                        <form action="/send_message/{{request.session.appointment_id}}" class="login-form" method="POST">     
+                            {% csrf_token %}
+                            {% if messages %}
+                                <ul class="messages">
+                                    {% for message in messages %}
+                                    {% if message.extra_tags == "length" %}
+                                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                    {% endif %}
+                                    {% endfor %}
+                                </ul>
+                                    {% endif %}
+                    
+                            <textarea class="post_area" rows="4" cols="100" name="post" value = ""></textarea>
+                            <input class="submit" name="message" type="submit" value="Post_a_message">
+                        </form>  
+
+                    </div>
+                    <div class="col text-right">
+                        <div class="text-left">
+                            <p>Course Details: </p>
+                            <p>Date and time: {{appointment_Object.date}}</p>
+                            <p>Location: {{appointment_Object.location}} </p>
+                            <a class="btn btn-outline-danger" href = '/appointment/cancel/{{ request.session.appointment_id }}'>Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            {%endif%}
+        </div>
+        <div class="col"></div>
+    </div>
 
 
       </div> 
+    <div class=row>
+        <div class="col"></div>
+    <div class="col-8">
+        <form action="/send_review/{{request.session.appointment_id}}" class="login-form" method="POST"> 
+            <h4>Review :</h4>    
+            {% csrf_token %}
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    {% if message.extra_tags == "rating" %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+                    {% endif %}
 
-      <button type="button" class="btn btn-outline-success">Teacher Attended </button>
-      <button type="button" class="btn btn-outline-success">Student Attended</button>
+                <select name="rating">
+                        <option value="" selected >Please select</option>
+                        <option value="1">☆</option>
+                        <option value="2">☆☆</option>
+                        <option value="3">☆☆☆</option>
+                        <option value="4">☆☆☆☆</option>
+                        <option value="5">☆☆☆☆☆</option>
+                </select> 
 
-      <h4>Review :</h4>
+                {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    {% if message.extra_tags == "review_post" %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+                    {% endif %}
 
-            <select>
-            <option value="" selected disabled>Please select</option>
-            <option value="1">☆</option>
-            <option value="2">☆☆</option>
-            <option value="3">☆☆☆</option>
-            <option value="4">☆☆☆☆</option>
-            <option value="5">☆☆☆☆☆</option>
-          </select> 
 
-          <button type="button" class="btn btn-outline-primary">Submit Review</button>
+                <textarea class="post_area" rows="2" cols="75" name="review_post" value = ""></textarea>
+                <input class="submit" name="Review_post"type="submit" value="Submit Review">
+                {%endif%}
+            </form>
+        </div>
+        <div class="col"></div>
+    </div>
+
+
+      
+
+
+
+           
+
+          <!-- <button type="button" class="btn btn-outline-primary">Submit Review</button> -->
 
 
 </body>

@@ -72,8 +72,11 @@ def cancel_appointment(request, appointment_id):
     return redirect('/dashboard')
 
 def reserve_appointment(request, appointment_id):
+    appointment = Appointments.objects.get(id = appointment_id)
+    print(appointment.appointment_creator.skills_to_teach.all())
     context = {
-        'appointment' : Appointments.objects.get(id = appointment_id)
+        'appointment' : appointment,
+        'skills' : appointment.appointment_creator.skills_to_teach.all()
     }
     return render(request, 'appointment_app/reserve_appointment.html', context)
 
@@ -81,8 +84,8 @@ def process_reservation(request):
     appointment = Appointments.objects.get(id = request.POST['id'])
     user = Users.objects.get(id = request.session['curUser'])
     appointment.appointment_student = user
-    #category = SubCategories.objects.get(name = request.POST['category'])
-    #appointment.category = category
+    category = SubCategories.objects.get(name = request.POST['category'])
+    appointment.category = category
     appointment.pending_credit = True
     user.credits -= 1
     user.save()
@@ -92,6 +95,7 @@ def process_reservation(request):
 def edit_appointment(request, appointment_id):
     appointment = Appointments.objects.get(id = appointment_id)
     #"2018-06-12T19:30"
+    
     appointment.date = appointment.date.strftime("%Y-%m-%d"+ 'T' +"%H:%M")
     context = {
         'appointment' : appointment
@@ -103,7 +107,7 @@ def process_edits(request, appointment_id):
     if len(errors) > 0:
         for key, value in errors.items():
             messages.error(request, value)
-        return redirect('/appointment/edit/' + str(appointment_id))
+        return redirect('/messages/' + str(appointment_id))
     appointment = Appointments.objects.get(id = appointment_id)
     appointment.date = request.POST['date']
     appointment.location = request.POST['location']
