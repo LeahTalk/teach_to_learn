@@ -1,10 +1,19 @@
 {% for subcategory in selected_categories_subs %}
-<div>
-    <h5>Sub Category: {{subcategory.name}}</h5>
-    <p>Instructors: </p>
-    {% for teachers in subcategory.teachers.all %}
-    <p>{{teachers.first_name}} {{teachers.last_name}}</p>
-    <a href="/profile/{{ teachers.id }}">View Instructor Profile</a>
-    {% endfor %}
+<div class="col">
+    <div class="overflow-auto mt-3 mb-4 border rounded rounded-lg border-muted" style="width: 250px; min-height: 400px">
+        <h6 class="p-2 pl-3 m-0" style="width: 100%; background-color:#fff3cf">Sub Category:</h6>
+        <h4 class="p-2 pl-3 pb-3" style="width: 100%; background-color:#fff3cf">{{subcategory.name}}</h4>
+        <h6 class="pl-3 mt-3"> Current Instructors: </h6>
+        <ul>
+        {% for teachers in subcategory.teachers.all %}
+        <li class="mt-2">{{teachers.first_name}} {{teachers.last_name}}</li>
+        <a href="/profile/{{ teachers.id }}">View Instructor Profile</a>
+        {% endfor %}
+        </ul>
+    </div>
 </div>
 {% endfor %}
+<div class="col"></div>
+<div class="col"></div>
+<div class="col"></div>
+<div class="col"></div>
