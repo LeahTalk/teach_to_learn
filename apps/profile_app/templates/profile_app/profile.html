@@ -45,10 +45,11 @@
                 <div class="main_content">
                     <div class="profile_img">
                         <img src="" alt="profile avatar">
-                        <form action="check_picture" enctype="multipart/form-data" method="POST">
+                        <form action="/check_picture" enctype="multipart/form-data" method="POST">
                             {% csrf_token %}
+                            <img src="{% static '/profile_app/images/blank_user.jpg' %}" height = 100px>
                             <label for="profile_img" style="cursor: pointer;">Select Image</label>
-                            <input type="file" id="profile_img" name="profile_img" accept="image/png, image/jpeg" style="display: none;" onchange="loadFile(event)">
+                            <input type="file" id="profile_img" name="profile_img" style="display: none;" onchange="loadFile(event)">
                             <input type="submit" name="upload" value="Upload">
                             <img id="output" width="200"/>
                             <script>

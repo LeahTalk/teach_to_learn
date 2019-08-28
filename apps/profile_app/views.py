@@ -4,15 +4,23 @@ from apps.login_app.models import *
 from django.contrib import messages
 import bcrypt
 import re
+import os
 import boto3
+import base64
 
-
+'''
 def upload_photo(request):
-    # Create an S3 client
-    s3 = boto3.client('s3')
-    filename = 'file.txt'
-    bucket_name = 'my-bucket'
-    s3.upload_file(filename, bucket_name, filename)
+    bucket = 'teachtolearnphotos'
+
+    object_name = 'test.png'
+    #Change this for later so it doesn't have the access key in plaintext!!!
+    s3_client = boto3.client('s3', aws_access_key_id='AKIAUTEH3EOJ7EEP2HPU',
+         aws_secret_access_key= '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')
+    response = s3_client.upload_file(file_name, bucket, object_name)
+    return redirect('/dashboard')
+'''
+def upload_photo(request):
+    return redirect('/dashboard')
 
 def index(request):
     user = Users.objects.get(id = request.session['curUser'])

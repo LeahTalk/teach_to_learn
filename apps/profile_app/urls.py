@@ -10,5 +10,6 @@ urlpatterns = [
     url(r'^process_profile_edits$', views.process_profile_edits),
     url(r'^edit_password$', views.process_password_edits),
     url(r'^edit_description$', views.process_description_edits),
-    url(r'^populate_subcategories_display$', views.populate_subcategories_display)
+    url(r'^populate_subcategories_display$', views.populate_subcategories_display),
+    url(r'^check_picture$', views.upload_photo),
 ]
