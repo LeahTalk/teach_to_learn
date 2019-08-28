@@ -4,6 +4,15 @@ from apps.login_app.models import *
 from django.contrib import messages
 import bcrypt
 import re
+import boto3
+
+
+def upload_photo(request):
+    # Create an S3 client
+    s3 = boto3.client('s3')
+    filename = 'file.txt'
+    bucket_name = 'my-bucket'
+    s3.upload_file(filename, bucket_name, filename)
 
 def index(request):
     user = Users.objects.get(id = request.session['curUser'])

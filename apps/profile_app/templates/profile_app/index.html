@@ -42,7 +42,10 @@
                 <img src="{{ post.cover.url}}" alt="{{ post.title }}" height = 100px>
             {% else %}
                 <img src="{% static '/profile_app/images/blank_user.jpg' %}" alt="No User photo" height = 100px>
-            {% endif %}          
+            {% endif %}
+            <form>
+                <input type="file" id="file-input">
+            </form>
             <body>
                 <div class="control_panel">
                     <p>User Control Panel</p>
