@@ -38,7 +38,6 @@
             <h2 class=>Welcome {{ user.first_name }}!</h2>
             <div class = 'header_section'>
                 <h3 style = 'display: inline-block'>Edit Profile</h3>
-                <a class = 'btn btn-primary' style = 'color: white; margin-left: 780px;' href = '/dashboard'>Return to Dashboard</a>
             </div>
             {% if messages %}
                 <ul class="messages">    
@@ -69,12 +68,6 @@
                     <button class="btn btn-success" type="Create" style = "margin: 20px auto">Update Password</button>
                 </form>
             </div>
-            <h3>Edit Description</h3>
-            <form action = '/edit_description' method = 'post'>
-                {% csrf_token %}
-                <textarea style = 'border: 1px solid lightgray' class="form-control" id="desc" name = "desc" rows="5">{{ user.desc }}</textarea>
-                <button class="btn btn-success" type="Create" style = "margin: 20px auto">Save</button>
-            </form>
         </div>
     </div>
 </body>

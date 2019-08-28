@@ -6,13 +6,64 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Getting to know you!</title>
 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 </head>
 
+
+
 <body>
+    <div class="wrapper">
+    {% load static %}
+    <nav class="navbar mb-5 p-0 pb-1" style="background-image: linear-gradient(#fff, #fff3cf);">
+        <div class="row text-center pl-2 pr-2" style="width:100%">
+            <div class="col p-0 pl-5">
+                <img src="{% static 'profile_app/img/Teach2Learn.png' %}" style="height: 70px" />
+            </div>
+            <div class="col p-0"></div>
+            <div class="col border-left border-right p-0 mt-4" style="height: 75%">
+
+            </div>
+            <div class="col border-right p-0 mt-4" style="height: 75%">
+
+            </div>
+            <div class="col border-right p-0 mt-4" style="height: 75%">
+
+            </div>
+            <div class="col border-right p-0 mt-4" style="height: 75%">
+
+            </div>
+            <div class="col border-right p-0 mt-4" style="height: 75%">
+
+            </div>
+        </div>
+    </nav>
+
+    <div class="row">
+        <div clas="col"></div>
+        <div class="col text-center">
+            <h3> Thank you for registering, {{current_user.first_name}} {{current_user.last_name}}!</h3>
+            <p></p>
+            <p class="lead"> Please fill out the next few questions to get started!</p>
+            <p class="lead">Enjoy your time at Teach2Learn!</p>
+        </div>
+        <div clas="col"></div>
+    </div>
+
+    <div class="row">
+        <div clas="col"></div>
+        <div clas="col-8"></div>
+        <div clas="col"></div>
+    </div>
+
+
+
     <div>
-        <h3> Thank you for registering {{current_user.first_name}} {{current_user.last_name}} </h3>
+
 
         <form id="category_form" action="/category_form" method="POST"> {% csrf_token %}
             <h3>What Category would you like to teach in?</h3> 
@@ -42,6 +93,7 @@
         </div>
 
 
+    </div>
     </div>
 
     <script>

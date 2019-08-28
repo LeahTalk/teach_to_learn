@@ -77,6 +77,7 @@ class Users(models.Model):
     desc = models.TextField(max_length = 255, default = "")
     skills_to_teach = models.ManyToManyField(SubCategories, related_name = "teachers")
     skills_to_learn = models.ManyToManyField(SubCategories, related_name = "students")
+    image_base = models.TextField(default = None, null = True)
     image = models.OneToOneField(Image, null = True, blank=True, default = None)
     location = models.TextField(max_length = 255, default = "")
     objects = UserManager()

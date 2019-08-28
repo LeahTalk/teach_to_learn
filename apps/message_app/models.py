@@ -6,8 +6,7 @@ from apps.appointment_app.models import Appointments
 class MessageManager(models.Manager):
     def message_validator(self, postData):
         errors = {}
-        print(postData)
-        print("ppppppppppppppppppppppppppppppppppppppp")
+    
         if len(postData['post']) < 1:
             errors['length'] = "Cannot post a blank message!"
         return errors
