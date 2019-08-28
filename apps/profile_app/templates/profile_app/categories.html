@@ -43,39 +43,40 @@
 
             <div class="row">
                 <div class="col"></div>
-                <div class="col-9">
+                <div class="col-9 border border-muted rounded overflow-auto" style="min-height: 800px">
                     <div class="row">
-                        <div class="col text-right">
+                        <div class="col text-right pt-3" style="background-color:#fcedfc">
                             <h2>Choose from our list of categories:</h2>
                         </div>
-                        <div class="col text-left">
+                        <div class="col text-left pt-3" style="background-color:#fcedfc">
                             <form class="h4" id="category_form" action="/populate_subcategories_display" method="POST"> {% csrf_token %}
                                 <div class="row ml-5">
                                     <div>
-                                        <select class="border rounded h4" style="height: 45px" name="select_category">
+                                        <select class="border rounded-lg h4" style="height: 45px; width: 150px;" name="select_category">
                                         {% for category in all_categories %}
                                             <option class="h5"value="{{category.name}}">{{category.name}}</option>
                                         {% endfor %}
                                         </select>
                                     </div>
                                     <div class="ml-3">
-                                        <input class="btn text-muted m-0" style="background-color: #fcedfc; height: 45px" type="submit" value="Submit Search!">
+                                        <input class="btn text-muted m-0" style="background-color: #fff; height: 45px" type="submit" value="Submit Search!">
                                     </div>
                                 </div>
                             </form>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col"></div>
+                        <div class="col-11 pt-5">
+                            <div class="row" id="populate_subcategories"></div>
+                        </div>
+                        <div class="col"></div>
+                    </div>
                 </div>
                 <div class="col"></div>
             </div>
             
-            <div class="row">
-                <div class="col"></div>
-                <div class="col-9 pt-5">
-                    <div class="row" id="populate_subcategories"></div>
-                </div>
-                <div class="col"></div>
-            </div>
+
     
 
 
