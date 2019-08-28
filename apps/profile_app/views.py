@@ -13,7 +13,6 @@ def index(request):
         if appointment.appointment_student != None:
             reserved_appointments.append(appointment)
     attending_appointments = user.attending_appointments.all().order_by('date')
-
     context = {
         'user' : Users.objects.get(id = request.session['curUser']),
         'all_teaching_appointments' : created_appointments,
@@ -21,6 +20,7 @@ def index(request):
         'learning_appointments' : attending_appointments,
         'skills_to_learn' : user.skills_to_learn.all(),
         'all_users': Users.objects.all(),
+        'image' : user.image
     }
     return render(request, 'profile_app/index.html', context)
 
