@@ -7,6 +7,9 @@
         {% load static %}
         <link rel="stylesheet" href="{% static 'profile_app/css/####.css' %}">
         <title>Category</title>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
     </head>
     <body>
         <div class="container">
@@ -18,11 +21,14 @@
             <header>
                 <p>
                     Categories:
-                    <select name="categories">
-                    {% for category in all_categories %}
-                        <option value="{{category.name}}">{{category.name}}</option>
-                    {% endfor %}
-                    </select>
+                    <form id="category_form" action="/populate_subcategories_display" method="POST"> {% csrf_token %}
+                        <select class="btn text-dark bg-light" name="select_category">
+                        {% for category in all_categories %}
+                            <option value="{{category.name}}">{{category.name}}</option>
+                        {% endfor %}
+                        </select>
+                        <input type="submit">
+                    </form>
                 </p>
             </header>
             <body>
@@ -30,15 +36,28 @@
                     <h3>
                         This div will update depending on the drop down and populate the sub categories and instructors
                     </h3>
-                    {% for subcategory in categories %}
-                    <div>
-                        Sub Category 1 {{subcategory.name}}
-                        Instructor: {{PLACEHOLDER}}
-                        <a href="/profile/{{PLACEHOLDER}}">View User's Profile</a>
+                    <div id="populate_subcategories">
+
                     </div>
-                    {% endfor %}
                 </div>
             </body>
         </div>
+
+        <script>
+        $('#category_form').submit(function(e){
+            // preventDefault stops the default action of the event (e) from being triggered.
+            e.preventDefault();
+            console.log("Cateogry Form submitted but no HTTP request sent to server!");
+
+            $.ajax({
+                url: '/populate_subcategories_display',
+                method: 'POST',
+                data: $(this).serialize(),
+                success: function(serverResponse){
+                    $('#populate_subcategories').html(serverResponse);
+                }
+            })
+        });
+        </script>
     </body>
 </html>

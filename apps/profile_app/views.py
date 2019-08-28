@@ -86,10 +86,12 @@ def view_profile(request, user_id):
     for appointment in created_appointments:
         if appointment.appointment_student == None:
             open_appointments.append(appointment)
+
     context = {
         'user' : Users.objects.get(id = request.session['curUser']),
         'viewing_user' : view_user,
-        'open_appointments' : open_appointments
+        'open_appointments' : open_appointments,
+        'course_taught': view_user.skills_to_teach.all(),
     }
     return render(request, 'profile_app/profile.html', context)
 
@@ -105,6 +107,20 @@ def categories(request):
         "all_categories" : Categories.objects.all(),
     }
     return render(request, 'profile_app/categories.html', context)
+
+def populate_subcategories_display(request):
+    print("I'm over here!")
+    if request.method == "POST":
+        print("I'm in the Post!")
+        selected_category = Categories.objects.get(name=request.POST['select_category'])
+
+        selected_categories_subs = SubCategories.objects.filter(mainCategory = selected_category)
+
+        context = {
+            'selected_categories_subs' : selected_categories_subs,
+        }
+
+        return render(request, 'profile_app/selected_categories.html', context)
 
 
 # jonathan@test.com testpassword chair@wheels.com  testpassword
