@@ -45,7 +45,7 @@
                 <div class="main_content">
                     <div class="profile_img">
                         <img src="" alt="profile avatar">
-                        <form action="PLACEHOLDER" enctype="multipart/form-data" method="POST">
+                        <form action="check_picture" enctype="multipart/form-data" method="POST">
                             {% csrf_token %}
                             <label for="profile_img" style="cursor: pointer;">Select Image</label>
                             <input type="file" id="profile_img" name="profile_img" accept="image/png, image/jpeg" style="display: none;" onchange="loadFile(event)">
