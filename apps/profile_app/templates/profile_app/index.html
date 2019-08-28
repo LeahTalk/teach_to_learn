@@ -91,7 +91,7 @@
                     <p> {{skills.name}} Course is taught by: 
                         {% for user in all_users %}
                             {% if user in skills.teachers.all %}
-                                {{ user.first_name }} {{user.last_name}} 
+                                <a href="/profile/{{user.id}}">{{ user.first_name }} {{user.last_name}} </a>
                             {% endif %}
                         {% endfor %}
                     {% endfor %}
