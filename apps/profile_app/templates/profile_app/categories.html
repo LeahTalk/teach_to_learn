@@ -17,50 +17,73 @@
     <body>
         <div class="wrapper">
             {% load static %}
-            <nav class="navbar mb-5" style="background-color:#FFF6DB">
-                <div class="row text-center" style="width:100%">
-                    <div class="col">
-                        <a href="/dashboard"><img src="{% static 'profile_app/img/Teach2Learn.png' %}" style="height: 75px" /></a>
+            <nav class="navbar mb-5 p-0 pb-1" style="background-image: linear-gradient(#fff, #fff3cf);">
+                <div class="row text-center pl-2 pr-2" style="width:100%">
+                    <div class="col p-0 pl-5">
+                        <a href="/dashboard"><img src="{% static 'profile_app/img/Teach2Learn.png' %}" style="height: 70px" /></a>
                     </div>
-                    <div class="col"></div>
-                    <div class="col pt-4">
-                        <a class = 'nav-link text-secondary' href="/dashboard">Dashboard</a>
+                    <div class="col p-0"></div>
+                    <div class="col border-left border-right p-0 mt-4" style="height: 75%">
+                        <a class = 'nav-link text-secondary p-0' href="/dashboard">Dashboard</a>
                     </div>
-                    <div class="col pt-4">
-                        <a class = 'nav-link text-secondary' href="/profile/{{ user.id }}">My Profile Page</a>
+                    <div class="col border-right p-0 mt-4" style="height: 75%">
+                        <a class = 'nav-link text-secondary p-0' href="/profile/{{ user.id }}">My Profile Page</a>
                     </div>
-                    <div class="col pt-4">
-                        <a class = 'nav-link text-secondary' href="/edit_profile">Account Settings</a>
+                    <div class="col border-right p-0 mt-4" style="height: 75%">
+                        <a class = 'nav-link text-secondary p-0' href="/edit_profile">Account Settings</a>
                     </div>
-                    <div class="col pt-4">
-                        <a class = 'nav-link text-secondary' href="/categories">Categories</a>
+                    <div class="col border-right p-0 mt-4" style="height: 75%">
+                        <a class = 'nav-link text-secondary p-0' href="/categories">Categories</a>
                     </div>
-                    <div class="col pt-4">
-                        <a class = 'nav-link text-secondary' href="/logout">Logout</a>
+                    <div class="col border-right p-0 mt-4" style="height: 75%">
+                        <a class = 'nav-link text-secondary p-0' href="/logout">Logout</a>
                     </div>
                 </div>
             </nav>
-            <header>
-                <p>
-                    Categories:
-                    <form id="category_form" action="/populate_subcategories_display" method="POST"> {% csrf_token %}
-                        <select class="btn text-dark bg-light" name="select_category">
-                        {% for category in all_categories %}
-                            <option value="{{category.name}}">{{category.name}}</option>
-                        {% endfor %}
-                        </select>
-                        <input type="submit">
-                    </form>
-                </p>
-            </header>
+
+            <div class="row">
+                <div class="col"></div>
+                <div class="col-9">
+                    <div class="row">
+                        <div class="col text-right">
+                            <h2>Choose from our list of categories:</h2>
+                        </div>
+                        <div class="col text-left">
+                            <form class="h4" id="category_form" action="/populate_subcategories_display" method="POST"> {% csrf_token %}
+                                <div class="row ml-5">
+                                    <div>
+                                        <select class="border rounded h4" style="height: 45px" name="select_category">
+                                        {% for category in all_categories %}
+                                            <option class="h5"value="{{category.name}}">{{category.name}}</option>
+                                        {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="ml-3">
+                                        <input class="btn text-muted m-0" style="background-color: #fcedfc; height: 45px" type="submit" value="Submit Search!">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col"></div>
+            </div>
+            
+            <div class="row">
+                <div class="col"></div>
+                <div class="col-9 pt-5">
+                    <div class="row" id="populate_subcategories"></div>
+                </div>
+                <div class="col"></div>
+            </div>
+    
+
+
+
             <body>
                 <div class="main_content">
-                    <h3>
-                        This div will update depending on the drop down and populate the sub categories and instructors
-                    </h3>
-                    <div id="populate_subcategories">
 
-                    </div>
+
                 </div>
             </body>
         </div>

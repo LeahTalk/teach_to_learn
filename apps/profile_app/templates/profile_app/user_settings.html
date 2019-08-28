@@ -10,26 +10,26 @@
 <body>
     <div class = "wrapper">
         {% load static %}
-        <nav class="navbar mb-5" style="background-color:#FFF6DB">
-            <div class="row text-center" style="width:100%">
-                <div class="col">
-                    <a href="/dashboard"><img src="{% static 'profile_app/img/Teach2Learn.png' %}" style="height: 75px" /></a>
+        <nav class="navbar mb-5 p-0 pb-1" style="background-color:#FFF6DB">
+            <div class="row text-center pl-2 pr-2" style="width:100%">
+                <div class="col p-0">
+                    <a href="/dashboard"><img src="{% static 'profile_app/img/Teach2Learn.png' %}" style="height: 70px" /></a>
                 </div>
-                <div class="col"></div>
-                <div class="col pt-4">
-                    <a class = 'nav-link text-secondary' href="/dashboard">Dashboard</a>
+                <div class="col p-0"></div>
+                <div class="col border-left border-right p-0 mt-4" style="height: 75%">
+                    <a class = 'nav-link text-secondary p-0' href="/dashboard">Dashboard</a>
                 </div>
-                <div class="col pt-4">
-                    <a class = 'nav-link text-secondary' href="/profile/{{ user.id }}">My Profile Page</a>
+                <div class="col border-right p-0 mt-4" style="height: 75%">
+                    <a class = 'nav-link text-secondary p-0' href="/profile/{{ user.id }}">My Profile Page</a>
                 </div>
-                <div class="col pt-4">
-                    <a class = 'nav-link text-secondary' href="/edit_profile">Account Settings</a>
+                <div class="col border-right p-0 mt-4" style="height: 75%">
+                    <a class = 'nav-link text-secondary p-0' href="/edit_profile">Account Settings</a>
                 </div>
-                <div class="col pt-4">
-                    <a class = 'nav-link text-secondary' href="/categories">Categories</a>
+                <div class="col border-right p-0 mt-4" style="height: 75%">
+                    <a class = 'nav-link text-secondary p-0' href="/categories">Categories</a>
                 </div>
-                <div class="col pt-4">
-                    <a class = 'nav-link text-secondary' href="/logout">Logout</a>
+                <div class="col border-right p-0 mt-4" style="height: 75%">
+                    <a class = 'nav-link text-secondary p-0' href="/logout">Logout</a>
                 </div>
             </div>
         </nav>
