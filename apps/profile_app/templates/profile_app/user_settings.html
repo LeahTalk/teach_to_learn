@@ -9,32 +9,36 @@
 </head>
 <body>
     <div class = "wrapper">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-            <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-                <h1 class="navbar-brand">Welcome {{ user.first_name }}!</h1>
-                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                    <li class="nav-item">
-                        <a class = 'nav-link' href="/dashboard" style = 'margin-left: 50px'>Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class = 'nav-link' href="/profile/{{ user.id }}" style = 'margin-left: 50px'>My Profile Page</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class = 'nav-link' href="/edit_profile" style = 'margin-left: 50px'>About Page</a>
-                    </li>
-                    <li>
-                        <a class = 'nav-link' href="/categories" style = 'margin-left: 50px'>Categories</a>
-                    </li>
-                    <li class="nav-item">
-                        <a style = "margin-left: 50px" class = 'nav-link' href="/logout">Logout</a>
-                    </li>
-                </ul>
+        {% load static %}
+        <nav class="navbar mb-5" style="background-color:#FFF6DB">
+            <div class="row text-center" style="width:100%">
+                <div class="col">
+                    <a href="/dashboard"><img src="{% static 'profile_app/img/Teach2Learn.png' %}" style="height: 75px" /></a>
+                </div>
+                <div class="col"></div>
+                <div class="col pt-4">
+                    <a class = 'nav-link text-secondary' href="/dashboard">Dashboard</a>
+                </div>
+                <div class="col pt-4">
+                    <a class = 'nav-link text-secondary' href="/profile/{{ user.id }}">My Profile Page</a>
+                </div>
+                <div class="col pt-4">
+                    <a class = 'nav-link text-secondary' href="/edit_profile">Account Settings</a>
+                </div>
+                <div class="col pt-4">
+                    <a class = 'nav-link text-secondary' href="/categories">Categories</a>
+                </div>
+                <div class="col pt-4">
+                    <a class = 'nav-link text-secondary' href="/logout">Logout</a>
+                </div>
             </div>
         </nav>
+
         <div class = 'main_section'>
+            <h2 class=>Welcome {{ user.first_name }}!</h2>
             <div class = 'header_section'>
                 <h3 style = 'display: inline-block'>Edit Profile</h3>
-                <a class = 'btn btn-primary' style = 'color: white; margin-left: 780px;' href = '/dashboard/admin'>Return to Dashboard</a>
+                <a class = 'btn btn-primary' style = 'color: white; margin-left: 780px;' href = '/dashboard'>Return to Dashboard</a>
             </div>
             {% if messages %}
                 <ul class="messages">    

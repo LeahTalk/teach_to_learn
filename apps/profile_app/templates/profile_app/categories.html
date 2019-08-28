@@ -5,18 +5,40 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         {% load static %}
-        <link rel="stylesheet" href="{% static 'profile_app/css/####.css' %}">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+          <!-- Latest compiled and minified JavaScript -->
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <link rel="stylesheet" type="text/css" href="{% static '/profile_app/css/style.css' %}">
         <title>Category</title>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
     </head>
     <body>
-        <div class="container">
-            <nav>
-                <a href="PLACEHOLDER">About Us</a>
-                <a href = '/categories'>To categories</a>
-                <a href="/logout">Log Out</a>
+        <div class="wrapper">
+            {% load static %}
+            <nav class="navbar mb-5" style="background-color:#FFF6DB">
+                <div class="row text-center" style="width:100%">
+                    <div class="col">
+                        <a href="/dashboard"><img src="{% static 'profile_app/img/Teach2Learn.png' %}" style="height: 75px" /></a>
+                    </div>
+                    <div class="col"></div>
+                    <div class="col pt-4">
+                        <a class = 'nav-link text-secondary' href="/dashboard">Dashboard</a>
+                    </div>
+                    <div class="col pt-4">
+                        <a class = 'nav-link text-secondary' href="/profile/{{ user.id }}">My Profile Page</a>
+                    </div>
+                    <div class="col pt-4">
+                        <a class = 'nav-link text-secondary' href="/edit_profile">Account Settings</a>
+                    </div>
+                    <div class="col pt-4">
+                        <a class = 'nav-link text-secondary' href="/categories">Categories</a>
+                    </div>
+                    <div class="col pt-4">
+                        <a class = 'nav-link text-secondary' href="/logout">Logout</a>
+                    </div>
+                </div>
             </nav>
             <header>
                 <p>
