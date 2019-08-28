@@ -103,7 +103,7 @@ def process_edits(request, appointment_id):
     if len(errors) > 0:
         for key, value in errors.items():
             messages.error(request, value)
-        return redirect('/appointment/edit/' + str(appointment_id))
+        return redirect('/messages/' + str(appointment_id))
     appointment = Appointments.objects.get(id = appointment_id)
     appointment.date = request.POST['date']
     appointment.location = request.POST['location']

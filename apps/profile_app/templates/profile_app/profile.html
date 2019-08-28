@@ -13,26 +13,28 @@
     </head>
     <body>
         <div class="wrapper">
-            <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-                <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-                    <h1 class="navbar-brand">Welcome {{ user.first_name }}!</h1>
-                    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                        <li class="nav-item">
-                            <a class = 'nav-link' href="/dashboard" style = 'margin-left: 50px'>Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class = 'nav-link' href="/profile/{{ user.id }}" style = 'margin-left: 50px'>My Profile Page</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class = 'nav-link' href="/edit_profile" style = 'margin-left: 50px'>About Page</a>
-                        </li>
-                        <li>
-                            <a class = 'nav-link' href="/categories" style = 'margin-left: 50px'>Categories</a>
-                        </li>
-                        <li class="nav-item">
-                            <a style = "margin-left: 50px" class = 'nav-link' href="/logout">Logout</a>
-                        </li>
-                    </ul>
+            {% load static %}
+            <nav class="navbar mb-5 p-0 pb-1" style="background-image: linear-gradient(#fff, #fff3cf);">
+                <div class="row text-center pl-2 pr-2" style="width:100%">
+                    <div class="col p-0 pl-5">
+                        <a href="/dashboard"><img src="{% static 'profile_app/img/Teach2Learn.png' %}" style="height: 70px" /></a>
+                    </div>
+                    <div class="col p-0"></div>
+                    <div class="col border-left border-right p-0 mt-4" style="height: 75%">
+                        <a class = 'nav-link text-secondary p-0' href="/dashboard">Dashboard</a>
+                    </div>
+                    <div class="col border-right p-0 mt-4" style="height: 75%">
+                        <a class = 'nav-link text-secondary p-0' href="/profile/{{ user.id }}">My Profile Page</a>
+                    </div>
+                    <div class="col border-right p-0 mt-4" style="height: 75%">
+                        <a class = 'nav-link text-secondary p-0' href="/edit_profile">Account Settings</a>
+                    </div>
+                    <div class="col border-right p-0 mt-4" style="height: 75%">
+                        <a class = 'nav-link text-secondary p-0' href="/categories">Categories</a>
+                    </div>
+                    <div class="col border-right p-0 mt-4" style="height: 75%">
+                        <a class = 'nav-link text-secondary p-0' href="/logout">Logout</a>
+                    </div>
                 </div>
             </nav>
             <header>
@@ -43,7 +45,7 @@
                 <div class="main_content">
                     <div class="profile_img">
                         <img src="" alt="profile avatar">
-                        <form action="PLACEHOLDER" enctype="multipart/form-data" method="POST">
+                        <form action="check_picture" enctype="multipart/form-data" method="POST">
                             {% csrf_token %}
                             <label for="profile_img" style="cursor: pointer;">Select Image</label>
                             <input type="file" id="profile_img" name="profile_img" accept="image/png, image/jpeg" style="display: none;" onchange="loadFile(event)">
@@ -94,7 +96,7 @@
                     <p>Courses taught:</p>
                     <ul>
                     {% for course in course_taught  %}
-                        <li>{{course.skills_to_teach}}</li>
+                        <li>{{course.name}}</li>
                     {% endfor %}
                     </ul>
                     <a href="PLACEHOLDER">Add courses</a>

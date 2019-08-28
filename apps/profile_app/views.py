@@ -4,6 +4,15 @@ from apps.login_app.models import *
 from django.contrib import messages
 import bcrypt
 import re
+import boto3
+
+
+def upload_photo(request):
+    # Create an S3 client
+    s3 = boto3.client('s3')
+    filename = 'file.txt'
+    bucket_name = 'my-bucket'
+    s3.upload_file(filename, bucket_name, filename)
 
 def index(request):
     user = Users.objects.get(id = request.session['curUser'])
@@ -18,6 +27,9 @@ def index(request):
         'all_teaching_appointments' : created_appointments,
         'reserved_teaching_appointments' : reserved_appointments,
         'learning_appointments' : attending_appointments,
+        'skills_to_learn' : user.skills_to_learn.all(),
+        'all_users': Users.objects.all(),
+        'image' : user.image
     }
     return render(request, 'profile_app/index.html', context)
 
@@ -83,10 +95,12 @@ def view_profile(request, user_id):
     for appointment in created_appointments:
         if appointment.appointment_student == None:
             open_appointments.append(appointment)
+
     context = {
         'user' : Users.objects.get(id = request.session['curUser']),
         'viewing_user' : view_user,
-        'open_appointments' : open_appointments
+        'open_appointments' : open_appointments,
+        'course_taught': view_user.skills_to_teach.all(),
     }
     return render(request, 'profile_app/profile.html', context)
 
@@ -102,6 +116,20 @@ def categories(request):
         "all_categories" : Categories.objects.all(),
     }
     return render(request, 'profile_app/categories.html', context)
+
+def populate_subcategories_display(request):
+    print("I'm over here!")
+    if request.method == "POST":
+        print("I'm in the Post!")
+        selected_category = Categories.objects.get(name=request.POST['select_category'])
+
+        selected_categories_subs = SubCategories.objects.filter(mainCategory = selected_category)
+
+        context = {
+            'selected_categories_subs' : selected_categories_subs,
+        }
+
+        return render(request, 'profile_app/selected_categories.html', context)
 
 
 # jonathan@test.com testpassword chair@wheels.com  testpassword
