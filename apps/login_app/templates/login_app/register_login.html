@@ -8,44 +8,94 @@
     <link rel="stylesheet" type="text/css" href="{% static '/login_app/css/style.css' %}">
 </head>
 <body>
-    <div class = "wrapper">
-        <h1 class="mb-5">Welcome to Teach & Learn! </h1>
-        {% if messages %}
-        <ul class="messages border border-danger pl-5">    
-            {% for message in messages %}    
-                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        <div class = "login_section"> 
-            <h3>Registration</h3>
-            <form action = '/process_register' method = 'post'>
-                {% csrf_token %}
-                <label for="first_name">First Name</label>
-                <input class="form-control" type="text" placeholder="First Name" id = "first_name" name = "first_name">
-                <label for="last_name">Last Name</label>
-                <input class="form-control" type="text" placeholder="last Name" id = "last_name" name = "last_name">
-                <label for="email">Email</label>
-                <input class="form-control" type="text" placeholder="example@yahoo.com" id = "email" name = "email">
-                <label for="birthday" class="mt-2">Birthday: </label>
-                <input class="form-control" type="date" id="birthday" name="birthday" required="">
-                <label for="password">Password</label>
-                <input class="form-control" type="password" placeholder="Password" id = "regPassword" name = "regPassword">
-                <label for="confPassword">Confirm Password</label>
-                <input class="form-control" type="password" placeholder="Confirm Password" id = "confPassword" name = "confPassword">
-                <button class="btn btn-primary" type="submit" style = "margin-top: 20px; margin-left: 120px">Register</button>
-            </form>
+
+        {% load static %}
+        <nav class="navbar mb-5 p-0 pb-1" style="background-image: linear-gradient(#fff, #fcedfc);">
+            <div class="row text-center pl-2 pr-2" style="width:100%">
+                <div class="col p-0 pl-5">
+                    <a href="/"><img src="{% static 'login_app/img/Teach2Learn.png' %}" style="height: 70px" /></a>
+                </div>
+                <div class="col p-0"></div>
+                <div class="col border-left border-right p-0 mt-4" style="height: 75%">
+                </div>
+                <div class="col border-right p-0 mt-4" style="height: 75%">
+                </div>
+                <div class="col border-right p-0 mt-4" style="height: 75%">
+                </div>
+                <div class="col border-right p-0 mt-4" style="height: 75%">
+                </div>
+                <div class="col p-0 mt-4" style="height: 75%">
+                    <a class = 'nav-link text-secondary p-0' href="/">Home</a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="row">
+            <div class="col"></div>
+            <div class="col-8">
+                <div class="row m-0 p-0">
+                    <div class="col d-flex justify-content-center" style="min-width: 1000px">
+                        <h1 class="mb-5 lead rounded-circle text-center pt-2" style="width:50%; height: 135px; background-color:#fff8e3">Welcome to <img src="{% static 'login_app/img/Teach2Learn.png' %}" style="height: 125px" /></h1>
+                    </div>
+                </div>
+                {% if messages %}
+                <ul class="messages border border-danger pl-5">    
+                    {% for message in messages %}    
+                        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                <div class="row mt-3">
+                    <div class="col">
+
+                        <div class="mt-3 mb-4 border rounded rounded-lg border-muted" style="width: 95%; min-height: 300px;  min-width:250px">
+                            <h4 class="p-2" style="width: 100%; background-color:#fcedfc">Register</h4>
+                            <div class="ml-5 mt-4" style="width: 50%">
+                                <form action = '/process_register' method = 'post'>
+                                    {% csrf_token %}
+                                    <label for="first_name">First Name</label>
+                                    <input class="form-control" type="text" placeholder="First Name" id = "first_name" name = "first_name">
+                                    <label for="last_name">Last Name</label>
+                                    <input class="form-control" type="text" placeholder="Last Name" id = "last_name" name = "last_name">
+                                    <label for="email">Email</label>
+                                    <input class="form-control" type="text" placeholder="example@yahoo.com" id = "email" name = "email">
+                                    <label for="birthday" class="mt-2">Birthday: </label>
+                                    <input class="form-control" type="date" id="birthday" name="birthday" required="">
+                                    <label for="password">Password</label>
+                                    <input class="form-control" type="password" placeholder="Password" id = "regPassword" name = "regPassword">
+                                    <label for="confPassword">Confirm Password</label>
+                                    <input class="form-control" type="password" placeholder="Confirm Password" id = "confPassword" name = "confPassword">
+                                    <div class="text-center mt-4 mb-4">
+                                        <button class="btn text-dark" type="submit" style ="background-color:#fcedfc ">Register</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3"></div>
+                    <div class="col">
+                        <div class="mt-3 mb-4 border rounded rounded-lg border-muted" style="width: 95%; min-height: 300px; min-width:250px">
+                            <h4 class="p-2" style="width: 100%; background-color:#fcedfc">Login</h4>
+                            <div class="ml-5 mt-4" style="width: 50%">
+                            <form action = '/login' method = 'post'>
+                                {% csrf_token %}
+                                <label for="email">Email</label>
+                                <input class="form-control" type="text" placeholder="Email" id = "email" name = "email">
+                                <label for="password">Password</label>
+                                <input class="form-control" type="password" placeholder="Password" id = "password" name = "password">
+                                <div class="text-center mt-4 mb-4">
+                                    <button class="btn text-dark" type="submit" style ="background-color:#fcedfc ">Login</button>
+                                </div>
+                            </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col"></div>
         </div>
-        <div class = "login_section"> 
-            <h3>Login</h3>
-            <form action = '/login' method = 'post'>
-                {% csrf_token %}
-                <label for="email">Email</label>
-                <input class="form-control" type="text" placeholder="Email" id = "email" name = "email">
-                <label for="password">Password</label>
-                <input class="form-control" type="password" placeholder="Password" id = "password" name = "password">
-                <button class="btn btn-primary" type="submit" style = "margin-top: 20px; margin-left: 150px">Login</button>
-            </form>
-        </div>
-    </div>
+
+
+
 </body>
+</html>

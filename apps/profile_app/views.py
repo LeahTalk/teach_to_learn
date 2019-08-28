@@ -4,6 +4,7 @@ from apps.login_app.models import *
 from django.contrib import messages
 import bcrypt
 import re
+from geopy.geocoders import Nominatim
 
 def index(request):
     user = Users.objects.get(id = request.session['curUser'])
@@ -14,6 +15,13 @@ def index(request):
             reserved_appointments.append(appointment)
     attending_appointments = user.attending_appointments.all().order_by('date')
 
+    geolocator = Nominatim(user_agent="profile_app")
+    location = geolocator.geocode(user.location)
+    print("lat")
+    print(location.latitude)
+    print("long")
+    print(location.longitude)
+
     context = {
         'user' : Users.objects.get(id = request.session['curUser']),
         'all_teaching_appointments' : created_appointments,
@@ -21,6 +29,9 @@ def index(request):
         'learning_appointments' : attending_appointments,
         'skills_to_learn' : user.skills_to_learn.all(),
         'all_users': Users.objects.all(),
+        'latitude': location.latitude,
+        'longitude': location.longitude,
+
     }
     return render(request, 'profile_app/index.html', context)
 
@@ -103,7 +114,9 @@ def view_history(request):
     return render(request, 'profile_app/history.html', context)
 
 def categories(request):
+    current_user = Users.objects.get(id=request.session['curUser'])
     context = {
+        'user': current_user,
         "all_categories" : Categories.objects.all(),
     }
     return render(request, 'profile_app/categories.html', context)
