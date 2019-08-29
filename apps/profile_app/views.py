@@ -148,12 +148,23 @@ def view_profile(request, user_id):
         if (appointment.appointment_student == None) and (str(appointment.date) > str(datetime.now())):
             open_appointments.append(appointment)
     all_skills = SubCategories.objects.all()
+
+    geolocator = Nominatim(user_agent="profile_app")
+    location = geolocator.geocode(view_user.location)
+    print("lat")
+    print(location.latitude)
+    print("long")
+    print(location.longitude)
+
+
     context = {
         'user' : Users.objects.get(id = request.session['curUser']),
         'viewing_user' : view_user,
         'open_appointments' : open_appointments,
         'skills': view_user.skills_to_teach.all(),
-        'all_skills' : SubCategories.objects.exclude(teachers = Users.objects.filter(id = request.session['curUser'])).order_by('name')
+        'all_skills' : SubCategories.objects.exclude(teachers = Users.objects.filter(id = request.session['curUser'])).order_by('name'),
+        'latitude': location.latitude,
+        'longitude': location.longitude,
     }
     return render(request, 'profile_app/profile.html', context)
 
