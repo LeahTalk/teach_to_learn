@@ -16,6 +16,10 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='appointments',
             name='date',
+<<<<<<< HEAD:apps/appointment_app/migrations/0002_auto_20190828_2152.py
             field=models.DateTimeField(default=datetime.datetime(2019, 8, 28, 21, 52, 3, 510486)),
+=======
+            field=models.DateTimeField(default=datetime.datetime(2019, 8, 28, 21, 52, 17, 633400)),
+>>>>>>> 27a5dcbad5d92b7f4651954c0e475db6a8bbc1b3:apps/appointment_app/migrations/0002_auto_20190828_2116.py
         ),
     ]
