@@ -44,14 +44,13 @@ After creating a review the user should be redirected back to the dashboard.
 
     <div class="row">
         <div class="col">
-                <p class="lead ml-5"> You are viewing as Instructor: </p>
         </div>
         <div class="col">
 
         </div>
         <div class="col">
             {%if appointment_Object.appointment_creator.id == request.session.curUser %}
-
+            <p class="lead ml-5"> You are viewing as Instructor: </p>
                 <div class="overflow-auto mb-4 border rounded rounded-lg border-muted" style="min-height: 250px">
                     <h4 class="p-2" style="width: 100%; background-color:#fff3cf">Edit this timeslot:</h4>
                     <div class="ml-5 mt-4" style="width:55%">
@@ -59,7 +58,7 @@ After creating a review the user should be redirected back to the dashboard.
                             {% csrf_token %}
                             <p>Date and time:</p>
                             <input class="form-control" type="datetime-local" name="date" value = '{{ appointment_Object.date }}'>
-                            <p>Location: </p>
+                            <p>Address: </p>
                             <input class="form-control" type="text" name = "location" value = {{ appointment_Object.location }}>
                             
                             <div class="text-center mt-4 mb-4">
