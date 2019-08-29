@@ -58,31 +58,22 @@ def index(request):
     old_appointments = old_appointments[:3]
 
 
-    # count = Users.objects.all().count()
-    # slice = random.random() * (count - 3)
-    # newArr = set()
-    # something = Users.objects.exclude(id=request.session['curUser'])  #
-    # while len(newArr) < 3:
-    #     x = randrange(len(something) - 1)
-    #     newArr.add(something[x])
-    # print(newArr)
-    
-    # SubCategories.objects.get(id=).teachers.all()
-    # Users.objects.get(id=request.session['curUser']).skills_to_teach.all()
-
-    # Users.objects.exclude(id=request.session['curUser']).all(), 
-    # Users.objects.exclude(id=request.session['curUser']).order_by('?')[3:]
+    user = Users.objects.get(id = request.session['curUser'])
+    skills_to_learn = user.skills_to_learn.all()
+    instructors = {}
+    for skill in skills_to_learn:
+        instructors[skill.name] = Users.objects.exclude(id=request.session['curUser']).filter(skills_to_teach=skill).order_by('?')[:3]
+      
 
     context = {
-        'user' : Users.objects.get(id = request.session['curUser']),
+        'user' :user,
         'open_appointments' : open_appointments,
         'reserved_teaching_appointments' : reserved_appointments,
         'learning_appointments' : attending_appointments,
-        'skills_to_learn' : user.skills_to_learn.all(),
-        'all_users': Users.objects.exclude(id=request.session['curUser']).order_by('?')[:8],                      # only show all other users that teach the subject, do not include logged user
+        'skills_to_learn' : skills_to_learn,
+        'all_users': instructors,
         'latitude': location.latitude,
         'longitude': location.longitude,
-        'old_appointments' : old_appointments,
     }
     return render(request, 'profile_app/index.html', context)
 
