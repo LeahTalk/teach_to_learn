@@ -1,7 +1,13 @@
 {% if messages %}
-<ul class="messages border border-danger pl-5">    
-            {% for message in messages %}    
-                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-</ul>
+<div class="row">
+    <div class="col"></div>
+    <div class="col-8 text-center" id="first_stage">
+    <ul class="messages border border-danger pl-5">    
+        {% for message in messages %}    
+            <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    </div>
+    <div class="col"></div>
+</div>
 {% endif %}
