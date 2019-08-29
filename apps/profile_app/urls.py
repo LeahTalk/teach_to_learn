@@ -12,4 +12,5 @@ urlpatterns = [
     url(r'^edit_description$', views.process_description_edits),
     url(r'^populate_subcategories_display$', views.populate_subcategories_display),
     url(r'^check_picture$', views.upload_photo),
+    url(r'^add_skill$', views.add_skill),
 ]

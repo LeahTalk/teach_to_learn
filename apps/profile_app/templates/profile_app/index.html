@@ -81,14 +81,9 @@
                                 <div class="overflow-auto mt-3 mb-4 border rounded rounded-lg border-muted" style="width: 95%; min-height: 200px; max-height: 400px">
                                 <h4 class="p-2" style="width: 100%; background-color:#fcedfc">My Timeslots:</h4>
                                 <ul class="pl-5">
-                                {% for appointment in all_teaching_appointments %}
+                                {% for appointment in open_appointments %}
                                     <li>
                                         <a href = '/messages/{{appointment.id}}'>{{ appointment.date }} in {{ appointment.location }}</a>
-                                        {% if appointment.appointment_student == None %}
-                                            <p>(Open)</p>
-                                        {% else %}
-                                            <p>(Reserved)</p>
-                                        {% endif %}
                                         <a href = '/appointment/edit/{{ appointment.id }}'>Edit</a>
                                         <a href = '/appointment/cancel/{{ appointment.id }}' onclick="return confirm('Are you sure you want to cancel this appointment?');">Cancel</a>
                                     </li>
