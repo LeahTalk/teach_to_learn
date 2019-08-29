@@ -8,109 +8,176 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
           <!-- Latest compiled and minified JavaScript -->
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script>
         <link rel="stylesheet" type="text/css" href="{% static '/profile_app/css/style.css' %}">
         <title>Profile</title>
+
+        <script>
+        $(document).ready(function () {
+            bsCustomFileInput.init()
+        })
+        </script>
     </head>
     <body>
-        <div class="wrapper">
-            {% load static %}
-            <nav class="navbar mb-5 p-0 pb-1" style="background-image: linear-gradient(#fff, #fff3cf);">
-                <div class="row text-center pl-2 pr-2" style="width:100%">
-                    <div class="col p-0 pl-5">
-                        <a href="/dashboard"><img src="{% static 'profile_app/img/Teach2Learn.png' %}" style="height: 70px" /></a>
-                    </div>
-                    <div class="col p-0"></div>
-                    <div class="col border-left border-right p-0 mt-4" style="height: 75%">
-                        <a class = 'nav-link text-secondary p-0' href="/dashboard">Dashboard</a>
-                    </div>
-                    <div class="col border-right p-0 mt-4" style="height: 75%">
-                        <a class = 'nav-link text-secondary p-0' href="/profile/{{ user.id }}">My Profile Page</a>
-                    </div>
-                    <div class="col border-right p-0 mt-4" style="height: 75%">
-                        <a class = 'nav-link text-secondary p-0' href="/edit_profile">Account Settings</a>
-                    </div>
-                    <div class="col border-right p-0 mt-4" style="height: 75%">
-                        <a class = 'nav-link text-secondary p-0' href="/categories">Categories</a>
-                    </div>
-                    <div class="col border-right p-0 mt-4" style="height: 75%">
-                        <a class = 'nav-link text-secondary p-0' href="/logout">Logout</a>
-                    </div>
+
+        {% load static %}
+        <nav class="navbar mb-5 p-0 pb-1" style="background-image: linear-gradient(#fff, #fff3cf);">
+            <div class="row text-center pl-2 pr-2" style="width:100%">
+                <div class="col p-0 pl-5">
+                    <a href="/dashboard"><img src="{% static 'profile_app/img/Teach2Learn.png' %}" style="height: 70px" /></a>
                 </div>
-            </nav>
-            <header>
-                <h2>Username: {{viewing_user.first_name}} {{viewing_user.last_name}}</h2>
-            </header>
-            <body>
-                <div class="main_content">
-                    <div class="profile_img">
-                        <form action="/check_picture" enctype="multipart/form-data" method="POST">
-                            {% csrf_token %}
-                            {% if viewing_user.image_base == None %}
-                                <img src="{% static '/profile_app/images/blank_user.jpg' %}" height = 100px>
-                            {% else %}
-                                <img src="data:image/png;base64, {{ viewing_user.image_base }}" alt="user profile picture" height = 100px/>
-                            {% endif %}
-                            {% if user == viewing_user %}
-                                <label for="profile_img" style="cursor: pointer;">Select Image</label>
-                                <input type="file" id="profile_img" name="profile_img" style="display: none;" onchange="loadFile(event)">
-                                <input type="submit" name="upload" value="Upload">
-                            {% endif %}
-                            <script>
-                                var loadFile = function(event) {
-                                    var image = document.getElementById('output');
-                                    image.src = URL.createObjectURL(event.target.files[0]);
-                                };
-                            </script>
-                        </form>
-                    </div>
-                    <div class="user_bio">
-                        <p>User Bio:</p>
-                        <p>{{viewing_user.desc}}</p>
-                        {% if user == viewing_user %}
-                        <form action="/edit_description" method="POST">
-                            {% csrf_token %}
-                            <label for="edit_bio">Edit Bio: </label>
-                            <input type="text" name="desc">
-                            <input type="submit" name="update" value="Update">
-                        </form>
-                        {% endif %}
-                    </div>
-                    <div class="">
-                        <h2>{{ viewing_user.first_name}}'s open timeslots: </h2>
-                        <ul>
-                            {% for appointment in open_appointments %}
-                                <li>
-                                    <p>{{ appointment.date }} At {{ appointment.location }}</p>
-                                    {% if user.credits > 0 and viewing_user != user %}
-                                        <a href = "/appointment/reserve/{{ appointment.id }}">Reserve this timeslot!</a>
-                                    {%endif%}
-                                </li>
-                            {% endfor %}
-                        </ul>   
-                    </div>
-                    <div class="user_reviews">
-                        <p>Reviews:</p>
-                        {% for review in all_received_reviews  %}
-                        <p>
-                            {{review.review_creator}} says,   
-                        </p>
-                        <p>
-                            "{{review.content}}"
-                        </p>
-                        {% endfor %}
-                    </div>
+                <div class="col p-0"></div>
+                <div class="col border-left border-right p-0 mt-4" style="height: 75%">
+                    <a class = 'nav-link text-secondary p-0' href="/dashboard">Dashboard</a>
                 </div>
-                <div class="live_feed">
-                    <p>User Rating:</p>
-                    <p>Skills:</p>
-                    <ul>
-                    {% for skill in skills  %}
-                        <li>{{skill.name}}</li>
-                    {% endfor %}
-                    </ul>
-                    <a href="PLACEHOLDER">Add courses</a>
+                <div class="col border-right p-0 mt-4" style="height: 75%">
+                    <a class = 'nav-link text-secondary p-0' href="/profile/{{ user.id }}">My Profile Page</a>
                 </div>
-            </body>
+                <div class="col border-right p-0 mt-4" style="height: 75%">
+                    <a class = 'nav-link text-secondary p-0' href="/edit_profile">Account Settings</a>
+                </div>
+                <div class="col border-right p-0 mt-4" style="height: 75%">
+                    <a class = 'nav-link text-secondary p-0' href="/categories">Categories</a>
+                </div>
+                <div class="col border-right p-0 mt-4" style="height: 75%">
+                    <a class = 'nav-link text-secondary p-0' href="/logout">Logout</a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="row">
+            <div class="col"></div>
+            <div class="col-9">
+                <div class="row p-3 rounded-lg" style="background-color:#fcedfc">
+                    <h4>User: {{viewing_user.first_name}} {{viewing_user.last_name}}</h4>
+                </div>
+            </div>
+            <div class="col"></div>
         </div>
+
+        <div class="row mt-5">
+            <div class="col"></div>
+            <div class="col-3 p-0 border rounded border-muted">
+                <div class="profile_img">
+                    <form id="image_form" action="/check_picture" enctype="multipart/form-data" method="POST" class=" mt-5 mb-5 ml-5" style="width: 80%">
+                        {% csrf_token %}
+                        {% if viewing_user.image_base == None %}
+                            <img src="{% static '/profile_app/images/blank_user.jpg' %}" height = 200px>
+                        {% else %}
+                            <img src="data:image/png;base64, {{ viewing_user.image_base }}" alt="user profile picture" height = 200px/>
+                        {% endif %}
+                        {% if user == viewing_user %}
+                            <div>
+                                <div class="input-group mt-3">
+                                    <div class="input-group-prepend">
+                                        <input type="submit" class="input-group-text" id="inputGroupFileAddon01" value="Upload">
+                                    </div>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" name="profile_img" id="inputGroupFile01" onchange="loadFile(event)"
+                                        aria-describedby="inputGroupFileAddon01">
+                                        <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <script>
+                            var loadFile = function(event) {
+                                var image = document.getElementById('output');
+                                image.src = URL.createObjectURL(event.target.files[0]);
+                            };
+                        </script>
+                    </form>
+                </div>
+                
+                <div class="">
+                    <h4 style="background-color:#fff3cf" class="m-0 pl-3 pt-3 pb-3">{{ viewing_user.first_name}}'s open timeslots: </h4>
+                    <ul class="mt-3">
+                        {% for appointment in open_appointments %}
+                            <li>
+                                <p>{{ appointment.date }}<p>
+                                <p> Location: {{ appointment.location }}</p>
+                                {% if user.credits > 0 and viewing_user != user %}
+                                    <a class="btn" style="background-color:#fcedfc" href = "/appointment/reserve/{{ appointment.id }}">Reserve this timeslot!</a>
+                                {%endif%}
+                            </li>
+                        {% endfor %}
+                    </ul>   
+                </div>
+            </div>
+
+            <div class="col-6 pl-5">
+                <div class="row ml-5">
+                    <div class="border border-muted rounded" style="width: 95%; min-height: 300px">
+                            <div class="mb-4">
+                                <h4 class="p-2" style="width: 100%; background-color:#fff3cf">{{viewing_user.first_name}}'s Summary:</h4>
+                                <div class="pl-5">
+                                    <h5 class="mt-4">User Biography:</h5>
+                                    <p>{{viewing_user.desc}}</p>
+
+                                    {% if user == viewing_user %}
+                                    <form action="/edit_description" method="POST">
+                                        {% csrf_token %}
+                                        <label for="edit_bio">Edit Bio: </label>
+                                        <input type="text" name="desc">
+                                        <input type="submit" name="update" value="Update">
+                                    </form>
+                                    {% endif %}
+
+                                    <div class="live_feed">
+                                        <h5 class="mt-5">{{viewing_user.first_name}}'s Overall Rating:</h5>
+                                        <h5 class="mt-5">{{viewing_user.first_name}} can teach:</h5>
+                                        <ul>
+                                        {% for skill in skills  %}
+                                            <li>{{skill.name}}</li>
+                                        {% endfor %}
+                                        </ul>
+                                        <p>Add a new skill that you can teach!</p>
+                                        <form action = '/add_skill' method = 'post'>
+                                            {% csrf_token %}
+                                            <select name = 'category'>
+                                                {% for skill in all_skills %}
+                                                    <option>{{ skill.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <input type="submit" value="Submit">
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="user_reviews pl-5">
+                                    <h5 class="mt-5">Reviews:</h5>
+                                    {% for review in all_received_reviews  %}
+                                    <p>
+                                        {{review.review_creator}} says,   
+                                    </p>
+                                    <p>
+                                        "{{review.content}}"
+                                    </p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col"></div>
+        </div>
+
+
+
+
+
+
+                
+                    
+
+
+        <script src="./coverage/bs-custom-file-input.js"></script>
+        <script>
+            bsCustomFileInput.init()
+            var btn = document.getElementById('btnResetForm')
+            var form = document.querySelector('#image_form')
+            btn.addEventListener('click', function () {
+                form.reset()
+            })
+        </script>
     </body>
 </html>

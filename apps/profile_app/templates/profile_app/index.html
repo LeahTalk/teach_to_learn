@@ -51,10 +51,6 @@
                     <div class="row">
                         <div class="col control_panel m-0 p-0 pl-5 pt-5">
                             <h2>User Control Panel</h2>
-                            <a href = '/profile/{{request.session.curUser}}'>To Profile</a>
-                            <a href = '/my_history'>To history</a>
-                            <a href="/messages/1">To message</a>
-                            <a href="/appointment">Appointment</a>
                             <div class="mt-3 mb-4 border rounded rounded-lg border-muted" style="width: 95%; min-height: 300px">
                                 <h4 class="p-2" style="width: 100%; background-color:#fff3cf">Add New 1 Hour Timeslot:</h4>
                                 {% if messages %}
@@ -66,31 +62,26 @@
                                 {% endif %}
                                 <form action = '/appointment/add' method = 'post'>
                                     {% csrf_token %}
-                                    <div class="text-left pl-5 m-0" style="width: 50%">
+                                    <div class="text-left pl-5 m-0" style="width: 60%">
                                         <h5 class="mt-3">Date and time:</h5>
                                         <input class="form-control" type="datetime-local" name="date">
-                                        <h5 class="mt-3">Location: </h5>
+                                        <h5 class="mt-3">Address: </h5>
                                         <input class="form-control" type="text" name = "location">
-                                        <div class="text-center mt-3">
+                                        <div class="text-center mt-3 mb-3">
                                             <input class="btn text-muted" style="background-color: #fcedfc" type="submit" value="Submit">
                                         </div>
                                     </div>
-
                                 </form>
                             </div>
                                 <div class="overflow-auto mt-3 mb-4 border rounded rounded-lg border-muted" style="width: 95%; min-height: 200px; max-height: 400px">
                                 <h4 class="p-2" style="width: 100%; background-color:#fcedfc">My Timeslots:</h4>
                                 <ul class="pl-5">
-                                {% for appointment in all_teaching_appointments %}
-                                    <li>
+                                {% for appointment in open_appointments %}
+                                    <li class="mt-3 ">
                                         <a href = '/messages/{{appointment.id}}'>{{ appointment.date }} in {{ appointment.location }}</a>
-                                        {% if appointment.appointment_student == None %}
-                                            <p>(Open)</p>
-                                        {% else %}
-                                            <p>(Reserved)</p>
-                                        {% endif %}
-                                        <a href = '/appointment/edit/{{ appointment.id }}'>Edit</a>
-                                        <a href = '/appointment/cancel/{{ appointment.id }}' onclick="return confirm('Are you sure you want to cancel this appointment?');">Cancel</a>
+                                        <div>
+                                            <a class = "btn btn-danger btn-lg mt-4 mb-4" href = '/appointment/cancel/{{ appointment.id }}' onclick="return confirm('Are you sure you want to cancel this appointment?');"><h1>Cancel</h1></a>
+                                        </dvi>
                                     </li>
                                 {% endfor %}
                                 </ul>
@@ -105,7 +96,7 @@
                                     .mapouter{position:relative;text-align:right;height:100%;width:400px;}.gmap_canvas {overflow:hidden;background:none!important;height:100%;width:400px;}
                                 </style> -->
                                 
-                                <!--
+                                
                                 <script>
                                     var latitude = document.getElementById("latitude").value;
                                     var longitude = document.getElementById("longitude").value;
@@ -120,15 +111,16 @@
                                         });
                                     }
                                 </script>
-                                -->
+                               
                                 <div id="map" style="height: 200px; width:100%;"></div>
                                 <!-- Replace the value of the key parameter with your own API key. -->
-                                <!--
+                                
                                 <script async defer
                                 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7PlU4EZjprdgPd5dG3gXCoYhSs378seU&callback=initMap">
                                 </script>
-                                -->
+                               
                             </div>
+
                         </div>
 
                         <div class="col live_feed pl-5 pt-5">
@@ -155,13 +147,13 @@
                                 <ul class="pl-5">
                                     {% for appointment in reserved_teaching_appointments %}
                                         <li>
-                                            <p>I'm meeting </p>
-                                            <a href = '/profile/{{ appointment.appointment_student.id }}'>{{ appointment.appointment_student.first_name }}</a>
-                                            <p>To teach </p>
+                                            <p class = 'inline_class'>I'm meeting </p>
+                                            <a class = 'inline_class' href = '/profile/{{ appointment.appointment_student.id }}'>{{ appointment.appointment_student.first_name }}</a>
+                                            <p class = 'inline_class'>to teach </p>
                                             <a href = '/messages/{{ appointment.id }}'>{{ appointment.category.name }} on {{ appointment.date }}</a>
                                             <!-- <p>{{ appointment.category.name }} on {{ appointment.date }}</p> -->
                                             <p>Location: {{appointment.location }}</p>
-                                            <a href = '/appointment/cancel/{{ appointment.id }}' onclick="return confirm('Are you sure you want to cancel this appointment?');">Cancel</a>
+                                            <a class = "btn btn-danger btn-lg" href = '/appointment/cancel/{{ appointment.id }}' onclick="return confirm('Are you sure you want to cancel this appointment?');"><h1>Cancel</h1></a>
                                         </li>
                                     {% endfor %}
                                 </ul>
@@ -171,12 +163,12 @@
                                 <ul class="pl-5">
                                     {% for appointment in learning_appointments %}
                                         <li>
-                                            <p>I'm meeting</p>
-                                            <a href = '/profile/{{ appointment.appointment_creator.id }}'>{{ appointment.appointment_creator.first_name }}</a>
-                                            <p> To learn </p>
-                                            <a href = '/messages/{{ appointment.id }}'>{{ appointment.category.name }} on {{ appointment.date }}</a>
+                                            <p class = 'inline_class'>I'm meeting</p>
+                                            <a class = 'inline_class' href = '/profile/{{ appointment.appointment_creator.id }}'>{{ appointment.appointment_creator.first_name }}</a>
+                                            <p class = 'inline_class'> to learn </p>
+                                            <a class = 'inline_class'href = '/messages/{{ appointment.id }}'>{{ appointment.category.name }} on {{ appointment.date }}</a>
                                             <p>Location: {{ appointment.location }}</p>
-                                            <a href = '/appointment/cancel/{{ appointment.id }}' onclick="return confirm('Are you sure you want to cancel this appointment? Credit will not be refunded for cancellations made within 24 hours of your scheduled session.');">Cancel</a>
+                                            <a class = "btn btn-danger btn-lg" href = '/appointment/cancel/{{ appointment.id }}' onclick="return confirm('Are you sure you want to cancel this appointment? Credit will not be refunded for cancellations made within 24 hours of your scheduled session.');"><h1>Cancel</h1></a>
                                         </li>
                                     {% endfor %}
                                 </ul>

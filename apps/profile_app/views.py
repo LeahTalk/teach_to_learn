@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from .models import *
 from apps.login_app.models import *
 from django.contrib import messages
+from datetime import datetime
 import bcrypt
 import re
 import os
@@ -23,11 +24,24 @@ def index(request):
     user = Users.objects.get(id = request.session['curUser'])
     created_appointments = user.created_appointments.all().order_by('date')
     reserved_appointments = []
+    open_appointments = []
+    attending_appointments = []
     for appointment in created_appointments:
-        if appointment.appointment_student != None:
-            reserved_appointments.append(appointment)
-    attending_appointments = user.attending_appointments.all().order_by('date')
-
+        #If the teacher is owed credit, and the appointment has occurred then give credit
+        if (appointment.pending_credit == True) and (str(appointment.date) < str(datetime.today())):
+            appointment.pending_credit = False
+            appointment.save()
+            user.credits += 1
+            user.save()
+        if (str(appointment.date) > str(datetime.now())):
+            if appointment.appointment_student != None:
+                reserved_appointments.append(appointment)
+            else:
+                open_appointments.append(appointment)
+    all_attended = user.attending_appointments.all().order_by('date')
+    for appointment in all_attended:
+        if (str(appointment.date) > str(datetime.now())):
+            attending_appointments.append(appointment)
     geolocator = Nominatim(user_agent="profile_app")
     location = geolocator.geocode(user.location)
     print("lat")
@@ -52,7 +66,7 @@ def index(request):
 
     context = {
         'user' : Users.objects.get(id = request.session['curUser']),
-        'all_teaching_appointments' : created_appointments,
+        'open_appointments' : open_appointments,
         'reserved_teaching_appointments' : reserved_appointments,
         'learning_appointments' : attending_appointments,
         'skills_to_learn' : user.skills_to_learn.all(),
@@ -62,6 +76,14 @@ def index(request):
 
     }
     return render(request, 'profile_app/index.html', context)
+
+def add_skill(request):
+    if 'category' not in request.POST:
+        return redirect('/profile/' + str(request.session['curUser']))
+    category = SubCategories.objects.get(name = request.POST['category'])
+    user = request.session['curUser']
+    category.teachers.add(user)
+    return redirect('/profile/' + str(request.session['curUser']))
 
 def edit_profile(request):
     if 'curUser' not in request.session:
@@ -123,14 +145,15 @@ def view_profile(request, user_id):
     created_appointments = view_user.created_appointments.all().order_by('date')
     open_appointments = []
     for appointment in created_appointments:
-        if appointment.appointment_student == None:
+        if (appointment.appointment_student == None) and (str(appointment.date) > str(datetime.now())):
             open_appointments.append(appointment)
-
+    all_skills = SubCategories.objects.all()
     context = {
         'user' : Users.objects.get(id = request.session['curUser']),
         'viewing_user' : view_user,
         'open_appointments' : open_appointments,
         'skills': view_user.skills_to_teach.all(),
+        'all_skills' : SubCategories.objects.exclude(teachers = Users.objects.filter(id = request.session['curUser'])).order_by('name')
     }
     return render(request, 'profile_app/profile.html', context)
 
