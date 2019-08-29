@@ -8,18 +8,9 @@ import os
 import boto3
 import base64
 from geopy.geocoders import Nominatim
+import random
+from random import sample, randrange
 
-'''
-def upload_photo(request):
-    bucket = 'teachtolearnphotos'
-
-    object_name = 'test.png'
-    #Change this for later so it doesn't have the access key in plaintext!!!
-    s3_client = boto3.client('s3', aws_access_key_id='AKIAUTEH3EOJ7EEP2HPU',
-         aws_secret_access_key= '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')
-    response = s3_client.upload_file(file_name, bucket, object_name)
-    return redirect('/dashboard')
-'''
 def upload_photo(request):
     if 'profile_img' in request.FILES:
         encoded_string = base64.b64encode(request.FILES['profile_img'].read())
@@ -44,13 +35,28 @@ def index(request):
     print("long")
     print(location.longitude)
 
+    # count = Users.objects.all().count()
+    # slice = random.random() * (count - 3)
+    # newArr = set()
+    # something = Users.objects.exclude(id=request.session['curUser'])  #
+    # while len(newArr) < 3:
+    #     x = randrange(len(something) - 1)
+    #     newArr.add(something[x])
+    # print(newArr)
+    
+    # SubCategories.objects.get(id=).teachers.all()
+    # Users.objects.get(id=request.session['curUser']).skills_to_teach.all()
+
+    # Users.objects.exclude(id=request.session['curUser']).all(), 
+    # Users.objects.exclude(id=request.session['curUser']).order_by('?')[3:]
+
     context = {
         'user' : Users.objects.get(id = request.session['curUser']),
         'all_teaching_appointments' : created_appointments,
         'reserved_teaching_appointments' : reserved_appointments,
         'learning_appointments' : attending_appointments,
         'skills_to_learn' : user.skills_to_learn.all(),
-        'all_users': Users.objects.all(),
+        'all_users': Users.objects.exclude(id=request.session['curUser']).order_by('?')[:8],                      # only show all other users that teach the subject, do not include logged user
         'latitude': location.latitude,
         'longitude': location.longitude,
 
