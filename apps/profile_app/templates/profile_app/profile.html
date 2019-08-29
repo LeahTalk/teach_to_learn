@@ -103,7 +103,16 @@
                         <li>{{skill.name}}</li>
                     {% endfor %}
                     </ul>
-                    <a href="PLACEHOLDER">Add courses</a>
+                    <p>Add a new skill that you can teach!</p>
+                    <form action = '/add_skill' method = 'post'>
+                        {% csrf_token %}
+                        <select name = 'category'>
+                            {% for skill in all_skills %}
+                                <option>{{ skill.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="submit" value="Submit">
+                    </form>
                 </div>
             </body>
         </div>
