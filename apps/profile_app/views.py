@@ -64,7 +64,6 @@ def index(request):
     for skill in skills_to_learn:
         instructors[skill.name] = Users.objects.exclude(id=request.session['curUser']).filter(skills_to_teach=skill).order_by('?')[:3]
       
-
     context = {
         'user' :user,
         'open_appointments' : open_appointments,

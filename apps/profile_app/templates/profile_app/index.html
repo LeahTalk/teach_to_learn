@@ -132,13 +132,17 @@
                                 <div class="pl-5">
                                     {% for key, value in all_users.items %}
                                     <p> {{ key }} course by: </p>
-                                        <ul>
-                                            {% for user in value %}
-                                            <li>
-                                                <a href="/profile/{{user.id}}">{{ user.first_name }} {{user.last_name}} </a>
-                                            </li>
-                                            {% endfor %}
-                                        </ul>
+                                        {%if not value%}
+                                            <p>There are no users teaching this subject!</p>
+                                        {%else%}
+                                            <ul>
+                                                {% for user in value %}
+                                                <li>
+                                                    <a href="/profile/{{user.id}}">{{ user.first_name }} {{user.last_name}} </a>
+                                                </li>
+                                                {% endfor %}
+                                            </ul>
+                                        {%endif%}
                                     {% endfor %}
                                 </div>
                             </div>
