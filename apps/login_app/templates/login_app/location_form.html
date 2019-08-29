@@ -1,9 +1,23 @@
-<form id="location_form" action="/location_form" method="POST"> {% csrf_token %}
-    <h3>What city are you looking to teach in?</h3>
-    <input type="text" id="post_location" class="form-control" name="place">
-    <input type="hidden" name="current_user" value={{current_user.id}}>
-    <input type="submit">
-</form>
+<div class="row">
+    <div class="col"></div>
+    <div class="col-8 text-center" id="first_stage">
+        <form id="location_form" action="/location_form" method="POST"> {% csrf_token %}
+            <h3>What city are you looking to teach in?</h3>
+            <div class="row">
+                <div class="col"></div>
+                    <div class="col text-center text-light">
+                        <input type="text" id="post_location" class="form-control" name="place" placeholder="Please insert City, State, and Country">
+                    </div>      
+                <div class="col"></div>
+            </div>
+            <input type="hidden" name="current_user" value={{current_user.id}}>
+            <div class="text-center mt-4 mb-4">
+                <button class="btn text-dark" type="submit" style ="background-color:#fcedfc ">Submit!</button>
+            </div>
+        </form>
+    </div>
+    <div class="col"></div>
+</div>
 
 <script>
 $('#location_form').submit(function(e){
@@ -16,7 +30,12 @@ $('#location_form').submit(function(e){
         method: 'POST',
         data: { location : $('#post_location').val() },
         success: function(serverResponse){
-            $('#choose_subcategories').html(serverResponse);
+            $('#location_form').fadeOut(475)
+                .delay(475)
+                .queue(function(n) {
+                    $('#choose_subcategories').hide().html(serverResponse).fadeIn(475);   
+                    n();
+            })
         }
     })
 });

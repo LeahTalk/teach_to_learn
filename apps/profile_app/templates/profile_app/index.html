@@ -62,11 +62,13 @@
                                 {% endif %}
                                 <form action = '/appointment/add' method = 'post'>
                                     {% csrf_token %}
-                                    <div class="text-left pl-5 m-0" style="width: 60%">
+                                    <div class="text-left pl-5 m-0" style="width: 65%">
                                         <h5 class="mt-3">Date and time:</h5>
+                                        <p class="lead mt-1">Select Date in the Future!</p>
                                         <input class="form-control" type="datetime-local" name="date">
                                         <h5 class="mt-3">Address: </h5>
-                                        <input class="form-control" type="text" name = "location">
+                                        <p class="lead mt-1">Minimum: Please Specify City, State, and Country</p>
+                                        <input class="form-control" type="text" name = "location" placeholder="Enter Address or City, State, and Country">
                                         <div class="text-center mt-3 mb-3">
                                             <input class="btn text-muted" style="background-color: #fcedfc" type="submit" value="Submit">
                                         </div>

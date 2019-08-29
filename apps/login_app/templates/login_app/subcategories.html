@@ -1,19 +1,34 @@
-<form id="subcategory_form" action="/subcategory_form" method="POST"> {% csrf_token %}
-    <h3>You have selected {{current_category.name}}! What Course/Subcategory would you like to teach? </h3> 
-    
-    <p> Choose from the list: </p>
-    <select class="btn text-dark bg-light" name="select_subcategory">
-        {% for subcategory in all_subcategories %}
-        <option value="{{subcategory.id}}">{{subcategory.name}}</option>
-        {% endfor %}
-    </select>
-    <p>Or add a new course/subcategory! </p>
-    <input type="text" class="form-control" name="add_subcategory">
+<div class="row">
+    <div class="col"></div>
+    <div class="col-8 text-center" id="first_stage">
+        <form id="subcategory_form" action="/subcategory_form" method="POST"> {% csrf_token %}
+            <h3>You have selected {{current_category.name}}! What Course/Subcategory would you like to teach? </h3> 
+            
+            <p class="lead mt-5"> Choose from the list: </p>
+            <select class="btn text-dark bg-light" name="select_subcategory">
+                {% for subcategory in all_subcategories %}
+                <option value="{{subcategory.id}}">{{subcategory.name}}</option>
+                {% endfor %}
+            </select>
+            <p class="lead mt-5">Or add a new course/subcategory! </p>
 
-    <input type="hidden" name="current_category" value="{{current_category.id}}">
-    <input type="hidden" name="current_user" value="{{current_user.id}}">
-    <input type="submit">
-</form>
+            <div class="row">
+                <div class="col"></div>
+                    <div class="col text-center text-light">
+                        <input type="text" class="form-control" name="add_subcategory">
+                    </div>      
+                <div class="col"></div>
+            </div>
+
+            <input type="hidden" name="current_category" value="{{current_category.id}}">
+            <input type="hidden" name="current_user" value="{{current_user.id}}">
+            <div class="text-center mt-4 mb-4">
+                <button class="btn text-dark" type="submit" style ="background-color:#fcedfc ">Submit!</button>
+            </div>
+        </form>
+    </div>
+    <div class="col"></div>
+</div>
 
 <script>
 $('#subcategory_form').submit(function(e){
@@ -26,7 +41,12 @@ $('#subcategory_form').submit(function(e){
         method: 'POST',
         data: $(this).serialize(),
         success: function(serverResponse){
-            $('#location_form').html(serverResponse);
+            $('#subcategories').fadeOut(475)
+                .delay(475)
+                .queue(function(n) {
+                    $('#location_form').hide().html(serverResponse).fadeIn(475);   
+                    n();
+            })
         }
     })
 });

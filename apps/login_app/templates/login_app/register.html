@@ -17,7 +17,6 @@
 
 
 <body>
-    <div class="wrapper">
     {% load static %}
     <nav class="navbar mb-5 p-0 pb-1" style="background-image: linear-gradient(#fff, #fff3cf);">
         <div class="row text-center pl-2 pr-2" style="width:100%">
@@ -55,30 +54,38 @@
     </div>
 
     <div class="row">
-        <div clas="col"></div>
-        <div clas="col-8"></div>
-        <div clas="col"></div>
+        <div class="col"></div>
+        <div class="col-8 mt-5 text-center" id="first_stage">
+            <form id="category_form" action="/category_form" method="POST"> {% csrf_token %}
+                <h3>What Category would you like to teach in?</h3> 
+                <p class="lead mt-5"> Choose from the list: </p>
+                <select class="btn text-dark bg-light" name="select_category">
+                    {% for category in all_categories %}
+                    <option value="{{category.id}}">{{category.name}}</option>
+                    {% endfor %}
+                </select>
+                <p class="lead mt-5">Or add a new category! </p>
+                
+                <div class="row">
+                    <div class="col"></div>
+                    <div class="col text-center text-light">
+                        <input type="text" class="form-control" name="add_category" placeholder="Examples: Math, Languages, Art, Technology, Sports">
+                    </div>
+                    <div class="col"></div>
+                </div>
+
+                <input type="hidden" name="current_user" value="{{current_user.id}}">
+                <div class="text-center mt-4 mb-4">
+                    <button class="btn text-dark" type="submit" style ="background-color:#fcedfc ">Submit!</button>
+                </div>
+            </form>
+        </div>
+        <div class="col"></div>
     </div>
 
 
 
     <div>
-
-
-        <form id="category_form" action="/category_form" method="POST"> {% csrf_token %}
-            <h3>What Category would you like to teach in?</h3> 
-            <p> Choose from the list: </p>
-            <select class="btn text-dark bg-light" name="select_category">
-                {% for category in all_categories %}
-                <option value="{{category.id}}">{{category.name}}</option>
-                {% endfor %}
-            </select>
-            <p>Or add a new category! </p>
-            <input type="text" class="form-control" name="add_category">
-            
-            <input type="hidden" name="current_user" value="{{current_user.id}}">
-            <input type="submit">
-        </form>
 
         <div id="subcategories">
 
@@ -92,8 +99,6 @@
 
         </div>
 
-
-    </div>
     </div>
 
     <script>
@@ -133,7 +138,12 @@
                 method: 'POST',
                 data: $(this).serialize(),
                 success: function(serverResponse){
-                    $('#subcategories').html(serverResponse);
+                    $('#category_form').fadeOut(475)
+                        .delay(475)
+                        .queue(function(n) {
+                            $('#subcategories').hide().html(serverResponse).fadeIn(475);   
+                            n();
+                    })
                 }
             })
         });
