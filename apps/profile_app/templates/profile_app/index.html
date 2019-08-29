@@ -152,9 +152,9 @@
                                 <ul class="pl-5">
                                     {% for appointment in reserved_teaching_appointments %}
                                         <li>
-                                            <p>I'm meeting </p>
-                                            <a href = '/profile/{{ appointment.appointment_student.id }}'>{{ appointment.appointment_student.first_name }}</a>
-                                            <p>To teach </p>
+                                            <p class = 'inline_class'>I'm meeting </p>
+                                            <a class = 'inline_class' href = '/profile/{{ appointment.appointment_student.id }}'>{{ appointment.appointment_student.first_name }}</a>
+                                            <p class = 'inline_class'>to teach </p>
                                             <a href = '/messages/{{ appointment.id }}'>{{ appointment.category.name }} on {{ appointment.date }}</a>
                                             <!-- <p>{{ appointment.category.name }} on {{ appointment.date }}</p> -->
                                             <p>Location: {{appointment.location }}</p>
@@ -168,10 +168,10 @@
                                 <ul class="pl-5">
                                     {% for appointment in learning_appointments %}
                                         <li>
-                                            <p>I'm meeting</p>
-                                            <a href = '/profile/{{ appointment.appointment_creator.id }}'>{{ appointment.appointment_creator.first_name }}</a>
-                                            <p> To learn </p>
-                                            <a href = '/messages/{{ appointment.id }}'>{{ appointment.category.name }} on {{ appointment.date }}</a>
+                                            <p class = 'inline_class'>I'm meeting</p>
+                                            <a class = 'inline_class' href = '/profile/{{ appointment.appointment_creator.id }}'>{{ appointment.appointment_creator.first_name }}</a>
+                                            <p class = 'inline_class'> to learn </p>
+                                            <a class = 'inline_class'href = '/messages/{{ appointment.id }}'>{{ appointment.category.name }} on {{ appointment.date }}</a>
                                             <p>Location: {{ appointment.location }}</p>
                                             <a href = '/appointment/cancel/{{ appointment.id }}' onclick="return confirm('Are you sure you want to cancel this appointment? Credit will not be refunded for cancellations made within 24 hours of your scheduled session.');">Cancel</a>
                                         </li>
