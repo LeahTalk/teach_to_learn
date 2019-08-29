@@ -10,7 +10,6 @@ import boto3
 import base64
 from geopy.geocoders import Nominatim
 import random
-from random import sample, randrange
 import statistics
 
 def upload_photo(request):
@@ -45,10 +44,9 @@ def index(request):
             attending_appointments.append(appointment)
     geolocator = Nominatim(user_agent="profile_app")
     location = geolocator.geocode(user.location)
-    print("lat")
-    print(location.latitude)
-    print("long")
-    print(location.longitude)
+
+    newArr = []
+    
 
     # count = Users.objects.all().count()
     # slice = random.random() * (count - 3)
@@ -156,16 +154,11 @@ def view_profile(request, user_id):
 
     arr_rating =[]
     
-    print("uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu")
     for x in user_reviews:
         print(x.rating)
         arr_rating.append(x.rating)
     x = statistics.mean(arr_rating)
     average_reviews = (int(round(x)))
-    
-
-    print("uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu")
-
 
     geolocator = Nominatim(user_agent="profile_app")
     location = geolocator.geocode(view_user.location)
