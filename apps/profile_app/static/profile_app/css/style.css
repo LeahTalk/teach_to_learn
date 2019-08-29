@@ -29,3 +29,7 @@
     overflow:auto;
     height: 100px;
 }
+
+.inline_class {
+    display: inline;
+}
