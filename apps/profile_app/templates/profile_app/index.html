@@ -131,7 +131,7 @@
                                 <h4 class="p-2" style="width: 100%; background-color:#fff3cf">Course Suggestions for You:</h4>
                                 <div class="pl-5">
                                     {% for skills in skills_to_learn %}
-                                    <p> {{skills.name}} course by: </p>
+                                    <p>Users who teach {{skills.name}}: </p>
                                         <ul>
                                         {% for user in all_users %}
                                             {% if user in skills.teachers.all %}
@@ -175,7 +175,25 @@
                                     {% endfor %}
                                 </ul>
                             </div>
-                        </div>
+                            <div class="overflow-auto mt-3 border rounded rounded-lg border-muted" style="width: 95%; min-height: 200px">
+                                <h4 class="p-2" style="width: 100%; background-color:#fff3cf">Recent sessions:</h4>
+                                <ul class="pl-5">
+                                    {% for appointment in old_appointments %}
+                                        <li>
+                                            <p class = 'inline_class'>Met with </p>
+                                            <a class = 'inline_class' href = '/profile/{{ appointment.appointment_creator.id }}'>{{ appointment.appointment_creator.first_name }}</a>
+                                            <p class = 'inline_class'> on </p>
+                                            <a class = 'inline_class'href = '/messages/{{ appointment.id }}'>{{ appointment.date }}
+                                            {% if user == appointment.appointment_creator %}
+                                                to teach {{ appointment.category.name }}</a>
+                                            {% else %}
+                                                to learn {{ appointment.category.name }}</a>
+                                            {% endif %}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                    </div>
                     </div>
             </div>
             <div class="col"></div>

@@ -10,7 +10,6 @@ import boto3
 import base64
 from geopy.geocoders import Nominatim
 import random
-from random import sample, randrange
 import statistics
 
 def upload_photo(request):
@@ -27,13 +26,20 @@ def index(request):
     reserved_appointments = []
     open_appointments = []
     attending_appointments = []
+    old_appointments = []
     for appointment in created_appointments:
-        #If the teacher is owed credit, and the appointment has occurred then give credit
-        if (appointment.pending_credit == True) and (str(appointment.date) < str(datetime.today())):
-            appointment.pending_credit = False
-            appointment.save()
-            user.credits += 1
-            user.save()
+        if (str(appointment.date) < str(datetime.today())):
+            #If the teacher is owed credit, and the appointment has occurred then give credit
+            if appointment.pending_credit == True:
+                appointment.pending_credit = False
+                appointment.save()
+                user.credits += 1
+                user.save()
+                old_appointments.append(appointment)
+            elif appointment.appointment_student == None:
+                appointment.delete()
+            else:
+                old_appointments.append(appointment)
         if (str(appointment.date) > str(datetime.now())):
             if appointment.appointment_student != None:
                 reserved_appointments.append(appointment)
@@ -43,12 +49,14 @@ def index(request):
     for appointment in all_attended:
         if (str(appointment.date) > str(datetime.now())):
             attending_appointments.append(appointment)
+        else:
+            old_appointments.append(appointment)
     geolocator = Nominatim(user_agent="profile_app")
     location = geolocator.geocode(user.location)
-    print("lat")
-    print(location.latitude)
-    print("long")
-    print(location.longitude)
+    #Sort past appointments taught and learned by date and take the most recent 3
+    old_appointments.sort(key=lambda x: str(x.date), reverse=True)
+    old_appointments = old_appointments[:3]
+
 
     # count = Users.objects.all().count()
     # slice = random.random() * (count - 3)
@@ -74,7 +82,7 @@ def index(request):
         'all_users': Users.objects.exclude(id=request.session['curUser']).order_by('?')[:8],                      # only show all other users that teach the subject, do not include logged user
         'latitude': location.latitude,
         'longitude': location.longitude,
-
+        'old_appointments' : old_appointments,
     }
     return render(request, 'profile_app/index.html', context)
 
@@ -156,25 +164,16 @@ def view_profile(request, user_id):
 
     arr_rating =[]
     
-    print("uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu")
     for x in user_reviews:
         print(x.rating)
         arr_rating.append(x.rating)
-    x = statistics.mean(arr_rating)
-    average_reviews = (int(round(x)))
-    
-
-    print("uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu")
-
-
+        
+    average_reviews = ""
+    if len(arr_rating)>0 :
+        x = statistics.mean(arr_rating)
+        average_reviews = (int(round(x)))
     geolocator = Nominatim(user_agent="profile_app")
     location = geolocator.geocode(view_user.location)
-    
-    print("lat")
-    print(location.latitude)
-    print("long")
-    print(location.longitude)
-
 
     context = {
         'user' : Users.objects.get(id = request.session['curUser']),
