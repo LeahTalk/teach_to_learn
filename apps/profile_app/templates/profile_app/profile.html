@@ -154,6 +154,37 @@
 
                                     <div class="live_feed">
                                         <h5 class="mt-5">{{viewing_user.first_name}}'s Overall Rating:</h5>
+                                        {% if average_reviews == 1 %}
+                                        <span style="font-size:300%;color:yellow;">&starf;</span>
+                                        {% endif %}
+    
+                                        {% if average_reviews == 2 %}
+                                        <span style="font-size:300%;color:yellow;">&starf;</span>
+                                        <span style="font-size:300%;color:yellow;">&starf;</span>
+                                        {% endif %}
+    
+                                        {% if average_reviews == 3 %}
+                                        <span style="font-size:300%;color:yellow;">&starf;</span>
+                                        <span style="font-size:300%;color:yellow;">&starf;</span>
+                                        <span style="font-size:300%;color:yellow;">&starf;</span>
+                                        {% endif %}
+    
+                                        {% if average_reviews == 4 %}
+                                        <span style="font-size:300%;color:yellow;">&starf;</span>
+                                        <span style="font-size:300%;color:yellow;">&starf;</span>
+                                        <span style="font-size:300%;color:yellow;">&starf;</span>
+                                        <span style="font-size:300%;color:yellow;">&starf;</span>
+                                        {% endif %}
+    
+                                        {% if average_reviews == 5 %}
+                                        <span style="font-size:300%;color:yellow;">&starf;</span>
+                                        <span style="font-size:300%;color:yellow;">&starf;</span>
+                                        <span style="font-size:300%;color:yellow;">&starf;</span>
+                                        <span style="font-size:300%;color:yellow;">&starf;</span>
+                                        <span style="font-size:300%;color:yellow;">&starf;</span>
+                                        {% endif %}
+
+
                                         <h5 class="mt-5">{{viewing_user.first_name}} can teach:</h5>
                                         <ul>
                                         {% for skill in skills  %}
@@ -177,45 +208,47 @@
                                 <div class="user_reviews pl-5">
                                         
                                         
-                                    {% if average_reviews == 1 %}
-                                    <h5 class="mt-5">Reviews:</h5>
-                                    <span style="font-size:200%;color:yellow;">&starf;</span>
-                                    {% endif %}
-
-                                    {% if average_reviews == 2 %}
-                                    <h5 class="mt-5">Reviews: </h5>
-                                    <span style="font-size:200%;color:yellow;">&starf;</span>
-                                    <span style="font-size:200%;color:yellow;">&starf;</span>
-                                    {% endif %}
-
-                                    {% if average_reviews == 3 %}
-                                    <h5 class="mt-5">Reviews: </h5>
-                                    <span style="font-size:200%;color:yellow;">&starf;</span>
-                                    <span style="font-size:200%;color:yellow;">&starf;</span>
-                                    <span style="font-size:200%;color:yellow;">&starf;</span>
-                                    {% endif %}
-
-                                    {% if average_reviews == 4 %}
-                                    <h5 class="mt-5">Reviews: </h5>
-                                    <span style="font-size:200%;color:yellow;">&starf;</span>
-                                    <span style="font-size:200%;color:yellow;">&starf;</span>
-                                    <span style="font-size:200%;color:yellow;">&starf;</span>
-                                    <span style="font-size:200%;color:yellow;">&starf;</span>
-                                    {% endif %}
-
-                                    {% if average_reviews == 5 %}
-                                    <h5 class="mt-5">Reviews: </h5>
-                                    <span style="font-size:200%;color:yellow;">&starf;</span>
-                                    <span style="font-size:200%;color:yellow;">&starf;</span>
-                                    <span style="font-size:200%;color:yellow;">&starf;</span>
-                                    <span style="font-size:200%;color:yellow;">&starf;</span>
-                                    <span style="font-size:200%;color:yellow;">&starf;</span>
-                                    {% endif %}
+                                
                                     
                                     {% for review in user_reviews  %}
                                     <ul>
                                     <h6 class="">
-                                       <li> {{review.review_creator.first_name}} {{review.review_creator.last_name}} [{{review.created_at}}] : </li>  
+                                       <li> {{review.review_creator.first_name}} {{review.review_creator.last_name}} [{{review.created_at}}] : 
+                                            {% if review.rating == 1 %}
+                                        
+                                            <span style="font-size:200%;color:yellow;">&starf;</span>
+                                            {% endif %}
+        
+                                            {% if review.rating == 2 %}
+                                
+                                            <span style="font-size:200%;color:yellow;">&starf;</span>
+                                            <span style="font-size:200%;color:yellow;">&starf;</span>
+                                            {% endif %}
+        
+                                            {% if review.rating == 3 %}
+                                        
+                                            <span style="font-size:200%;color:yellow;">&starf;</span>
+                                            <span style="font-size:200%;color:yellow;">&starf;</span>
+                                            <span style="font-size:200%;color:yellow;">&starf;</span>
+                                            {% endif %}
+        
+                                            {% if review.rating == 4 %}
+                                    
+                                            <span style="font-size:200%;color:yellow;">&starf;</span>
+                                            <span style="font-size:200%;color:yellow;">&starf;</span>
+                                            <span style="font-size:200%;color:yellow;">&starf;</span>
+                                            <span style="font-size:200%;color:yellow;">&starf;</span>
+                                            {% endif %}
+        
+                                            {% if review.rating == 5 %}
+            
+                                            <span style="font-size:200%;color:yellow;">&starf;</span>
+                                            <span style="font-size:200%;color:yellow;">&starf;</span>
+                                            <span style="font-size:200%;color:yellow;">&starf;</span>
+                                            <span style="font-size:200%;color:yellow;">&starf;</span>
+                                            <span style="font-size:200%;color:yellow;">&starf;</span>
+                                            {% endif %}
+                                       </li>  
                                     </h6>
                                     <p class="pl-4">
                                         "{{review.content}}"
