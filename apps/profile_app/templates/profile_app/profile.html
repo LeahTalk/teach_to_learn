@@ -153,35 +153,41 @@
                                     {% endif %}
 
                                     <div class="live_feed">
+                                      
                                         <h5 class="mt-5">{{viewing_user.first_name}}'s Overall Rating:</h5>
+                                        
+                                        {% if average_reviews == "" %}
+                                        <h3>No reviews </h3>
+                                        {% endif %}
+
                                         {% if average_reviews == 1 %}
-                                        <span style="font-size:300%;color:yellow;">&starf;</span>
+                                        <span style="font-size:400%;color:yellow;">&starf;</span>
                                         {% endif %}
     
                                         {% if average_reviews == 2 %}
-                                        <span style="font-size:300%;color:yellow;">&starf;</span>
-                                        <span style="font-size:300%;color:yellow;">&starf;</span>
+                                        <span style="font-size:400%;color:yellow;">&starf;</span>
+                                        <span style="font-size:400%;color:yellow;">&starf;</span>
                                         {% endif %}
     
                                         {% if average_reviews == 3 %}
-                                        <span style="font-size:300%;color:yellow;">&starf;</span>
-                                        <span style="font-size:300%;color:yellow;">&starf;</span>
-                                        <span style="font-size:300%;color:yellow;">&starf;</span>
+                                        <span style="font-size:400%;color:yellow;">&starf;</span>
+                                        <span style="font-size:400%;color:yellow;">&starf;</span>
+                                        <span style="font-size:400%;color:yellow;">&starf;</span>
                                         {% endif %}
     
                                         {% if average_reviews == 4 %}
-                                        <span style="font-size:300%;color:yellow;">&starf;</span>
-                                        <span style="font-size:300%;color:yellow;">&starf;</span>
-                                        <span style="font-size:300%;color:yellow;">&starf;</span>
-                                        <span style="font-size:300%;color:yellow;">&starf;</span>
+                                        <span style="font-size:400%;color:yellow;">&starf;</span>
+                                        <span style="font-size:400%;color:yellow;">&starf;</span>
+                                        <span style="font-size:400%;color:yellow;">&starf;</span>
+                                        <span style="font-size:400%;color:yellow;">&starf;</span>
                                         {% endif %}
     
                                         {% if average_reviews == 5 %}
-                                        <span style="font-size:300%;color:yellow;">&starf;</span>
-                                        <span style="font-size:300%;color:yellow;">&starf;</span>
-                                        <span style="font-size:300%;color:yellow;">&starf;</span>
-                                        <span style="font-size:300%;color:yellow;">&starf;</span>
-                                        <span style="font-size:300%;color:yellow;">&starf;</span>
+                                        <span style="font-size:400%;color:yellow;">&starf;</span>
+                                        <span style="font-size:400%;color:yellow;">&starf;</span>
+                                        <span style="font-size:400%;color:yellow;">&starf;</span>
+                                        <span style="font-size:400%;color:yellow;">&starf;</span>
+                                        <span style="font-size:400%;color:yellow;">&starf;</span>
                                         {% endif %}
 
 
@@ -201,7 +207,7 @@
                                                 {% endfor %}
                                             </select>
                                             <input class="btn text-muted mt-2" style="background-color: #fcedfc" type="submit" value="Submit" name="update">
-                                        </form>
+                                        </form><br>
                                         {% endif %}
                                     </div>
                                 </div>
@@ -209,10 +215,11 @@
                                         
                                         
                                 
-                                    
+                                    <h4>Reviews :</h4>
                                     {% for review in user_reviews  %}
                                     <ul>
                                     <h6 class="">
+                                           
                                        <li> {{review.review_creator.first_name}} {{review.review_creator.last_name}} [{{review.created_at}}] : 
                                             {% if review.rating == 1 %}
                                         

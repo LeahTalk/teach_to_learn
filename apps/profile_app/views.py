@@ -160,8 +160,13 @@ def view_profile(request, user_id):
     for x in user_reviews:
         print(x.rating)
         arr_rating.append(x.rating)
-    x = statistics.mean(arr_rating)
-    average_reviews = (int(round(x)))
+        
+    average_reviews = ""
+    if len(arr_rating)>0 :
+        x = statistics.mean(arr_rating)
+        average_reviews = (int(round(x)))
+
+
     
 
     print("uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu")
