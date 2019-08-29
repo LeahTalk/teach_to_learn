@@ -62,11 +62,13 @@
                                 {% endif %}
                                 <form action = '/appointment/add' method = 'post'>
                                     {% csrf_token %}
-                                    <div class="text-left pl-5 m-0" style="width: 60%">
+                                    <div class="text-left pl-5 m-0" style="width: 65%">
                                         <h5 class="mt-3">Date and time:</h5>
+                                        <p class="lead mt-1">Select Date in the Future!</p>
                                         <input class="form-control" type="datetime-local" name="date">
                                         <h5 class="mt-3">Address: </h5>
-                                        <input class="form-control" type="text" name = "location">
+                                        <p class="lead mt-1">Minimum: Please Specify City, State, and Country</p>
+                                        <input class="form-control" type="text" name = "location" placeholder="Enter Address or City, State, and Country">
                                         <div class="text-center mt-3 mb-3">
                                             <input class="btn text-muted" style="background-color: #fcedfc" type="submit" value="Submit">
                                         </div>
@@ -171,7 +173,25 @@
                                     {% endfor %}
                                 </ul>
                             </div>
-                        </div>
+                            <div class="overflow-auto mt-3 border rounded rounded-lg border-muted" style="width: 95%; min-height: 200px">
+                                <h4 class="p-2" style="width: 100%; background-color:#fcedfc">Recent sessions:</h4>
+                                <ul class="pl-5">
+                                    {% for appointment in old_appointments %}
+                                        <li>
+                                            <p class = 'inline_class'>Met with </p>
+                                            <a class = 'inline_class' href = '/profile/{{ appointment.appointment_creator.id }}'>{{ appointment.appointment_creator.first_name }}</a>
+                                            <p class = 'inline_class'> on </p>
+                                            <a class = 'inline_class'href = '/messages/{{ appointment.id }}'>{{ appointment.date }}
+                                            {% if user == appointment.appointment_creator %}
+                                                to teach {{ appointment.category.name }}</a>
+                                            {% else %}
+                                                to learn {{ appointment.category.name }}</a>
+                                            {% endif %}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                    </div>
                     </div>
             </div>
             <div class="col"></div>

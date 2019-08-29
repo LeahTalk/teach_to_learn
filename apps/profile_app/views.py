@@ -10,7 +10,7 @@ import boto3
 import base64
 from geopy.geocoders import Nominatim
 import random
-from random import sample, randrange
+import statistics
 
 def upload_photo(request):
     if 'profile_img' in request.FILES:
@@ -26,13 +26,20 @@ def index(request):
     reserved_appointments = []
     open_appointments = []
     attending_appointments = []
+    old_appointments = []
     for appointment in created_appointments:
-        #If the teacher is owed credit, and the appointment has occurred then give credit
-        if (appointment.pending_credit == True) and (str(appointment.date) < str(datetime.today())):
-            appointment.pending_credit = False
-            appointment.save()
-            user.credits += 1
-            user.save()
+        if (str(appointment.date) < str(datetime.today())):
+            #If the teacher is owed credit, and the appointment has occurred then give credit
+            if appointment.pending_credit == True:
+                appointment.pending_credit = False
+                appointment.save()
+                user.credits += 1
+                user.save()
+                old_appointments.append(appointment)
+            elif appointment.appointment_student == None:
+                appointment.delete()
+            else:
+                old_appointments.append(appointment)
         if (str(appointment.date) > str(datetime.now())):
             if appointment.appointment_student != None:
                 reserved_appointments.append(appointment)
@@ -42,12 +49,14 @@ def index(request):
     for appointment in all_attended:
         if (str(appointment.date) > str(datetime.now())):
             attending_appointments.append(appointment)
+        else:
+            old_appointments.append(appointment)
     geolocator = Nominatim(user_agent="profile_app")
     location = geolocator.geocode(user.location)
-    print("lat")
-    print(location.latitude)
-    print("long")
-    print(location.longitude)
+    #Sort past appointments taught and learned by date and take the most recent 3
+    old_appointments.sort(key=lambda x: str(x.date), reverse=True)
+    old_appointments = old_appointments[:3]
+
 
     user = Users.objects.get(id = request.session['curUser'])
     skills_to_learn = user.skills_to_learn.all()
@@ -65,8 +74,6 @@ def index(request):
         'all_users': instructors,
         'latitude': location.latitude,
         'longitude': location.longitude,
-        
-
     }
     return render(request, 'profile_app/index.html', context)
 
@@ -141,13 +148,36 @@ def view_profile(request, user_id):
         if (appointment.appointment_student == None) and (str(appointment.date) > str(datetime.now())):
             open_appointments.append(appointment)
     all_skills = SubCategories.objects.all()
+
+    #  
+    getUser = Users.objects.get(id = user_id )
+    user_reviews = Reviews.objects.filter(review_receiver = getUser)
+
+    arr_rating =[]
+    
+    for x in user_reviews:
+        print(x.rating)
+        arr_rating.append(x.rating)
+        
+    average_reviews = ""
+    if len(arr_rating)>0 :
+        x = statistics.mean(arr_rating)
+        average_reviews = (int(round(x)))
+    geolocator = Nominatim(user_agent="profile_app")
+    location = geolocator.geocode(view_user.location)
+
     context = {
         'user' : Users.objects.get(id = request.session['curUser']),
         'viewing_user' : view_user,
         'open_appointments' : open_appointments,
         'skills': view_user.skills_to_teach.all(),
-        'all_skills' : SubCategories.objects.exclude(teachers = Users.objects.filter(id = request.session['curUser'])).order_by('name')
+        'all_skills' : SubCategories.objects.exclude(teachers = Users.objects.filter(id = request.session['curUser'])).order_by('name'),
+        'user_reviews' : user_reviews,
+        'average_reviews' : average_reviews,
+        'latitude': location.latitude,
+        'longitude': location.longitude,
     }
+
     return render(request, 'profile_app/profile.html', context)
 
 def view_history(request):

@@ -120,8 +120,7 @@ After creating a review the user should be redirected back to the dashboard.
         </div>
         <div style="width: 2.5%"></div>
         <div class="col-4">
-                {% if not appointment_Object.appointment_student == none %}
-            
+            {% if not appointment_Object.appointment_student == none %}
                 <!-- Instructor View -->
                 {% if appointment_Object.appointment_creator.id == request.session.curUser %}
 
@@ -146,8 +145,7 @@ After creating a review the user should be redirected back to the dashboard.
                                     {% endfor %}
                                 </ul>
                                     {% endif %}
-                    
-                            <textarea class="post_area from-control ml-3" rows="4" cols="60" name="post" value = ""></textarea>
+                            <textarea class="post_area from-control ml-3" rows="4" style = 'width: 90%' name="post" value = ""></textarea>
                             <div class="text-center mt-4 mb-4">
                                 <button class="btn text-dark" type="submit" style ="background-color:#fcedfc ">Submit</button>
                             </div>
@@ -158,94 +156,74 @@ After creating a review the user should be redirected back to the dashboard.
                 {% else %}
                 <div class="mb-4 border rounded rounded-lg border-muted" style="width: 95%; min-height: 500px;  min-width:250px">
                     <h4 class="p-2" style="width: 100%; background-color:#fcedfc">You are messaging {{appointment_Object.appointment_creator.first_name}} {{appointment_Object.appointment_creator.last_name}} for {{appointment_Object.category.name}} </h4>
-                        
-                            {% for message in all_messages %}
-                            <h6 class="pl-3">{{message.message_owner.first_name}} {{message.message_owner.last_name}} [{{message.created_at}}] </h6>
-                            <p class="pl-5">{{message.content}}</p>
-                            {% endfor %}
-                                
-                                    
-                            <form action="/send_message/{{request.session.appointment_id}}" class="login-form pl-3" method="POST">     
-                                {% csrf_token %}
-                                {% if messages %}
-                                    <ul class="messages">
-                                        {% for message in messages %}
-                                        {% if message.extra_tags == "length" %}
+                    {% for message in all_messages %}
+                        <h6 class="pl-3">{{message.message_owner.first_name}} {{message.message_owner.last_name}} [{{message.created_at}}] </h6>
+                        <p class="pl-5">{{message.content}}</p>
+                    {% endfor %}        
+                    <form action="/send_message/{{request.session.appointment_id}}" class="login-form pl-3" method="POST">     
+                        {% csrf_token %}
+                        {% if messages %}
+                            <ul class="messages">
+                                {% for message in messages %}
+                                    {% if message.extra_tags == "length" %}
                                         <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                                        {% endif %}
-                                        {% endfor %}
-                                    </ul>
-                                        {% endif %}
-                        
-                                <textarea class="post_area" rows="4" cols="60" name="post" value = ""></textarea>
-                                <div class="text-center mt-4 mb-4">
-                                        <button class="btn text-dark" type="submit" style ="background-color:#fcedfc ">Submit</button>
-                                    </div>
-                            </form>  
-    
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        <textarea class="post_area" rows="4" cols="60" name="post" value = ""></textarea>
+                        <div class="text-center mt-4 mb-4">
+                            <button class="btn text-dark" type="submit" style ="background-color:#fcedfc ">Submit</button>
                         </div>
-    
+                    </form>  
+                </div>
                 {%endif%}
+            </div>
+            <div class="col"></div>
         </div>
-        <div class="col"></div>
-    </div>
 
     <div class="row mt-5">
         <div class="col"></div>
-
-        <div class="overflow-auto mb-4 border rounded rounded-lg border-muted" style="min-height: 250px">
-            <h4 class="p-2" style="width: 100%; background-color:#fff3cf">Leave a Review: </h4> 
-            <form action="/send_review/{{request.session.appointment_id}}" class="login-form" method="POST"> 
-                {% csrf_token %}
-                {% if messages %}
-                <ul class="messages">
-                    {% for message in messages %}
-                    {% if message.extra_tags == "rating" %}
-                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% if showReview %}
+            <div class="overflow-auto mb-4 border rounded rounded-lg border-muted" style="min-height: 250px">
+                <h4 class="p-2" style="width: 100%; background-color:#fff3cf">Leave a Review: </h4> 
+                <form action="/send_review/{{request.session.appointment_id}}" class="login-form" method="POST"> 
+                    {% csrf_token %}
+                    {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            {% if message.extra_tags == "rating" %}
+                                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
                     {% endif %}
-                    {% endfor %}
-                </ul>
-                {% endif %}
-
-                {% if messages %}
-                <ul class="messages">
-                    {% for message in messages %}
-                    {% if message.extra_tags == "review_post" %}
-                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            {% if message.extra_tags == "review_post" %}
+                                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
                     {% endif %}
-                    {% endfor %}
-                </ul>
-                {% endif %}
-
-
-                <textarea class="post_area ml-3 mr-3" rows="5" cols="50" name="review_post" value = ""></textarea>
-                <div class="text-center mt-3 pl-3 pr-3">
-                    <select name="rating" class="form-control">
-                        <option value="1">☆</option>
-                        <option value="2">☆☆</option>
-                        <option value="3">☆☆☆</option>
-                        <option value="4">☆☆☆☆</option>
-                        <option value="5">☆☆☆☆☆</option>
-                    </select> 
-                </div>
-                <div class="text-center mt-4 mb-4">
-                    <button class="btn text-dark" type="submit" style ="background-color:#fcedfc ">Submit</button>
-                </div>
-                {%endif%}
-            </form>
-        </div>
-
+                    <textarea class="post_area ml-3 mr-3" rows="5" cols="50" name="review_post" value = ""></textarea>
+                    <div class="text-center mt-3 pl-3 pr-3">
+                        <select name="rating" class="form-control">
+                            <option value="1">☆</option>
+                            <option value="2">☆☆</option>
+                            <option value="3">☆☆☆</option>
+                            <option value="4">☆☆☆☆</option>
+                            <option value="5">☆☆☆☆☆</option>
+                        </select> 
+                    </div>
+                    <div class="text-center mt-4 mb-4">
+                        <button class="btn text-dark" type="submit" style ="background-color:#fcedfc ">Submit</button>
+                    </div>
+                </form>
+            </div>
+        {%endif%}
         <div class="col"></div>
+        {%endif%}
     </div>
-
-
-      
-
-
-
-           
-
-          <!-- <button type="button" class="btn btn-outline-primary">Submit Review</button> -->
-
-
 </body>

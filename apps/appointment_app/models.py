@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 from django.db import models
 from apps.login_app.models import *
 import datetime
+from geopy.geocoders import Nominatim
 
 class AppointmentManager(models.Manager):
     def appointment_validator(self, postData):
@@ -10,8 +11,25 @@ class AppointmentManager(models.Manager):
             errors['date'] = "You must choose a date!"
         if postData['date'] < str(datetime.datetime.today()):
             errors['starttime'] = "You cannot make an appointment in the past!"
-        if len(postData['location']) < 1:
-            errors['location'] = "You must choose a location!"
+        if len(postData['location']) < 2:
+            errors['location'] = "Location must be at least two characters"
+        geolocator = Nominatim(user_agent="login_app")
+        location = geolocator.geocode(postData['location'])
+        if location == None:
+            errors['location'] = "The city or location you have inputted does not exist, please try again"
+        return errors
+
+    def location_validator(self, postData):
+        errors = {}
+
+        if 'location' in postData:
+            if len(postData['location']) < 2:
+                errors['location'] = "Location must be at least two characters"
+
+            geolocator = Nominatim(user_agent="login_app")
+            location = geolocator.geocode(postData['location'])
+            if location == None:
+                errors['location'] = "The city or location you have inputted does not exist, please try again"
         return errors
 
 class reviewManager(models.Manager):
