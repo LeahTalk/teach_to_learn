@@ -11,6 +11,7 @@ import base64
 from geopy.geocoders import Nominatim
 import random
 from random import sample, randrange
+import statistics
 
 def upload_photo(request):
     if 'profile_img' in request.FILES:
@@ -152,8 +153,23 @@ def view_profile(request, user_id):
     #  
     getUser = Users.objects.get(id = user_id )
     user_reviews = Reviews.objects.filter(review_receiver = getUser)
+
+    arr_rating =[]
+    
+    print("uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu")
+    for x in user_reviews:
+        print(x.rating)
+        arr_rating.append(x.rating)
+    x = statistics.mean(arr_rating)
+    average_reviews = (int(round(x)))
+    
+
+    print("uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu")
+
+
     geolocator = Nominatim(user_agent="profile_app")
     location = geolocator.geocode(view_user.location)
+    
     print("lat")
     print(location.latitude)
     print("long")
@@ -166,7 +182,8 @@ def view_profile(request, user_id):
         'open_appointments' : open_appointments,
         'skills': view_user.skills_to_teach.all(),
         'all_skills' : SubCategories.objects.exclude(teachers = Users.objects.filter(id = request.session['curUser'])).order_by('name'),
-        'user_reviews' : user_reviews, 
+        'user_reviews' : user_reviews,
+        'average_reviews' : average_reviews,
         'latitude': location.latitude,
         'longitude': location.longitude,
     }

@@ -33,3 +33,8 @@
 .inline_class {
     display: inline;
 }
+
+.extra{
+    color: yellow;
+    background-color: blue;
+}

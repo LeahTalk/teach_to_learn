@@ -180,14 +180,52 @@
                                     </div>
                                 </div>
                                 <div class="user_reviews pl-5">
+                                        
+                                        
+                                    {% if average_reviews == 1 %}
                                     <h5 class="mt-5">Reviews:</h5>
+                                    <span style="font-size:200%;color:yellow;">&starf;</span>
+                                    {% endif %}
+
+                                    {% if average_reviews == 2 %}
+                                    <h5 class="mt-5">Reviews: </h5>
+                                    <span style="font-size:200%;color:yellow;">&starf;</span>
+                                    <span style="font-size:200%;color:yellow;">&starf;</span>
+                                    {% endif %}
+
+                                    {% if average_reviews == 3 %}
+                                    <h5 class="mt-5">Reviews: </h5>
+                                    <span style="font-size:200%;color:yellow;">&starf;</span>
+                                    <span style="font-size:200%;color:yellow;">&starf;</span>
+                                    <span style="font-size:200%;color:yellow;">&starf;</span>
+                                    {% endif %}
+
+                                    {% if average_reviews == 4 %}
+                                    <h5 class="mt-5">Reviews: </h5>
+                                    <span style="font-size:200%;color:yellow;">&starf;</span>
+                                    <span style="font-size:200%;color:yellow;">&starf;</span>
+                                    <span style="font-size:200%;color:yellow;">&starf;</span>
+                                    <span style="font-size:200%;color:yellow;">&starf;</span>
+                                    {% endif %}
+
+                                    {% if average_reviews == 5 %}
+                                    <h5 class="mt-5">Reviews: </h5>
+                                    <span style="font-size:200%;color:yellow;">&starf;</span>
+                                    <span style="font-size:200%;color:yellow;">&starf;</span>
+                                    <span style="font-size:200%;color:yellow;">&starf;</span>
+                                    <span style="font-size:200%;color:yellow;">&starf;</span>
+                                    <span style="font-size:200%;color:yellow;">&starf;</span>
+                                    {% endif %}
+                                    
                                     {% for review in user_reviews  %}
-                                    <p>
-                                        {{review.review_creator.first_name}} {{review.review_creator.last_name}} says,   
-                                    </p>
-                                    <p>
+                                    <ul>
+                                    <h6 class="">
+                                       <li> {{review.review_creator.first_name}} {{review.review_creator.last_name}} [{{review.created_at}}] : </li>  
+                                    </h6>
+                                    <p class="pl-4">
                                         "{{review.content}}"
-                                    </p>
+                                    </p><br>
+                                    </ul>
                                     {% endfor %}
                                 </div>
                             </div>
