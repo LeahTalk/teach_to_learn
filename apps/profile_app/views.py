@@ -50,21 +50,18 @@ def index(request):
         if (str(appointment.date) > str(datetime.now())):
             attending_appointments.append(appointment)
         else:
+            print('hello')
             old_appointments.append(appointment)
     geolocator = Nominatim(user_agent="profile_app")
     location = geolocator.geocode(user.location)
     #Sort past appointments taught and learned by date and take the most recent 3
     old_appointments.sort(key=lambda x: str(x.date), reverse=True)
     old_appointments = old_appointments[:3]
-
-
     user = Users.objects.get(id = request.session['curUser'])
     skills_to_learn = user.skills_to_learn.all()
     instructors = {}
     for skill in skills_to_learn:
         instructors[skill.name] = Users.objects.exclude(id=request.session['curUser']).filter(skills_to_teach=skill).order_by('?')[:3]
-      
-
     context = {
         'user' :user,
         'open_appointments' : open_appointments,
@@ -74,6 +71,7 @@ def index(request):
         'all_users': instructors,
         'latitude': location.latitude,
         'longitude': location.longitude,
+        'old_appointments' : old_appointments,
     }
     return render(request, 'profile_app/index.html', context)
 

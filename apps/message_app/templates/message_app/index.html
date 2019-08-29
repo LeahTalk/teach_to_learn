@@ -68,7 +68,7 @@ After creating a review the user should be redirected back to the dashboard.
                                     </div>
 
                                     <div class="text-center ml-3 mt-4 mb-4">
-                                        <a class = "btn btn-danger btn-lg" href = '/appointment/cancel/{{ request.session.appointment_id }}'><h1>Cancel</h1></a>
+                                        <a class = "btn btn-danger" href = '/appointment/cancel/{{ request.session.appointment_id }}'>Cancel</a>
                                     </div>
                                 </div>
                             </form>
@@ -81,7 +81,7 @@ After creating a review the user should be redirected back to the dashboard.
                     <div class="ml-5 mt-4" style="width:55%">
                         <p>Date and time: {{appointment_Object.date}}</p>
                         <p>Address: {{appointment_Object.location}} </p>
-                        <a class = "btn btn-danger btn-lg" href = '/appointment/cancel/{{ request.session.appointment_id }}'><h1>Cancel</h1></a>
+                        <a class = "btn btn-danger" href = '/appointment/cancel/{{ request.session.appointment_id }}'>Cancel</a>
                     </div>
                 </div>
             {% endif %}
@@ -126,8 +126,6 @@ After creating a review the user should be redirected back to the dashboard.
 
                     <div class="mb-4 border rounded rounded-lg border-muted" style="width: 95%; min-height: 500px;  min-width:250px">
                         <h4 class="p-2" style="width: 100%; background-color:#fcedfc">You are messaging {{appointment_Object.appointment_student.first_name}} {{appointment_Object.appointment_student.last_name}} for {{appointment_Object.category.name}} course. </h4>
-
-
                         {% for message in all_messages %}
                         <h6 class="pl-3">{{message.message_owner.first_name}} {{message.message_owner.last_name}} [{{message.created_at}}] </h6>
                         <p class="pl-5">{{message.content}}</p>
