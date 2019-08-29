@@ -9,6 +9,8 @@ import os
 import boto3
 import base64
 from geopy.geocoders import Nominatim
+import random
+from random import sample, randrange
 
 def upload_photo(request):
     if 'profile_img' in request.FILES:
@@ -47,13 +49,28 @@ def index(request):
     print("long")
     print(location.longitude)
 
+    # count = Users.objects.all().count()
+    # slice = random.random() * (count - 3)
+    # newArr = set()
+    # something = Users.objects.exclude(id=request.session['curUser'])  #
+    # while len(newArr) < 3:
+    #     x = randrange(len(something) - 1)
+    #     newArr.add(something[x])
+    # print(newArr)
+    
+    # SubCategories.objects.get(id=).teachers.all()
+    # Users.objects.get(id=request.session['curUser']).skills_to_teach.all()
+
+    # Users.objects.exclude(id=request.session['curUser']).all(), 
+    # Users.objects.exclude(id=request.session['curUser']).order_by('?')[3:]
+
     context = {
         'user' : Users.objects.get(id = request.session['curUser']),
         'open_appointments' : open_appointments,
         'reserved_teaching_appointments' : reserved_appointments,
         'learning_appointments' : attending_appointments,
         'skills_to_learn' : user.skills_to_learn.all(),
-        'all_users': Users.objects.all(),
+        'all_users': Users.objects.exclude(id=request.session['curUser']).order_by('?')[:8],                      # only show all other users that teach the subject, do not include logged user
         'latitude': location.latitude,
         'longitude': location.longitude,
 
@@ -135,13 +152,23 @@ def view_profile(request, user_id):
     #  
     getUser = Users.objects.get(id = user_id )
     user_reviews = Reviews.objects.filter(review_receiver = getUser)
+    geolocator = Nominatim(user_agent="profile_app")
+    location = geolocator.geocode(view_user.location)
+    print("lat")
+    print(location.latitude)
+    print("long")
+    print(location.longitude)
+
+
     context = {
         'user' : Users.objects.get(id = request.session['curUser']),
         'viewing_user' : view_user,
         'open_appointments' : open_appointments,
         'skills': view_user.skills_to_teach.all(),
         'all_skills' : SubCategories.objects.exclude(teachers = Users.objects.filter(id = request.session['curUser'])).order_by('name'),
-        'user_reviews' : user_reviews 
+        'user_reviews' : user_reviews, 
+        'latitude': location.latitude,
+        'longitude': location.longitude,
     }
 
     return render(request, 'profile_app/profile.html', context)
