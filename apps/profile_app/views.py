@@ -10,17 +10,6 @@ import boto3
 import base64
 from geopy.geocoders import Nominatim
 
-'''
-def upload_photo(request):
-    bucket = 'teachtolearnphotos'
-
-    object_name = 'test.png'
-    #Change this for later so it doesn't have the access key in plaintext!!!
-    s3_client = boto3.client('s3', aws_access_key_id='AKIAUTEH3EOJ7EEP2HPU',
-         aws_secret_access_key= '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')
-    response = s3_client.upload_file(file_name, bucket, object_name)
-    return redirect('/dashboard')
-'''
 def upload_photo(request):
     if 'profile_img' in request.FILES:
         encoded_string = base64.b64encode(request.FILES['profile_img'].read())

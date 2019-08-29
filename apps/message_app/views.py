@@ -3,6 +3,7 @@ from .models import *
 from apps.login_app.models import *
 from apps.appointment_app.models import *
 from django.contrib import messages
+from geopy.geocoders import Nominatim
 
 
 def index(request, appointment_id):
@@ -21,10 +22,23 @@ def index(request, appointment_id):
 
         request.session['appointment_id'] = appointment_id
         appointment_object = Appointments.objects.get(id = appointment_id)
+
+        geolocator = Nominatim(user_agent="message_app")
+        location = geolocator.geocode(appointment.location)
+        if location == None:
+            location = "Seattle"
+        
+        print("lat")
+        print(location.latitude)
+        print("long")
+        print(location.longitude)
+
         context = {
             'user' : Users.objects.get(id=request.session['curUser']),
             'all_messages' : Messages.objects.filter(appointment = appointment_object),
-            'appointment_Object': appointment
+            'appointment_Object': appointment,
+            'latitude': location.latitude,
+            'longitude': location.longitude,
         }
         
         return render(request, 'message_app/index.html' , context)
