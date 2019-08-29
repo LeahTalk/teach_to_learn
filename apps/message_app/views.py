@@ -22,6 +22,7 @@ def index(request, appointment_id):
         request.session['appointment_id'] = appointment_id
         appointment_object = Appointments.objects.get(id = appointment_id)
         context = {
+            'user' : Users.objects.get(id=request.session['curUser']),
             'all_messages' : Messages.objects.filter(appointment = appointment_object),
             'appointment_Object': appointment
         }

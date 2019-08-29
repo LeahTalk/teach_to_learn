@@ -84,7 +84,7 @@
                                         {% else %}
                                             <p>(Reserved)</p>
                                         {% endif %}
-                                        <a href = '/appointment/cancel/{{ appointment.id }}' onclick="return confirm('Are you sure you want to cancel this appointment?');">Cancel</a>
+                                        <a class = "btn btn-danger btn-lg" href = '/appointment/cancel/{{ appointment.id }}' onclick="return confirm('Are you sure you want to cancel this appointment?');"><h1>Cancel</h1></a>
                                     </li>
                                 {% endfor %}
                                 </ul>
@@ -99,7 +99,7 @@
                                     .mapouter{position:relative;text-align:right;height:100%;width:400px;}.gmap_canvas {overflow:hidden;background:none!important;height:100%;width:400px;}
                                 </style> -->
                                 
-                                <!--
+                                
                                 <script>
                                     var latitude = document.getElementById("latitude").value;
                                     var longitude = document.getElementById("longitude").value;
@@ -114,14 +114,14 @@
                                         });
                                     }
                                 </script>
-                                -->
+                               
                                 <div id="map" style="height: 200px; width:100%;"></div>
                                 <!-- Replace the value of the key parameter with your own API key. -->
-                                <!--
+                                
                                 <script async defer
                                 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7PlU4EZjprdgPd5dG3gXCoYhSs378seU&callback=initMap">
                                 </script>
-                                -->
+                               
                             </div>
                         </div>
 
@@ -152,7 +152,7 @@
                                             <a href = '/messages/{{ appointment.id }}'>{{ appointment.category.name }} on {{ appointment.date }}</a>
                                             <!-- <p>{{ appointment.category.name }} on {{ appointment.date }}</p> -->
                                             <p>Location: {{appointment.location }}</p>
-                                            <a href = '/appointment/cancel/{{ appointment.id }}' onclick="return confirm('Are you sure you want to cancel this appointment?');">Cancel</a>
+                                            <a class = "btn btn-danger btn-lg" href = '/appointment/cancel/{{ appointment.id }}' onclick="return confirm('Are you sure you want to cancel this appointment?');"><h1>Cancel</h1></a>
                                         </li>
                                     {% endfor %}
                                 </ul>
@@ -167,7 +167,7 @@
                                             <p class = 'inline_class'> to learn </p>
                                             <a class = 'inline_class'href = '/messages/{{ appointment.id }}'>{{ appointment.category.name }} on {{ appointment.date }}</a>
                                             <p>Location: {{ appointment.location }}</p>
-                                            <a href = '/appointment/cancel/{{ appointment.id }}' onclick="return confirm('Are you sure you want to cancel this appointment? Credit will not be refunded for cancellations made within 24 hours of your scheduled session.');">Cancel</a>
+                                            <a class = "btn btn-danger btn-lg" href = '/appointment/cancel/{{ appointment.id }}' onclick="return confirm('Are you sure you want to cancel this appointment? Credit will not be refunded for cancellations made within 24 hours of your scheduled session.');"><h1>Cancel</h1></a>
                                         </li>
                                     {% endfor %}
                                 </ul>
