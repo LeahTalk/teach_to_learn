@@ -12,7 +12,13 @@ def index(request, appointment_id):
     appointment = Appointments.objects.get(id = appointment_id)
     showReview = False
     if (str(appointment.date) < str(datetime.today())):
-        showReview = True
+        if appointment.reviews == None:
+            print('hello')
+            showReview = True
+        elif (user == appointment.appointment_creator) and len(appointment.reviews.filter(role = 'Instructor')) == 0:
+            showReview = True
+        elif (user == appointment.appointment_student) and len(appointment.reviews.filter(role = 'Student')) == 0:
+            showReview = True
     if user == appointment.appointment_creator:
         appointment.date = appointment.date.strftime("%Y-%m-%d"+ 'T' +"%H:%M")
     request.session['appointment_id'] = appointment_id
@@ -71,10 +77,10 @@ def send_review(request , appointment_id ):
         reviewCreator = Users.objects.get(id = request.session['curUser'])
 
         if request.session['curUser'] == Appointments_object.appointment_creator.id:
-            Reviews.objects.create(review_creator = reviewCreator ,review_receiver = Appointments_object.appointment_student, rating = rating , content = review_content , role = "Instructor")
+            Reviews.objects.create(review_creator = reviewCreator ,review_receiver = Appointments_object.appointment_student, rating = rating , content = review_content , role = "Instructor", appointment = Appointments_object)
             return redirect(f"/profile/{Appointments_object.appointment_student.id}")
 
         elif request.session['curUser'] == Appointments_object.appointment_student.id:
-            Reviews.objects.create(review_creator = reviewCreator ,review_receiver = Appointments_object.appointment_creator, rating = rating , content = review_content , role = "Student")
+            Reviews.objects.create(review_creator = reviewCreator ,review_receiver = Appointments_object.appointment_creator, rating = rating , content = review_content , role = "Student", appointment = Appointments_object)
             return redirect(f"/profile/{Appointments_object.appointment_creator.id}")
 

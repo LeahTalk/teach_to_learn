@@ -39,7 +39,7 @@ class reviewManager(models.Manager):
             errors['review_post'] = "You must enter a review!"
         if postData['rating'] == "":
             errors['rating'] = "Please select a rating !"
-        return errors
+        return errors   
 
 class Appointments(models.Model):
     appointment_creator = models.ForeignKey(Users, related_name = 'created_appointments')
@@ -57,8 +57,8 @@ class Reviews(models.Model):
     review_receiver = models.ForeignKey(Users, related_name = 'received_reviews')
     rating = models.IntegerField()
     content = models.TextField()
-    # category = models.ForeignKey(SubCategories, related_name = 'related_reviews',  null = True, blank=True)
+    appointment = models.ForeignKey(Appointments, related_name = 'reviews', null = True, blank = True)
     role = models.CharField(max_length = 255)
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
-    objects = reviewManager()
+    objects = reviewManager()     

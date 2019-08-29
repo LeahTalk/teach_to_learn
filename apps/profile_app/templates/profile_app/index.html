@@ -181,13 +181,14 @@
                                     {% for appointment in old_appointments %}
                                         <li>
                                             <p class = 'inline_class'>Met with </p>
-                                            <a class = 'inline_class' href = '/profile/{{ appointment.appointment_creator.id }}'>{{ appointment.appointment_creator.first_name }}</a>
-                                            <p class = 'inline_class'> on </p>
-                                            <a class = 'inline_class'href = '/messages/{{ appointment.id }}'>{{ appointment.date }}
                                             {% if user == appointment.appointment_creator %}
-                                                to teach {{ appointment.category.name }}</a>
+                                                <a class = 'inline_class' href = '/profile/{{ appointment.appointment_student.id }}'>{{ appointment.appointment_student.first_name }}</a>
+                                                <p class = 'inline_class'> on </p>
+                                                <a class = 'inline_class'href = '/messages/{{ appointment.id }}'>{{ appointment.date }} to teach {{ appointment.category.name }}</a>
                                             {% else %}
-                                                to learn {{ appointment.category.name }}</a>
+                                                <a class = 'inline_class' href = '/profile/{{ appointment.appointment_creator.id }}'>{{ appointment.appointment_creator.first_name }}</a>
+                                                <p class = 'inline_class'> on </p>
+                                                <a class = 'inline_class'href = '/messages/{{ appointment.id }}'>{{ appointment.date }} to teach {{ appointment.category.name }}</a>
                                             {% endif %}
                                         </li>
                                     {% endfor %}
