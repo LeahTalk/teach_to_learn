@@ -115,7 +115,7 @@
                                     <p>{{viewing_user.desc}}</p>
 
                                     {% if user == viewing_user %}
-                                    <form action="PLACEHOLDER" method="POST">
+                                    <form action="/edit_description" method="POST">
                                         {% csrf_token %}
                                         <label for="edit_bio">Edit Biography: </label>
                                         <input class="form-control" type="text" name="edit_bio" style="width: 85%">

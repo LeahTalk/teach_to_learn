@@ -129,14 +129,17 @@
                                 <h4 class="p-2" style="width: 100%; background-color:#fff3cf">Course Suggestions for You:</h4>
                                 <div class="pl-5">
                                     {% for skills in skills_to_learn %}
-                                    <p> The {{skills.name}} course by: 
+                                    <p> {{skills.name}} course by: </p>
+                                        <ul>
                                         {% for user in all_users %}
                                             {% if user in skills.teachers.all %}
-                                                <a href="/profile/{{user.id}}">{{ user.first_name }} {{user.last_name}}, </a>
+                                            <li>
+                                                <a href="/profile/{{user.id}}">{{ user.first_name }} {{user.last_name}} </a>
+                                            </li>
                                             {% endif %}
                                         {% endfor %}
+                                        </ul>
                                     {% endfor %}
-                                    </p>
                                 </div>
                             </div>
                             <div class="overflow-auto mt-3 mb-4 border rounded rounded-lg border-muted" style="width: 95%; min-height: 200px">
