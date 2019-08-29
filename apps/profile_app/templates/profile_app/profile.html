@@ -145,9 +145,9 @@
                                 </div>
                                 <div class="user_reviews pl-5">
                                     <h5 class="mt-5">Reviews:</h5>
-                                    {% for review in all_received_reviews  %}
+                                    {% for review in user_reviews  %}
                                     <p>
-                                        {{review.review_creator}} says,   
+                                        {{review.review_creator.first_name}} {{review.review_creator.last_name}} says,   
                                     </p>
                                     <p>
                                         "{{review.content}}"

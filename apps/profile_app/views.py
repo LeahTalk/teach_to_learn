@@ -131,13 +131,19 @@ def view_profile(request, user_id):
         if (appointment.appointment_student == None) and (str(appointment.date) > str(datetime.now())):
             open_appointments.append(appointment)
     all_skills = SubCategories.objects.all()
+
+    #  
+    getUser = Users.objects.get(id = user_id )
+    user_reviews = Reviews.objects.filter(review_receiver = getUser)
     context = {
         'user' : Users.objects.get(id = request.session['curUser']),
         'viewing_user' : view_user,
         'open_appointments' : open_appointments,
         'skills': view_user.skills_to_teach.all(),
-        'all_skills' : SubCategories.objects.exclude(teachers = Users.objects.filter(id = request.session['curUser'])).order_by('name')
+        'all_skills' : SubCategories.objects.exclude(teachers = Users.objects.filter(id = request.session['curUser'])).order_by('name'),
+        'user_reviews' : user_reviews 
     }
+
     return render(request, 'profile_app/profile.html', context)
 
 def view_history(request):
