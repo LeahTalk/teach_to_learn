@@ -143,7 +143,10 @@
                         .queue(function(n) {
                             $('#subcategories').hide().html(serverResponse).fadeIn(475);   
                             n();
-                    })
+                        })
+                },
+                error: function(serverResponse){
+                    alert(serverResponse.responseJSON.error);
                 }
             })
         });

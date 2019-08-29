@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 from django.db import models
 from time import localtime, strftime, strptime
 from datetime import date, datetime
+from geopy.geocoders import Nominatim
 
 class CategoriesManager(models.Manager):
     def basic_validator(self, postData):
@@ -22,7 +23,10 @@ class Categories(models.Model):
 class SubCategoriesManager(models.Manager):
     def basic_validator(self, postData):
         errors = {}
-        if SubCategories.objects.filter(name__iexact=postData['add_subcategory']):
+
+        current_category = Categories.objects.get(id=postData['current_category'])
+
+        if current_category.subcategories.filter(name__iexact=postData['add_subcategory']):
             errors['add_subcategory'] = "Course/Subcategory already exists"
             return errors
         if len(postData['add_subcategory']) < 2:
@@ -41,10 +45,10 @@ class UserManager(models.Manager):
         errors = {}
         if 'first_name' in postData:
             if len(postData['first_name']) < 2:
-                errors['first_name'] = "First name must be at least two characters long"
+                errors['first_name'] = "First name must be at least two characters"
         if 'last_name' in postData:
             if len(postData['last_name']) < 2:
-                errors['last_name'] = "Last name must be at least two characters long"
+                errors['last_name'] = "Last name must be at least two characters"
         if 'birthday' in postData:
             birthday = datetime.strptime(postData['birthday'], '%Y-%M-%d')
             age = calculate_age(birthday)
@@ -54,9 +58,22 @@ class UserManager(models.Manager):
                 errors['age'] = "Must be 18 years old or older"
         if 'regPassword' in postData:
             if len(postData['regPassword']) < 8:
-                errors['pw_length'] = "Password must be at least eight characters long"
+                errors['pw_length'] = "Password must be at least eight characters"
             if postData['regPassword'] != postData['confPassword']:
                 errors['pw_match'] = "Passwords do not match!"
+        return errors
+    
+    def location_validator(self, postData):
+        errors = {}
+
+        if 'location' in postData:
+            if len(postData['location']) < 2:
+                errors['location'] = "Location must be at least two characters"
+
+            geolocator = Nominatim(user_agent="login_app")
+            location = geolocator.geocode(postData['location'])
+            if location == None:
+                errors['location'] = "The city or location you have inputted does not exist, please try again"
         return errors
 
 class Users(models.Model):

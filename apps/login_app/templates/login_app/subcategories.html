@@ -46,8 +46,12 @@ $('#subcategory_form').submit(function(e){
                 .queue(function(n) {
                     $('#location_form').hide().html(serverResponse).fadeIn(475);   
                     n();
-            })
+                })
+        },
+        error: function(serverResponse){
+            alert(serverResponse.responseJSON.error);
         }
     })
 });
+
 </script>

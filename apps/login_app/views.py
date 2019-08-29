@@ -3,6 +3,8 @@ from .models import *
 from django.contrib import messages
 import bcrypt
 import re
+from django.http import JsonResponse
+from geopy.geocoders import Nominatim
 
 def index(request):
     if 'curUser' in request.session:
@@ -85,9 +87,13 @@ def select_category(request):
         if len(request.POST['add_category']) > 0:
             errors = Categories.objects.basic_validator(request.POST)
             if len(errors) > 0:
-                for key, value in errors.items():
-                    messages.error(request, value)
-                return render(request, 'login_app/errors.html')
+
+                send_to_ajax = error_message(errors)
+
+                response = JsonResponse({'error': send_to_ajax })
+                response.status_code = 403
+
+                return response
             else:
                 new_category = Categories.objects.create(name=request.POST['add_category'])
                 new_category.save()
@@ -119,9 +125,13 @@ def select_subcategory(request):
         if len(request.POST['add_subcategory']) > 0:
             errors = SubCategories.objects.basic_validator(request.POST)
             if len(errors) > 0:
-                for key, value in errors.items():
-                    messages.error(request, value)
-                return render(request, 'login_app/errors.html')
+
+                send_to_ajax = error_message(errors)
+
+                response = JsonResponse({'error': send_to_ajax })
+                response.status_code = 403
+
+                return response
             else:
                 new_subcategory = SubCategories.objects.create(name=request.POST['add_subcategory'], mainCategory = current_category)
                 new_subcategory.teachers.add(current_user)
@@ -152,6 +162,18 @@ def select_subcategory(request):
 
 def location_form_process(request):
     if request.method == "POST":
+
+        print("I'm before erros")
+        errors = Users.objects.location_validator(request.POST)
+        if len(errors) > 0:
+            print("location has errors")
+            send_to_ajax = error_message(errors)
+
+            response = JsonResponse({'error': send_to_ajax })
+            response.status_code = 403
+
+            return response
+
         current_user = Users.objects.get(id=request.session['curUser'])
         user_location = request.POST['location']
         current_user.location = user_location
@@ -186,3 +208,10 @@ def choose_subcategories(request):
     return redirect("/dashboard")
 
 
+def error_message(errors):
+    was_empty_string = ""
+
+    for error in errors:
+        was_empty_string += errors[error]
+    
+    return was_empty_string

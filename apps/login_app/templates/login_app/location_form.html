@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col"></div>
                     <div class="col text-center text-light">
-                        <input type="text" id="post_location" class="form-control" name="place" placeholder="Please insert City, State, and Country">
+                        <input type="text" id="post_location" class="form-control" name="location" placeholder="Please insert City, State, and Country">
                     </div>      
                 <div class="col"></div>
             </div>
@@ -35,7 +35,10 @@ $('#location_form').submit(function(e){
                 .queue(function(n) {
                     $('#choose_subcategories').hide().html(serverResponse).fadeIn(475);   
                     n();
-            })
+                })
+        },
+        error: function(serverResponse){
+            alert(serverResponse.responseJSON.error);
         }
     })
 });
