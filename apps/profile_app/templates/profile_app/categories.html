@@ -14,7 +14,9 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
     </head>
-    <body>
+
+    <body style="min-height: 1250px">
+        
         <div class="wrapper">
             {% load static %}
             <nav class="navbar mb-5 p-0 pb-1" style="background-image: linear-gradient(#fff, #fff3cf);">
@@ -36,6 +38,8 @@
                     <div class="col border-right p-0 mt-4" style="height: 75%">
                         {% if curUser != "logged out" %}
                         <a class = 'nav-link text-secondary p-0' href="/edit_profile">Account Settings</a>
+                        {% else %}
+                        <a class = 'nav-link text-secondary p-0' href="/">Home</a>
                         {% endif %}
                     </div>
                     <div class="col border-right p-0 mt-4" style="height: 75%">
