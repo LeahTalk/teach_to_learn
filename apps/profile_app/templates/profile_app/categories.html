@@ -120,7 +120,7 @@
                 method: 'POST',
                 data: $(this).serialize(),
                 success: function(serverResponse){
-                    $('#populate_subcategories').html(serverResponse);
+                    $('#populate_subcategories').hide().html(serverResponse).slideDown(800);
                 }
             })
         });
