@@ -7,8 +7,8 @@ from django.http import JsonResponse
 from geopy.geocoders import Nominatim
 
 def index(request):
-    if 'curUser' in request.session:
-        return redirect('/dashboard')
+    if 'curUser' not in request.session:
+        request.session['curUser'] = "logged out"
     return render(request, 'login_app/index.html')
 
 def logout(request):

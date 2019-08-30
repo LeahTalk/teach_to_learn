@@ -164,12 +164,20 @@ def view_profile(request, user_id):
     geolocator = Nominatim(user_agent="profile_app")
     location = geolocator.geocode(view_user.location)
 
+    if request.session['curUser'] != "logged out":
+        current_user = Users.objects.get(id = request.session['curUser'])
+        all_skills: SubCategories.objects.exclude(teachers = Users.objects.filter(id = request.session['curUser'])).order_by('name')
+    else:
+        current_user = "logged out"
+        all_skills: SubCategories.objects.all()
+
     context = {
-        'user' : Users.objects.get(id = request.session['curUser']),
+        'user' : current_user,
+        'curUser' : current_user,
         'viewing_user' : view_user,
         'open_appointments' : open_appointments,
         'skills': view_user.skills_to_teach.all(),
-        'all_skills' : SubCategories.objects.exclude(teachers = Users.objects.filter(id = request.session['curUser'])).order_by('name'),
+        'all_skills' : all_skills,
         'user_reviews' : user_reviews,
         'average_reviews' : average_reviews,
         'latitude': location.latitude,
@@ -186,9 +194,10 @@ def view_history(request):
     return render(request, 'profile_app/history.html', context)
 
 def categories(request):
-    current_user = Users.objects.get(id=request.session['curUser'])
+    curUser = request.session['curUser']
+
     context = {
-        'user': current_user,
+        "curUser" : curUser,
         "all_categories" : Categories.objects.all(),
     }
     return render(request, 'profile_app/categories.html', context)

@@ -24,23 +24,33 @@
         <nav class="navbar mb-5 p-0 pb-1" style="background-image: linear-gradient(#fff, #fff3cf);">
             <div class="row text-center pl-2 pr-2" style="width:100%">
                 <div class="col p-0 pl-5">
-                    <a href="/dashboard"><img src="{% static 'profile_app/img/Teach2Learn.png' %}" style="height: 70px" /></a>
+                    <img src="{% static 'profile_app/img/Teach2Learn.png' %}" style="height: 70px" />
                 </div>
                 <div class="col p-0"></div>
                 <div class="col border-left border-right p-0 mt-4" style="height: 75%">
+                    {% if curUser != "logged out" %}
                     <a class = 'nav-link text-secondary p-0' href="/dashboard">Dashboard</a>
+                    {% endif %}
                 </div>
                 <div class="col border-right p-0 mt-4" style="height: 75%">
+                    {% if curUser != "logged out" %}
                     <a class = 'nav-link text-secondary p-0' href="/profile/{{ user.id }}">My Profile Page</a>
+                    {% endif %}
                 </div>
                 <div class="col border-right p-0 mt-4" style="height: 75%">
+                    {% if curUser != "logged out" %}
                     <a class = 'nav-link text-secondary p-0' href="/edit_profile">Account Settings</a>
+                    {% endif %}
                 </div>
                 <div class="col border-right p-0 mt-4" style="height: 75%">
                     <a class = 'nav-link text-secondary p-0' href="/categories">Categories</a>
                 </div>
                 <div class="col border-right p-0 mt-4" style="height: 75%">
+                    {% if curUser != "logged out" %}
                     <a class = 'nav-link text-secondary p-0' href="/logout">Logout</a>
+                    {% else %}
+                    <a class = 'nav-link text-dark p-0' href="/register_login">Register/Login</a>
+                    {% endif %}
                 </div>
             </div>
         </nav>

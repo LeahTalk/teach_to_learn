@@ -10,6 +10,7 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <link rel="stylesheet" type="text/css" href="{% static '/profile_app/css/style.css' %}">
         <title>Teach 2 Learn </title>
+        <meta http-equiv="refresh" content="3"/>
     </head>
     <body>
 
@@ -27,16 +28,16 @@
                 <div class="col p-0 mt-4" style="height: 75%">
                 </div>
                 <div class="col border-left p-0 mt-4" style="height: 75%">
-                    <a class = 'nav-link text-secondary p-0' href="/categories">Categories</a>
+                    <a class = 'nav-link text-dark p-0' href="/categories">Categories</a>
                 </div>
                 <div class="col border-right border-left p-0 mt-4" style="height: 75%">
-                    <a class = 'nav-link text-secondary p-0' href="/register_login">Register/Login</a>
+                    <a class = 'nav-link text-dark p-0' href="/register_login">Register/Login</a>
                 </div>
             </div>
         </nav>
 
 
-<div class="row border rounded" style="height: 500px; width: 100%; background-size: cover; background-repeat: no-repeat; background-position: center; background-image: url({% static 'login_app/img/learning222.jpg' %})">
+<div class="row border rounded" style="height: 500px; background-size: cover; background-repeat: no-repeat; background-position: center; background-image: url({% static 'login_app/img/learning222.jpg' %})">
     <div class="col"></div>
     <div class="col"></div>
     <div class="col"></div>
@@ -48,8 +49,8 @@
                 <div class="col"></div>
                 <div class="col">
                     <img src="{% static 'profile_app/img/Teach2Learn.png' %}" style="height: 150px" />
-                    <h1 class="text-right font-weight-bold"> 2021's #1 Learning Community!</h1>
-                        <h3 class="text-right">Forbes, 2030</h3>
+                    <h1 class="text-right font-weight-bold"> The #1 Learning Community!</h1>
+                        <h3 class="text-right">Forbes, 2021</h3>
                 </div>
                 <div class=" col text-center">
                     <a href="/register_login" class="btn mt-5 " style="background-color: gold">Register Now!</a>
@@ -74,10 +75,95 @@
 
 <div class="row" style="height: 100px"></div>
 
+<div class="row" style="background-color:#fadefa">
+    <div class="col"></div>
+    <div class="col-9 text-center">
+        <h1 class="text-muted p-5 font-weight-bold">Teach, Learn, Teach, and Learn Again</h1>
+    </div>
+    <div class="col"></div>
+</div>
+
+<div class="row border rounded" style="height: 500px; background-size: cover; background-repeat: no-repeat; background-position: center; background-image: url({% static 'login_app/img/community.jpg' %})">
+    <div class="col"></div>
+    <div class="col">
+        <div class="mt-5 rounded-lg border pl-5 pr-5 pb-3" style="background-color: white; opacity: .95;">
+            <div class="row" >
+                <div class="col"></div>
+                <div class="col">
+                    <img src="{% static 'profile_app/img/Teach2Learn.png' %}" style="height: 150px" />
+                    <h2 class="text-right font-weight-light text-center mb-3"> Over 9000 topics taught by our community!</h2>
+                    <p class="text-center lead">« Piano « Fashion Design « Fancy Culinary Arts « Anime Knowledge « History of League of Legends « What Happened Yesterday « Is Earth Round or Flat 101  </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col"></div>
+    <div class="col"></div>
+    <div class="col"></div>
+    <div class="col">
+
+    </div>
+    <div class="col"></div>
+</div>
+
+<div class="row" style="background-color:#fadefa">
+    <div class="col"></div>
+    <div class="col-9 text-center">
+        <h1 class="text-muted p-5 font-weight-bold">Meet our Team!</h1>
+    </div>
+    <div class="col"></div>
+</div>
+
 <div class="row">
-    <div class="col"></div>
-    <div class="col"></div>
-    <div class="col"></div>
+
+    <div class="col m-3">
+        <div class="mt-5 rounded-lg border pl-3 pr-3 pb-3" style="background-color: white; opacity: .95;">
+            <div class="row pt-5" >
+                <div class="col text-center">
+                    <img src="{% static 'login_app/img/Ferdinand.jpg' %}" style="height: 150px" />
+                    <h2 class="text-right font-weight-light text-center mb-3 mt-3">Ferdinand "Ferdi" Tembo</h2>
+                    <p class="text-center lead"> Chief Executive Officer </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col m-3">
+        <div class="mt-5 rounded-lg border pl-3 pr-3 pb-3" style="background-color: white; opacity: .95;">
+            <div class="row pt-5" >
+                <div class="col text-center">
+                    <img src="{% static 'login_app/img/Jonathan.png' %}" style="height: 150px" />
+                    <h2 class="text-right font-weight-light text-center mb-3 mt-3">Jonathan "Sathonn" Lee</h2>
+                    <p class="text-center lead"> Regular Employee & Janitor </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col m-3">
+        <div class="mt-5 rounded-lg border pl-3 pr-3 pb-3" style="background-color: white; opacity: .95;">
+            <div class="row pt-5" >
+                <div class="col text-center">
+                    <img src="{% static 'login_app/img/Leah.png' %}" style="height: 150px" />
+                    <h2 class="text-right font-weight-light text-center mb-3 mt-3"> Leah " " Talkov</h2>
+                    <p class="text-center lead"> Board President </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col m-3">
+        <div class="mt-5 rounded-lg border pl-3 pr-3 pb-3" style="background-color: white; opacity: .95;">
+            <div class="row pt-5" >
+                <div class="col text-center">
+                    <img src="{% static 'login_app/img/Sam.gif' %}" style="height: 150px" />
+                    <h2 class="text-right font-weight-light text-center mb-3 mt-3">Sam "Brick'n'Mortar" Le</h2>
+                    <p class="text-center lead"> C.E.O. (Chief Entertainment Officer) </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <div class="row"></div>
