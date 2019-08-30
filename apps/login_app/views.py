@@ -30,7 +30,7 @@ def login(request):
             errors['badPassword'] = "The password is incorrect."
             for key, value in errors.items():
                 messages.error(request, value)
-            return redirect('/')
+            return redirect('/register_login')
     else:
         errors['noUser'] = "There is no user with this email address!"  
         for key, value in errors.items():
@@ -38,13 +38,10 @@ def login(request):
         return redirect("/register_login")
 
 def register(request):
-
     errors = Users.objects.user_validator(request.POST)
-
     EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
     if not EMAIL_REGEX.match(request.POST['email']):        
         errors['email'] = ("Invalid email address!")
-
     if Users.objects.filter(email=request.POST['email']).exists():
         errors['exists'] = "A user with this email already exists!"
     if len(errors) > 0:
@@ -60,8 +57,6 @@ def register(request):
 
 def continue_registration(request):
     current_user = Users.objects.get(id=request.session['curUser'])
-    print(current_user.first_name)
-
     if 'current_category' not in request.session:
         request.session['current_category'] = ''
         current_category = Categories.objects.filter(name = request.session['current_category'])
@@ -69,10 +64,8 @@ def continue_registration(request):
     else:
         current_category = Categories.objects.filter(name = request.session['current_category'])
         all_subcategories = SubCategories.objects.filter(mainCategory = current_category)
-
     all_categories = Categories.objects.all()
     current_user = Users.objects.get(id = request.session['curUser'])
-
     context = {
         'current_user': current_user,
         'all_categories' : all_categories,
@@ -83,16 +76,15 @@ def continue_registration(request):
 
 
 def select_category(request):
+    #if 'curUser' not in request.session or request.session['curUser'] == 'logged out':
+       # return redirect('/')
     if request.method == "POST":
         if len(request.POST['add_category']) > 0:
             errors = Categories.objects.basic_validator(request.POST)
             if len(errors) > 0:
-
                 send_to_ajax = error_message(errors)
-
                 response = JsonResponse({'error': send_to_ajax })
                 response.status_code = 403
-
                 return response
             else:
                 new_category = Categories.objects.create(name=request.POST['add_category'])
@@ -103,8 +95,6 @@ def select_category(request):
                     'current_category': new_category,
                     'all_subcategories': SubCategories.objects.filter(name=new_category.name),
                 }
-                print("category made")
-                print(new_category.name)
                 return render(request, 'login_app/subcategories.html', context)
         if request.POST['select_category']:
             request.session['current_category'] = request.POST['select_category']
@@ -114,84 +104,58 @@ def select_category(request):
                 'current_category': current_category,
                 'all_subcategories': SubCategories.objects.filter(mainCategory=current_category),
             }
-            print("category selected")
-            print(current_category.name)
             return render(request, 'login_app/subcategories.html', context)
 
 def select_subcategory(request):
+    if 'curUser' not in request.session or request.session['curUser'] == 'logged out':
+        return redirect('/')
     if request.method == "POST":
         current_category = Categories.objects.get(id=request.POST['current_category'])
         current_user = Users.objects.get(id=request.session['curUser'])
         if len(request.POST['add_subcategory']) > 0:
             errors = SubCategories.objects.basic_validator(request.POST)
             if len(errors) > 0:
-
                 send_to_ajax = error_message(errors)
-
                 response = JsonResponse({'error': send_to_ajax })
                 response.status_code = 403
-
                 return response
             else:
                 new_subcategory = SubCategories.objects.create(name=request.POST['add_subcategory'], mainCategory = current_category)
                 new_subcategory.teachers.add(current_user)
                 request.session.save()
-                print("new subcategory created")
                 all_teachers = new_subcategory.teachers.all()
                 this_subs_teacher = all_teachers.filter(id = current_user.id)
                 current_teacher = this_subs_teacher[0]
-                print(current_teacher.first_name)
-                print("is teaching")
                 return render(request, 'login_app/location_form.html')
 
         if request.POST['select_subcategory']:
             current_subcategory = SubCategories.objects.get(id=request.POST['select_subcategory'])
             current_subcategory.teachers.add(current_user)
-            print("subcategory selected to teach")
-            print(current_subcategory.name)
-
-            print("-----------------------")
             all_teachers = current_subcategory.teachers.all()
             this_subs_teacher = all_teachers.filter(id = current_user.id)
             current_teacher = this_subs_teacher[0]
-            print(current_teacher.first_name)
-            print("is teaching")
-            print(current_subcategory.name)
-
         return render(request, 'login_app/location_form.html')
 
 def location_form_process(request):
     if request.method == "POST":
-
-        print("I'm before erros")
         errors = Users.objects.location_validator(request.POST)
         if len(errors) > 0:
-            print("location has errors")
             send_to_ajax = error_message(errors)
-
             response = JsonResponse({'error': send_to_ajax })
             response.status_code = 403
-
             return response
-
         current_user = Users.objects.get(id=request.session['curUser'])
         user_location = request.POST['location']
         current_user.location = user_location
         current_user.save()
-
-        print("location saved!")
-        print(current_user.location)
-
         context = {
             'all_subcategories' : SubCategories.objects.all()
         }
-
         return render(request, 'login_app/learn_subcategories.html', context)
 
 def choose_subcategories(request):
-    print("I'm at choose_categories")
-    print(request.POST)
-
+    if 'curUser' not in request.session or request.session['curUser'] == 'logged out':
+        return redirect('/')
     current_user = Users.objects.get(id=request.session['curUser'])
     all_subcategories = SubCategories.objects.all() 
     if request.method == "POST":
@@ -200,18 +164,11 @@ def choose_subcategories(request):
                 # loop_subcategory = SubCategories.objects.get(id = int(request.POST[key]))
                 loop_subcategory = SubCategories.objects.get(name__iexact=request.POST[subcategory.name])
                 current_user.skills_to_learn.add(loop_subcategory)
-                print(current_user.first_name)
-                print("has added")
-                print(loop_subcategory.name)
-                print("to the skills they want to learn!")
-
     return redirect("/dashboard")
 
 
 def error_message(errors):
     was_empty_string = ""
-
     for error in errors:
         was_empty_string += errors[error]
-    
     return was_empty_string

@@ -128,7 +128,7 @@
                                 <h4 class="p-2" style="width: 100%; background-color:#fff3cf">Course Suggestions for You:</h4>
                                 <div class="pl-5">
                                     {% for key, value in all_users.items %}
-                                    <p> {{ key }} course by: </p>
+                                    <p> Users who teach {{ key }}: </p>
                                         {%if not value%}
                                             <p>There are no users teaching this subject!</p>
                                         {%else%}

@@ -63,13 +63,14 @@ After creating a review the user should be redirected back to the dashboard.
                                 <p>Address: </p>
                                 <input class="form-control" type="text" name = "location" value = "{{ appointment_Object.location }}">
                                 <div class="row pl-3">
+                                    {% if showDelete %}
                                     <div class="text-center mt-4 mb-4">
                                         <button class="btn text-dark" type="submit" style ="background-color:#fcedfc ">Update</button>
                                     </div>
-
                                     <div class="text-center ml-3 mt-4 mb-4">
                                         <a class = "btn btn-danger" href = '/appointment/cancel/{{ request.session.appointment_id }}'>Cancel</a>
                                     </div>
+                                    {% endif %}
                                 </div>
                             </form>
                         </div>
@@ -81,7 +82,9 @@ After creating a review the user should be redirected back to the dashboard.
                     <div class="ml-5 mt-4" style="width:55%">
                         <p>Date and time: {{appointment_Object.date}}</p>
                         <p>Address: {{appointment_Object.location}} </p>
-                        <a class = "btn btn-danger" href = '/appointment/cancel/{{ request.session.appointment_id }}'>Cancel</a>
+                        {% if showDelete %}
+                            <a class = "btn btn-danger" href = '/appointment/cancel/{{ request.session.appointment_id }}'>Cancel</a>
+                        {% endif %}
                     </div>
                 </div>
             {% endif %}
@@ -125,7 +128,7 @@ After creating a review the user should be redirected back to the dashboard.
                 {% if appointment_Object.appointment_creator.id == request.session.curUser %}
 
                     <div class="mb-4 border rounded rounded-lg border-muted" style="width: 95%; min-height: 500px;  min-width:250px">
-                        <h4 class="p-2" style="width: 100%; background-color:#fcedfc">You are messaging {{appointment_Object.appointment_student.first_name}} {{appointment_Object.appointment_student.last_name}} for {{appointment_Object.category.name}} course. </h4>
+                        <h4 class="p-2" style="width: 100%; background-color:#fcedfc">You are teaching {{appointment_Object.appointment_student.first_name}} {{appointment_Object.appointment_student.last_name}} {{appointment_Object.category.name}} </h4>
                         {% for message in all_messages %}
                         <h6 class="pl-3">{{message.message_owner.first_name}} {{message.message_owner.last_name}} [{{message.created_at}}] </h6>
                         <p class="pl-5">{{message.content}}</p>
@@ -153,7 +156,7 @@ After creating a review the user should be redirected back to the dashboard.
                 <!-- Student View -->
                 {% else %}
                 <div class="mb-4 border rounded rounded-lg border-muted" style="width: 95%; min-height: 500px;  min-width:250px">
-                    <h4 class="p-2" style="width: 100%; background-color:#fcedfc">You are messaging {{appointment_Object.appointment_creator.first_name}} {{appointment_Object.appointment_creator.last_name}} for {{appointment_Object.category.name}} </h4>
+                    <h4 class="p-2" style="width: 100%; background-color:#fcedfc">You are learning {{appointment_Object.category.name}} from {{appointment_Object.appointment_creator.first_name}} {{appointment_Object.appointment_creator.last_name}} </h4>
                     {% for message in all_messages %}
                         <h6 class="pl-3">{{message.message_owner.first_name}} {{message.message_owner.last_name}} [{{message.created_at}}] </h6>
                         <p class="pl-5">{{message.content}}</p>

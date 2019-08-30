@@ -9,6 +9,8 @@ from pytz import timezone
 
 
 def index(request):
+    if 'curUser' not in request.session or request.session['curUser'] == 'logged out':
+        return redirect('/')
     user = Users.objects.get(id = request.session['curUser'])
     created_appointments = user.created_appointments.all().order_by('date')
     reserved_appointments = []
@@ -31,6 +33,8 @@ def index(request):
     return render(request, 'appointment_app/index.html', context)
 
 def process_new_appointment(request):
+    if 'curUser' not in request.session or request.session['curUser'] == 'logged out':
+        return redirect('/')
     errors = Appointments.objects.appointment_validator(request.POST)
     if len(errors) > 0:
         for key, value in errors.items():
@@ -42,9 +46,13 @@ def process_new_appointment(request):
     return redirect('/dashboard')
 
 def cancel_appointment(request, appointment_id):
+    if 'curUser' not in request.session or request.session['curUser'] == 'logged out':
+        return redirect('/')
     #Add a check here to make sure the person cancelling is either the teacher or student - otherwise return redirect to dashboard
     appointment = Appointments.objects.get(id = appointment_id)
     user = Users.objects.get(id = request.session['curUser'])
+    if (user != appointment.appointment_creator) and (user != appointment.appointment_student):
+        return redirect('/dashboard')
     student = appointment.appointment_student
     #If the student cancelled
     if user == appointment.appointment_student:
@@ -72,8 +80,9 @@ def cancel_appointment(request, appointment_id):
     return redirect('/dashboard')
 
 def reserve_appointment(request, appointment_id):
+    if 'curUser' not in request.session or request.session['curUser'] == 'logged out':
+        return redirect('/')
     appointment = Appointments.objects.get(id = appointment_id)
-    print(appointment.appointment_creator.skills_to_teach.all())
     context = {
         'appointment' : appointment,
         'skills' : appointment.appointment_creator.skills_to_teach.all()
@@ -81,8 +90,12 @@ def reserve_appointment(request, appointment_id):
     return render(request, 'appointment_app/reserve_appointment.html', context)
 
 def process_reservation(request):
+    if 'curUser' not in request.session or request.session['curUser'] == 'logged out':
+        return redirect('/')
     appointment = Appointments.objects.get(id = request.POST['id'])
     user = Users.objects.get(id = request.session['curUser'])
+    if appointment.appointment_student != None:
+        return redirect('/dashboard')
     appointment.appointment_student = user
     category = SubCategories.objects.get(name = request.POST['category'])
     appointment.category = category
@@ -93,9 +106,9 @@ def process_reservation(request):
     return redirect('/dashboard')
 
 def edit_appointment(request, appointment_id):
+    if 'curUser' not in request.session or request.session['curUser'] == 'logged out':
+        return redirect('/')
     appointment = Appointments.objects.get(id = appointment_id)
-    #"2018-06-12T19:30"
-    
     appointment.date = appointment.date.strftime("%Y-%m-%d"+ 'T' +"%H:%M")
     context = {
         'appointment' : appointment
@@ -103,6 +116,8 @@ def edit_appointment(request, appointment_id):
     return render(request, 'appointment_app/edit.html', context)
 
 def process_edits(request, appointment_id):
+    if 'curUser' not in request.session or request.session['curUser'] == 'logged out':
+        return redirect('/')
     errors = Appointments.objects.appointment_validator(request.POST)
     if len(errors) > 0:
         for key, value in errors.items():

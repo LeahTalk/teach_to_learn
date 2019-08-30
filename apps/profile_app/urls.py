@@ -4,7 +4,7 @@ from . import views
 urlpatterns = [
     url(r'^dashboard$', views.index),
     url(r'^profile/(?P<user_id>\d+)$', views.view_profile),
-    url(r'^my_history$', views.view_history),
+    #url(r'^my_history$', views.view_history),
     url(r'^categories$', views.categories),
     url(r'^edit_profile$', views.edit_profile),
     url(r'^process_profile_edits$', views.process_profile_edits),

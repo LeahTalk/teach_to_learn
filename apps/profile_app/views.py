@@ -13,6 +13,8 @@ import random
 import statistics
 
 def upload_photo(request):
+    if 'curUser' not in request.session or request.session['curUser'] == 'logged out':
+        return redirect('/')
     if 'profile_img' in request.FILES:
         encoded_string = base64.b64encode(request.FILES['profile_img'].read())
         user = Users.objects.get(id = request.session['curUser'])
@@ -21,6 +23,8 @@ def upload_photo(request):
     return redirect('/profile/' + str(request.session['curUser']))
 
 def index(request):
+    if 'curUser' not in request.session or request.session['curUser'] == 'logged out':
+        return redirect('/')
     user = Users.objects.get(id = request.session['curUser'])
     created_appointments = user.created_appointments.all().order_by('date')
     reserved_appointments = []
@@ -50,7 +54,6 @@ def index(request):
         if (str(appointment.date) > str(datetime.now())):
             attending_appointments.append(appointment)
         else:
-            print('hello')
             old_appointments.append(appointment)
     geolocator = Nominatim(user_agent="profile_app")
     location = geolocator.geocode(user.location)
@@ -76,6 +79,8 @@ def index(request):
     return render(request, 'profile_app/index.html', context)
 
 def add_skill(request):
+    if 'curUser' not in request.session or request.session['curUser'] == 'logged out':
+        return redirect('/')
     if 'category' not in request.POST:
         return redirect('/profile/' + str(request.session['curUser']))
     category = SubCategories.objects.get(name = request.POST['category'])
@@ -84,20 +89,19 @@ def add_skill(request):
     return redirect('/profile/' + str(request.session['curUser']))
 
 def edit_profile(request):
-    if 'curUser' not in request.session:
-        return redirect('/') 
+    if 'curUser' not in request.session or request.session['curUser'] == 'logged out':
+        return redirect('/')
     context = {
         'user' : Users.objects.get(id = request.session['curUser'])
     }
     return render(request, "profile_app/user_settings.html", context)
 
 def process_profile_edits(request):
-    if 'curUser' not in request.session:
-        return redirect('/') 
+    if 'curUser' not in request.session or request.session['curUser'] == 'logged out':
+        return redirect('/')
     errors = Users.objects.user_validator(request.POST)
     #Make sure we don't compare against the user's original email if they keep it the same
     user = Users.objects.get(id = request.session['curUser'])
-    
     users = Users.objects.filter(email = request.POST['email'])
     if len(users) > 0 and users[0].id != request.session['curUser']:
         errors['exists'] = "A user with this email already exists!"
@@ -114,9 +118,8 @@ def process_profile_edits(request):
     return redirect('/profile/' + str(user.id))
 
 def process_password_edits(request):
-    print("I am here")
-    if 'curUser' not in request.session:
-        return redirect('/') 
+    if 'curUser' not in request.session or request.session['curUser'] == 'logged out':
+        return redirect('/')
     errors = Users.objects.user_validator(request.POST)
     if len(errors) > 0:
         for key, value in errors.items():
@@ -130,15 +133,14 @@ def process_password_edits(request):
     return redirect('/profile/' + str(user.id))
 
 def process_description_edits(request):
-    if 'curUser' not in request.session:
-        return redirect('/') 
+    if 'curUser' not in request.session or request.session['curUser'] == 'logged out':
+        return redirect('/')
     user = Users.objects.get(id = request.session['curUser'])
     user.desc = request.POST['desc']
     user.save()
     return redirect('/profile/' + str(user.id))
 
 def view_profile(request, user_id):
-    print(request.session['curUser'])
     view_user = Users.objects.get(id = user_id)
     created_appointments = view_user.created_appointments.all().order_by('date')
     open_appointments = []
@@ -146,31 +148,23 @@ def view_profile(request, user_id):
         if (appointment.appointment_student == None) and (str(appointment.date) > str(datetime.now())):
             open_appointments.append(appointment)
     all_skills = SubCategories.objects.all()
-
-    #  
     getUser = Users.objects.get(id = user_id )
     user_reviews = Reviews.objects.filter(review_receiver = getUser)
-
     arr_rating =[]
-    
     for x in user_reviews:
-        print(x.rating)
         arr_rating.append(x.rating)
-        
     average_reviews = ""
     if len(arr_rating)>0 :
         x = statistics.mean(arr_rating)
         average_reviews = (int(round(x)))
     geolocator = Nominatim(user_agent="profile_app")
     location = geolocator.geocode(view_user.location)
-
-    if request.session['curUser'] != "logged out":
+    if 'curUser' not in request.session or request.session['curUser'] != "logged out":
         current_user = Users.objects.get(id = request.session['curUser'])
         all_skills: SubCategories.objects.exclude(teachers = Users.objects.filter(id = request.session['curUser'])).order_by('name')
     else:
         current_user = "logged out"
         all_skills: SubCategories.objects.all()
-
     context = {
         'user' : current_user,
         'curUser' : current_user,
@@ -183,19 +177,21 @@ def view_profile(request, user_id):
         'latitude': location.latitude,
         'longitude': location.longitude,
     }
-
     return render(request, 'profile_app/profile.html', context)
 
+'''
 def view_history(request):
     context = {
         "classes_taken" : Users.objects.get(id=request.session['curUser']).attending_appointments.all(),
         "classes_taught" : Users.objects.get(id=request.session['curUser']).created_appointments.all(),
     }
     return render(request, 'profile_app/history.html', context)
+'''
 
 def categories(request):
+    if 'curUser' not in request.session:
+        request.session['curUser'] = 'logged out'
     curUser = request.session['curUser']
-
     context = {
         "curUser" : curUser,
         "all_categories" : Categories.objects.all(),
@@ -203,18 +199,10 @@ def categories(request):
     return render(request, 'profile_app/categories.html', context)
 
 def populate_subcategories_display(request):
-    print("I'm over here!")
     if request.method == "POST":
-        print("I'm in the Post!")
         selected_category = Categories.objects.get(name=request.POST['select_category'])
-
         selected_categories_subs = SubCategories.objects.filter(mainCategory = selected_category)
-
         context = {
             'selected_categories_subs' : selected_categories_subs,
         }
-
         return render(request, 'profile_app/selected_categories.html', context)
-
-
-# jonathan@test.com testpassword chair@wheels.com  testpassword
