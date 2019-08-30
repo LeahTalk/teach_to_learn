@@ -19,6 +19,8 @@ def register_login(request):
     return render(request, 'login_app/register_login.html')
 
 def login(request):
+    if 'curUser' not in request.session or request.session['curUser'] == 'logged out':
+        return redirect('/')
     errors = Users.objects.user_validator(request.POST)
     user = Users.objects.filter(email=request.POST['email'])
     if user: 
@@ -38,6 +40,8 @@ def login(request):
         return redirect("/register_login")
 
 def register(request):
+    if 'curUser' not in request.session or request.session['curUser'] == 'logged out':
+        return redirect('/')
     errors = Users.objects.user_validator(request.POST)
     EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
     if not EMAIL_REGEX.match(request.POST['email']):        
@@ -56,6 +60,8 @@ def register(request):
     return redirect('/register')
 
 def continue_registration(request):
+    #if 'curUser' not in request.session or request.session['curUser'] == 'logged out':
+        #return redirect('/')
     current_user = Users.objects.get(id=request.session['curUser'])
     if 'current_category' not in request.session:
         request.session['current_category'] = ''
@@ -76,8 +82,8 @@ def continue_registration(request):
 
 
 def select_category(request):
-    #if 'curUser' not in request.session or request.session['curUser'] == 'logged out':
-       # return redirect('/')
+    if 'curUser' not in request.session or request.session['curUser'] == 'logged out':
+        return redirect('/')
     if request.method == "POST":
         if len(request.POST['add_category']) > 0:
             errors = Categories.objects.basic_validator(request.POST)
